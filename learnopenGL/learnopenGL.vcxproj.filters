@@ -32,6 +32,9 @@
     <ClCompile Include="Source\Text_Renderer.cpp">
       <Filter>Core Utilities\Text</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Scene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Controller">
@@ -60,6 +63,9 @@
     </Filter>
     <Filter Include="Core Utilities\Input">
       <UniqueIdentifier>{591e8d0b-accf-44d3-9b40-e045603e526f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{34476a48-2729-4b7e-8aed-4c51d14cdba0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -97,6 +103,9 @@
     </ClInclude>
     <ClInclude Include="Source\Text_Renderer.h">
       <Filter>Core Utilities\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene.h">
+      <Filter>Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

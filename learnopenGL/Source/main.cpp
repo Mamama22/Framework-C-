@@ -9,10 +9,4 @@ int main( void )
 	controller.Init();
 	controller.Run();
 	controller.Exit();
-	
-	/*
-	map<string, int> numMap;
-	numMap["one"] = 1;
-
-	cout << numMap["one"] << endl;*/
 }

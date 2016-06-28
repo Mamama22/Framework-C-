@@ -306,9 +306,9 @@ void View::Start_WorldRender(Camera& camera)
 	CameraAndProj(camera);
 }
 
-void View::Start_ScreenRender()
+void View::Start_ScreenRender(float offsetX, float offsetY)
 {
-	CameraAndProj_OnScreen();
+	CameraAndProj_OnScreen(offsetX, offsetY);
 }
 
 /********************************************************************************
@@ -351,11 +351,11 @@ void View::ClearScreen()
 /********************************************************************************
 Setup camera and projection for world
 ********************************************************************************/
+Mtx44 perspective;
 void View::CameraAndProj(Camera& camera)
 {
 	glEnable(GL_DEPTH_TEST);
 
-	Mtx44 perspective;
 	//perspective.SetToPerspective(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
 	//perspective.SetToOrtho(0.f, Screen::CAMERA_WIDTH, 0.f, Screen::CAMERA_HEIGHT, -1000, 1000);	//2D
 	perspective.SetToPerspective(45.f, Screen::CAM_X_TO_Y_RATIO, 0.1f, 500.f);	//3D
@@ -375,12 +375,12 @@ void View::CameraAndProj(Camera& camera)
 Setup camera and projection for on screen:
 -camera position does not matter
 ********************************************************************************/
-void View::CameraAndProj_OnScreen()
+Mtx44 ortho;
+void View::CameraAndProj_OnScreen(float offsetX, float offsetY)
 {
-	Mtx44 ortho;
 	glDisable(GL_DEPTH_TEST);
 
-	ortho.SetToOrtho(0.f, Screen::CAMERA_WIDTH, 0.f, Screen::CAMERA_HEIGHT, -10.f, 10.f);
+	ortho.SetToOrtho(offsetX, Screen::CAMERA_WIDTH + offsetX, offsetY, Screen::CAMERA_HEIGHT + offsetY, -10.f, 10.f);
 	projectionStack.PushMatrix();
 	projectionStack.LoadMatrix(ortho);
 	viewStack.PushMatrix();

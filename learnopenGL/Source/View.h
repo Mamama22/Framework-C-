@@ -70,7 +70,7 @@ public:
 	/********************** Call this before/after any render functions *****************************/
 	void ClearScreen();
 	void Start_WorldRender(Camera& camera);	//render in world
-	void Start_ScreenRender();	//render on screen
+	void Start_ScreenRender(float offsetX, float offsetY);	//render on screen
 	void PostRender();
 
 	/********************** The type of shader to use *****************************/
@@ -102,7 +102,7 @@ private:
 
 	/**************** pre-render, call in order ****************/
 	void CameraAndProj(Camera& camera);
-	void CameraAndProj_OnScreen();
+	void CameraAndProj_OnScreen(float offsetX, float offsetY);
 
 	/************* Transformation *****************/
 	//Transform utility var----------------------------//
