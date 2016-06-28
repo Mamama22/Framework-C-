@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual C++ Express 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "learnopenGL", "learnopenGL\learnopenGL.vcxproj", "{5B4A2896-A891-4624-86FC-92F6913BEDCE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B1C0EFB5-507F-45DB-A400-A898F3A0EC4C} = {B1C0EFB5-507F-45DB-A400-A898F3A0EC4C}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Common", "Common\Common.vcxproj", "{B1C0EFB5-507F-45DB-A400-A898F3A0EC4C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5B4A2896-A891-4624-86FC-92F6913BEDCE}.Debug|Win32.ActiveCfg = Debug|Win32
+		{5B4A2896-A891-4624-86FC-92F6913BEDCE}.Debug|Win32.Build.0 = Debug|Win32
+		{5B4A2896-A891-4624-86FC-92F6913BEDCE}.Release|Win32.ActiveCfg = Release|Win32
+		{5B4A2896-A891-4624-86FC-92F6913BEDCE}.Release|Win32.Build.0 = Release|Win32
+		{B1C0EFB5-507F-45DB-A400-A898F3A0EC4C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B1C0EFB5-507F-45DB-A400-A898F3A0EC4C}.Debug|Win32.Build.0 = Debug|Win32
+		{B1C0EFB5-507F-45DB-A400-A898F3A0EC4C}.Release|Win32.ActiveCfg = Release|Win32
+		{B1C0EFB5-507F-45DB-A400-A898F3A0EC4C}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,78 @@
+#include "Text_Renderer.h"
+
+FreeType_Text::FreeType_Text(){}
+FreeType_Text::~FreeType_Text(){}
+
+/******************************************************************************
+Init
+******************************************************************************/
+void FreeType_Text::Init()
+{
+	//Init FT library--------------------------------------------------//
+	if (FT_Init_FreeType(&ft))
+		cout << "Init error: could not init FT library" << endl;
+
+	//Load and init font as face---------------------------------------//
+
+	if (FT_New_Face(ft, "fonts/SEASRN__.ttf", 0, &minecraft))
+		cout << "Error: failed to load font" << endl;
+
+	//extract font size--------------------------------------------------//
+	FT_Set_Pixel_Sizes(minecraft, 0, 48);	//setting widh to 0 lets face dynamically cal. width based on given height
+
+	//FT face hosts collection of glyphs, set one of those glyphs as active----------------------------------//
+	if (FT_Load_Char(minecraft, 'X', FT_LOAD_RENDER))	//tell FT to create an 8-bit grayscale bitmap image for us 
+		cout << "Error: failed to load glyph" << endl;
+
+	
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // Disable byte-alignment restriction
+
+	//For each character, generate a character and store relevant data to Character struct------------------------------------------------//
+	for (GLubyte c = 0; c < 128; c++)
+	{
+		// Load character glyph 
+		if (FT_Load_Char(minecraft, c, FT_LOAD_RENDER))
+		{
+			std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
+			continue;
+		}
+		// Generate texture and store alpha value in R component of texture
+		GLuint texture;
+		glGenTextures(1, &texture);
+		glBindTexture(GL_TEXTURE_2D, texture);
+		glTexImage2D(
+			GL_TEXTURE_2D,
+			0,
+			GL_RED,
+			minecraft->glyph->bitmap.width,
+			minecraft->glyph->bitmap.rows,
+			0,
+			GL_RED,
+			GL_UNSIGNED_BYTE,
+			minecraft->glyph->bitmap.buffer
+			);
+
+		// Set texture options-------------------------------------------------------------//
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		// Now store character for later use-----------------------------------------------//
+		Character character;
+
+		character.init(texture, Vector2(minecraft->glyph->bitmap.width, minecraft->glyph->bitmap.rows),
+			Vector2(minecraft->glyph->bitmap_left, minecraft->glyph->bitmap_top),
+			minecraft->glyph->advance.x);
+
+		//Add new data-------------------------------------------------------------//
+		characters.insert(std::pair<GLchar, Character>(c, character));
+	}
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+	//glPixelStorei(GL_UNPACK_ALIGNMENT, 0); // Enable byte-alignment restriction
+
+	//cleanup-------------------------------------------------------------//
+	FT_Done_Face(minecraft);
+	FT_Done_FreeType(ft);
+}

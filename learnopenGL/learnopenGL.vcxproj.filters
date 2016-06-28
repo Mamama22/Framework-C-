@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Source\main.cpp" />
+    <ClCompile Include="Source\Controller.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\View.cpp">
+      <Filter>Core Utilities\View</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CoreUtilities.cpp">
+      <Filter>Core Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\shader.cpp">
+      <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Mesh.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MeshBuilder.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Camera.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Input.cpp">
+      <Filter>Core Utilities\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\FPS_Camera.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Text_Renderer.cpp">
+      <Filter>Core Utilities\Text</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Controller">
+      <UniqueIdentifier>{c45ab452-400c-4aaa-88dc-f4e0d335580d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core Utilities">
+      <UniqueIdentifier>{5eedd451-0f6c-4376-bbec-a65ae707b434}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core Utilities\View">
+      <UniqueIdentifier>{c3374e9f-99c1-4fe6-9c3c-d5ff2812b943}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Mesh">
+      <UniqueIdentifier>{22d76852-9c76-4b7b-97a5-439ea35ca284}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Misc">
+      <UniqueIdentifier>{74cdf528-564e-427f-ab9a-6fdace869bde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Camera">
+      <UniqueIdentifier>{95e25d82-c60b-499d-9f81-1daf84f62403}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Light">
+      <UniqueIdentifier>{8025e460-ef50-4284-98d7-862fa0802a34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core Utilities\Text">
+      <UniqueIdentifier>{5a06d606-0ef7-4b9a-b93c-d63fcfdf68f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core Utilities\Input">
+      <UniqueIdentifier>{591e8d0b-accf-44d3-9b40-e045603e526f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\Controller.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Header.h" />
+    <ClInclude Include="Source\View.h">
+      <Filter>Core Utilities\View</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CoreUtilities.h">
+      <Filter>Core Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\shader.hpp">
+      <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Vertex.h" />
+    <ClInclude Include="Source\Mesh.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MeshBuilder.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Camera.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Light.h">
+      <Filter>Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Input.h">
+      <Filter>Core Utilities\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\FPS_Camera.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Text_Renderer.h">
+      <Filter>Core Utilities\Text</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,51 @@
+
+	//LAZARUS
+	float x = 4;
+	float y = 120;
+	float z = 0;
+	int BoxCounter = 0;
+	boxList.resize(100);
+	//Create memory space for the text file values.
+	string line;
+
+	//Select File
+	ifstream myfile("BetaLoad.txt");
+
+	//Start opening file
+	while (myfile.is_open())
+	{
+		//While there's a line
+		while (getline(myfile, line, ','))
+		{
+
+			//Go to next line.
+			if (line == "")
+			{
+				y -= 7.5;
+				x = 4;
+			}
+
+			// '1' in text file = create 1 block.
+			if (line == "1")
+			{
+				//Create box
+				boxList[BoxCounter].Init("b1", Vector3(x, y, 0), Vector3(7, 7, 1));
+				//Increase X position to put the next entity
+				x += 7;
+
+				//Increase the total value in the vector
+				BoxCounter++;
+			}
+
+			if (line == "0")
+			{
+				//Create an empty space
+				x += 7;
+			}
+
+
+
+		}
+		//If no more line close file
+		myfile.close();
+	}
