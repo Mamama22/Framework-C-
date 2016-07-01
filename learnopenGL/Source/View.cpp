@@ -316,6 +316,7 @@ Post render cleanup
 ********************************************************************************/
 void View::PostRender()
 {
+	Mesh::ResetCurrentMesh();
 	modelStack.Clear();
 	projectionStack.Clear();
 	viewStack.Clear();
@@ -327,6 +328,7 @@ Choose the shader to use
 void View::UseShader(SHADER_TYPE type)
 {
 	currentShader = type;
+
 	if (type == LIGHT_SHADER)
 		glUseProgram(m_programID);
 	else if (type == BASIC_SHADER)
@@ -460,6 +462,14 @@ void View::RenderMesh(Mesh& renderMe)
 
 	//Render the mesh-------------------------------------------------------//
 	renderMe.Render();
+}
+
+/********************************************************************************
+Reset
+********************************************************************************/
+void View::Reset()
+{
+
 }
 
 /********************************************************************************

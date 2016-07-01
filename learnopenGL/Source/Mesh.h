@@ -11,7 +11,7 @@ Author: Tan Yie Cher
 Date: 23/6/2016
 
 Note:
--All mesh can share the same VAO
+-IMPORTANT: render mesh of this type without binding to any other external VAO, ie. text VAO!!!
 /*************************************************************/
 class Mesh
 {
@@ -35,6 +35,8 @@ public:
 
 	//Core------------------------------//
 	void Render();
+
+	static void ResetCurrentMesh();	//call
 };
 
 #endif

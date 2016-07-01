@@ -32,9 +32,9 @@ void MeshBuilder::BindBuffers(Mesh& mesh, std::vector<Vertex>& vertex_buffer_dat
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-	/*glDisableVertexAttribArray(0);
+	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
-	glDisableVertexAttribArray(2);*/
+	glDisableVertexAttribArray(2);
 }
 
 /******************************************************************************

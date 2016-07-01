@@ -23,7 +23,7 @@ struct Character
 FreeType text library wrapper.
 Credits:
 -Tutorial: http://learnopengl.com/#!In-Practice/Text-Rendering
-credit goes to FreeType for this awesome text library :)
+credit goes to FreeType for this awesome text library and learnopengl.xom for the comprehensive tutorial :)
 
 Author: Tan Yie Cher
 Date: 25/6/16

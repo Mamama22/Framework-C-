@@ -18,6 +18,8 @@ public:
 	/******************** core utilities **********************/
 	static View view;
 	static Input input;
+	static double dt;
+	static float fps;
 
 	/******************** wrapper functions **********************/
 	static void Init()

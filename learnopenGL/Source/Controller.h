@@ -1,8 +1,8 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
-#include "CoreUtilities.h"
-#include "FPS_Camera.h"
-#include "MeshBuilder.h"
+
+//Scenes-------------------------//
+#include "Scene_Test.h"
 
 /*************************************************************
 New and improved controller
@@ -12,12 +12,8 @@ Date: 23/6/2016
 /*************************************************************/
 class Controller
 {
-	//camera--------------------------------//
-	FPS_Cam camera;
-
-	Mesh* axes;
-	Mesh* quad;
-	Mesh* sphere;
+	//Scenes--------------------------------//
+	Scene* current_scene;
 
 	/********************** FPS **********************/
 	const static unsigned char Controller::FPS; // FPS of this game (ONLY RELEASE MODE CAN RUN SMOOTHLY AT 170FPS MAX)
@@ -29,6 +25,7 @@ class Controller
 	double m_dAccumulatedTime_thread1;
 	double m_dAccumulatedTime_thread2;
 	float fps;
+
 public:
 
 	/******************** core functions **********************/

@@ -2,6 +2,12 @@
 int Mesh::totalMeshes = 0;
 int Mesh::currentMesh = -1;
 
+void Mesh::ResetCurrentMesh()
+{
+	//reset, as Text and other renders will bind incompatible VAO, so even if currentMesh is same is this mesh ID, VAO will not be the same
+	currentMesh = -1;
+}
+
 /********************************************************************************
 CD
 ********************************************************************************/
@@ -32,7 +38,9 @@ void Mesh::Render()
 {
 	//If rendering this mesh for first time this frame, bind it's VAO
 	if (currentMesh != meshID)
+	{
 		glBindVertexArray(m_vertexArrayID);
+	}
 
 	currentMesh = meshID;
 

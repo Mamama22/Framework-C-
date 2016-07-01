@@ -40,12 +40,14 @@ void FreeType_Text::Init()
 		GLuint texture;
 		glGenTextures(1, &texture);
 		glBindTexture(GL_TEXTURE_2D, texture);
+
+		//GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const GLvoid *pixels
 		glTexImage2D(
 			GL_TEXTURE_2D,
 			0,
-			GL_RED,
-			minecraft->glyph->bitmap.width,
-			minecraft->glyph->bitmap.rows,
+			GL_RED,	//only has red component, instead of RGBA
+			minecraft->glyph->bitmap.width,	//pixel width
+			minecraft->glyph->bitmap.rows,	//pixel height
 			0,
 			GL_RED,
 			GL_UNSIGNED_BYTE,
@@ -70,7 +72,7 @@ void FreeType_Text::Init()
 	}
 
 	glBindTexture(GL_TEXTURE_2D, 0);
-	//glPixelStorei(GL_UNPACK_ALIGNMENT, 0); // Enable byte-alignment restriction
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 0); // Enable byte-alignment restriction
 
 	//cleanup-------------------------------------------------------------//
 	FT_Done_Face(minecraft);

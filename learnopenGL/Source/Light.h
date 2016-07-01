@@ -70,6 +70,15 @@ public:
 		spot_cutoff[total_spot] = cos(Math::DegreeToRadian(cutoff_Angle));
 		++total_spot;
 	}
+
+	/*************************************************************
+	Remove all lights
+	/*************************************************************/
+	void Remove_All()
+	{
+		total_spot = total_dir = total_point = 0;
+	}
+
 };
 
 

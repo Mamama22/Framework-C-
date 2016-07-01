@@ -61,6 +61,7 @@ public:
 	/********************** Core functions *****************************/
 	void Init();
 	void Exit();
+	void Reset();	//changing scene etc. needs to reset lights etc.
 
 	/********************** Add Lights *****************************/
 	void AddDirLight(Vector3 dir, Color color);
