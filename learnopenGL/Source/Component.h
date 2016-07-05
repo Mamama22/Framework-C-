@@ -31,6 +31,9 @@ protected:
 	/******************** abstract functions **********************/
 	virtual void UpdatingComp() = 0;
 
+	//Static----------------------------------//
+	static Mtx44 rotate, translate, translate2, TRS;
+
 public:
 
 	//Transform comp-------------------------//
@@ -48,6 +51,10 @@ public:
 
 	/******************** Transformation function **********************/
 	virtual void Translate(Vector3 vel);	//overload if applicable
+	virtual void Rotate(float angle);
+
+	/******************** Entity Transformation function: ENTITY USE ONLY **********************/
+	virtual void RotateWithEntity(Transformation& entTrans, float angle);
 
 	/******************** Get functions **********************/
 	const char* GetName();

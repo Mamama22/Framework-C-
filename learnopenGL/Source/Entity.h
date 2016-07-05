@@ -34,6 +34,11 @@ class Entity
 	/******************** List **********************/
 	vector<Component*> componentList;
 	vector<Entity*> children;
+	
+protected:
+
+	//Static----------------------------------//
+	static Mtx44 rotate, translate, translate2, TRS;
 
 public:
 	
@@ -57,8 +62,10 @@ public:
 
 	/******************** Transformation function **********************/
 	virtual void Translate(Vector3 vel);	//overload if applicable
+	virtual void Rotate(float angle);
 
-
+	/******************** Entity Transformation function: ENTITY USE ONLY **********************/
+	virtual void RotateWithEntity(Transformation& entTrans, float angle);
 
 	/********************************************************************************
 	get the component (specify its type when calling this function)

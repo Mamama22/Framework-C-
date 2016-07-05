@@ -44,9 +44,9 @@ void Scene_ECS::AddRendererToTest()
 	ss << "renderer" << rendererCounter;
 
 	if (meshType == 0)
-		Render_OnScreen_List[rendererCounter].Init(ss.str().c_str(), quad, newPos, Vector3(100, 150, 1));	//assign available renderer
+		Render_OnScreen_List[rendererCounter].Init(ss.str().c_str(), quad, newPos, Vector3(50, 75, 1));	//assign available renderer
 	else if (meshType == 1)
-		Render_OnScreen_List[rendererCounter].Init(ss.str().c_str(), sphere, newPos, Vector3(100, 150, 1));	//assign available renderer
+		Render_OnScreen_List[rendererCounter].Init(ss.str().c_str(), sphere, newPos, Vector3(50, 75, 1));	//assign available renderer
 
 	meshType++;
 	if (meshType > 1)
@@ -54,7 +54,7 @@ void Scene_ECS::AddRendererToTest()
 
 	Render_OnScreen_List[rendererCounter].SetActive(true);
 	testEnt.AddComponent(&Render_OnScreen_List[rendererCounter]);
-	startPos += Vector3(50, 50, 0);
+	startPos += Vector3(25, 25, 0);
 	++rendererCounter;
 }
 
@@ -83,6 +83,8 @@ void Scene_ECS::Run()
 		testEnt.Translate(Vector3(-2, 0, 0));
 	if (CU::input.IsKeyPressed(Input::D))
 		testEnt.Translate(Vector3(2, 0, 0));
+	if (CU::input.IsKeyPressed(Input::C))
+		testEnt.Rotate(2.f);
 }
 
 /********************************************************************************

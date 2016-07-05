@@ -18,10 +18,14 @@ Date: 4/7/2016
 class Transformation
 {
 public:
+	float angle;
 	Vector3 pos;
 	Vector3 scale;
 
-	void Set(Vector3 pos, Vector3 scale){ this->pos = pos; this->scale = scale; }
+	Transformation(){ angle = 0.f; }
+	~Transformation(){}
+
+	void Set(Vector3 pos, Vector3 scale){ this->pos = pos; this->scale = scale; this->angle = 0.f; }
 };
 
 #endif
