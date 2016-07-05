@@ -6,6 +6,9 @@
 #include "FPS_Camera.h"
 #include "MeshBuilder.h"
 
+//Entity types---------------------------//
+#include "Entity.h"
+
 /*************************************************************
 Scene class, create your own scene:
 1) Derive from this class and inherit all the necessary functions

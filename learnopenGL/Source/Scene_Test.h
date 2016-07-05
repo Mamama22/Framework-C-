@@ -9,6 +9,7 @@ Date: 1/7/2016
 /*************************************************************/
 class Scene_Test : public Scene
 {
+	ostringstream ss;
 	Mesh* axes;
 	Mesh* quad;
 	Mesh* sphere;

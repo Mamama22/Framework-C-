@@ -16,7 +16,7 @@ void Controller::Init()
 	CU::Init();
 	CU::input.SetMouse(true);
 
-	current_scene = new Scene_Test();
+	current_scene = new Scene_ECS();
 	current_scene->Init();
 }
 

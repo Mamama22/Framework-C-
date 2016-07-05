@@ -1,0 +1,3 @@
+-Make light a component type
+-Renderer is a entity type? It needs to contain children to modify their scale
+-CAMERA crashes

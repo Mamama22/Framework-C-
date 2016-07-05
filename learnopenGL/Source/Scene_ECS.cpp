@@ -1,9 +1,18 @@
-#include "Scene_Test.h"
+#include "Scene_ECS.h"
+
+Scene_ECS::Scene_ECS()
+{
+	rendererCounter = 0;
+	meshType = 0;
+}
+
+
+Scene_ECS::~Scene_ECS(){}
 
 /********************************************************************************
 Init
 ********************************************************************************/
-void Scene_Test::Init()
+void Scene_ECS::Init()
 {
 	//Call parent--------------------------------------//
 	Scene::Init();
@@ -18,73 +27,88 @@ void Scene_Test::Init()
 	CU::view.AddPointLight(Vector3(-4.f, 4.f, 5.f));
 	CU::view.AddSpotLight(Vector3(-12.f, 1.f, 7.f), Vector3(-12.5f, 0.f, 7.f), 30.f);
 	CU::view.AddSpotLight(Vector3(13.f, 1.f, 6.f), Vector3(15.f, 0.f, 6.f), 35.f);
+
+	//make 20 on screen renderers------------------------------------------//
+	Render_OnScreen_List.resize(20);
+
+	testEnt.Init(Vector3(-100, -100, 0));
+
+	//Add renderer to test----------------------------------------------------//
+	AddRendererToTest();
+}
+
+void Scene_ECS::AddRendererToTest()
+{
+	Vector3 newPos = testEnt.transform.pos + startPos;
+	ss.str("");
+	ss << "renderer" << rendererCounter;
+
+	if (meshType == 0)
+		Render_OnScreen_List[rendererCounter].Init(ss.str().c_str(), quad, newPos, Vector3(100, 150, 1));	//assign available renderer
+	else if (meshType == 1)
+		Render_OnScreen_List[rendererCounter].Init(ss.str().c_str(), sphere, newPos, Vector3(100, 150, 1));	//assign available renderer
+
+	meshType++;
+	if (meshType > 1)
+		meshType = 0;
+
+	Render_OnScreen_List[rendererCounter].SetActive(true);
+	testEnt.AddComponent(&Render_OnScreen_List[rendererCounter]);
+	startPos += Vector3(50, 50, 0);
+	++rendererCounter;
 }
 
 
 /********************************************************************************
 Run
 ********************************************************************************/
-void Scene_Test::Run()
+void Scene_ECS::Run()
 {
 	//Call parent--------------------------------------//
 	Scene::Run();
 
+	//Add new comp------------------------------------------------//
 	if (CU::input.IsKeyReleased(Input::P))
-		CU::view.Reset();
+	{
+		AddRendererToTest();
+	}
+
+	//Control---------------------------------------------------------------------//
+	//testEnt.GetComp<Render_OnScreen>("renderer")->Translate(Vector3(0, 1, 0));
+	if (CU::input.IsKeyPressed(Input::W))
+		testEnt.Translate(Vector3(0, 2, 0));
+	if (CU::input.IsKeyPressed(Input::S))
+		testEnt.Translate(Vector3(0, -2, 0));
+	if (CU::input.IsKeyPressed(Input::A))
+		testEnt.Translate(Vector3(-2, 0, 0));
+	if (CU::input.IsKeyPressed(Input::D))
+		testEnt.Translate(Vector3(2, 0, 0));
 }
 
 /********************************************************************************
 Draw in worldq
 ********************************************************************************/
-void Scene_Test::DrawInWorld()
+void Scene_ECS::DrawInWorld()
 {
 
-	CU::view.UseShader(View::LIGHT_SHADER);	//use light shader
-
-	CU::view.SetIdentity();
-	CU::view.Translate(-2.f, 2.f, 0.f);
-	CU::view.Scale(2.f, 2.f, 2.f);
-	CU::view.RenderMesh(*sphere);
-
-	CU::view.SetIdentity();
-	CU::view.Translate(-2.f, -2.5f, 0.f);
-	CU::view.Rotate(-90.f, 1.f, 0.f, 0.f);
-	CU::view.Scale(100.f, 100.f, 1.f);
-	CU::view.RenderMesh(*quad);
-
-	CU::view.UseShader(View::BASIC_SHADER);	//use basic shader
-
-	//Point light----------------------------------//
-	CU::view.SetIdentity();
-	CU::view.Translate(-2.f, 2.f, 2.5f);
-	CU::view.Scale(0.3f, 0.3f, 0.3f);
-	CU::view.RenderMesh(*sphere);
-
-	//spot light------------------------------------//
-	CU::view.SetIdentity();
-	CU::view.Translate(-12.f, 1.f, 7.f);
-	CU::view.Scale(0.2f, 0.2f, 0.2f);
-	CU::view.RenderMesh(*sphere);
-
-	CU::view.SetIdentity();
-	CU::view.Translate(13.f, 1.f, 6.f);
-	CU::view.Scale(0.2f, 0.2f, 0.2f);
-	CU::view.RenderMesh(*sphere);
 }
 
 /********************************************************************************
 Draw on screen
 ********************************************************************************/
-void Scene_Test::DrawOnScreen()
+void Scene_ECS::DrawOnScreen()
 {
-	/*CU::view.SetIdentity();
+	CU::view.UseShader(View::BASIC_SHADER);	//use basic shader
+
+	//Axes----------------------------------------------------//
+	CU::view.SetIdentity();
 	CU::view.Scale(2000.f, 2000.f, 2000.f);
 	CU::view.RenderMesh(*axes);
 
-	CU::view.SetIdentity();
-	CU::view.Translate(200.f, 100.f, 0.f);
-	CU::view.Scale(100.f, 100.f, 1.f);
-	CU::view.RenderMesh(*quad);*/
+	//Renderer update (Draw)---------------------------------------------//
+	for (int i = 0; i < Render_OnScreen_List.size(); ++i)
+		Render_OnScreen_List[i].Update();
+
 
 	CU::view.UseShader(View::TEXT_SHADER);	//use light shader
 
@@ -95,13 +119,13 @@ void Scene_Test::DrawOnScreen()
 	int findDot = theFPS.find('.');
 	theFPS = theFPS.substr(0, findDot);
 	CU::view.RenderText(theFPS, Vector2(-390.f, 250.f), 0.5f, Color(0.f, 255.f, 255.f));
-	CU::view.RenderText("OWL CITY", Vector2(50.f, -290.f), 1.f, Color(242.f, 215.f, 104.f));
+	CU::view.RenderText("ECS scene", Vector2(50.f, -290.f), 1.f, Color(242.f, 215.f, 104.f));
 }
 
 /********************************************************************************
 Exit
 ********************************************************************************/
-void Scene_Test::Exit()
+void Scene_ECS::Exit()
 {
 	delete sphere;
 	delete quad;

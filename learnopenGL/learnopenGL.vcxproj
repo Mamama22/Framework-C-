@@ -12,31 +12,48 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Camera.cpp" />
+    <ClCompile Include="Source\Component.cpp" />
     <ClCompile Include="Source\Controller.cpp" />
     <ClCompile Include="Source\CoreUtilities.cpp" />
+    <ClCompile Include="Source\Entity.cpp" />
     <ClCompile Include="Source\FPS_Camera.cpp" />
     <ClCompile Include="Source\Input.cpp" />
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\Mesh.cpp" />
     <ClCompile Include="Source\MeshBuilder.cpp" />
+    <ClCompile Include="Source\Renderer.cpp" />
+    <ClCompile Include="Source\Scene.cpp" />
+    <ClCompile Include="Source\Scene_ECS.cpp" />
+    <ClCompile Include="Source\Scene_Test.cpp" />
     <ClCompile Include="Source\shader.cpp" />
     <ClCompile Include="Source\Text_Renderer.cpp" />
+    <ClCompile Include="Source\Transformation.cpp" />
     <ClCompile Include="Source\View.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Camera.h" />
+    <ClInclude Include="Source\Component.h" />
     <ClInclude Include="Source\Controller.h" />
     <ClInclude Include="Source\CoreUtilities.h" />
+    <ClInclude Include="Source\Entity.h" />
     <ClInclude Include="Source\FPS_Camera.h" />
     <ClInclude Include="Source\Header.h" />
     <ClInclude Include="Source\Input.h" />
     <ClInclude Include="Source\Light.h" />
     <ClInclude Include="Source\Mesh.h" />
     <ClInclude Include="Source\MeshBuilder.h" />
+    <ClInclude Include="Source\Renderer.h" />
+    <ClInclude Include="Source\Scene.h" />
+    <ClInclude Include="Source\Scene_ECS.h" />
+    <ClInclude Include="Source\Scene_Test.h" />
     <ClInclude Include="Source\shader.hpp" />
     <ClInclude Include="Source\Text_Renderer.h" />
+    <ClInclude Include="Source\Transformation.h" />
     <ClInclude Include="Source\Vertex.h" />
     <ClInclude Include="Source\View.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Source\IMPROVEMENTS.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{5B4A2896-A891-4624-86FC-92F6913BEDCE}</ProjectGuid>
@@ -80,13 +97,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)\glew\include;$(SolutionDir)\glfw\include;$(SolutionDir)\Common\Source;$(SolutionDir)\freetype;$(SolutionDir)/lua/include;$(SolutionDir)\irrKlang\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\glew\include;$(SolutionDir)\glfw\include;$(SolutionDir)\Common\Source;$(SolutionDir)\freetype;$(SolutionDir)/lua/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)\irrKlang\lib;$(SolutionDir)\glew\lib;$(SolutionDir)\glfw\lib-msvc100;$(SolutionDir)/lua/lib;$(SolutionDir)\freetype\lib;$(SolutionDir)$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32.lib;glfw3.lib;opengl32.lib;winmm.lib;Common.lib;debug\lua5.1.lib;ws2_32.lib;lua5.1.lib;irrKlang.lib;freetype262d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\glew\lib;$(SolutionDir)\glfw\lib-msvc100;$(SolutionDir)/lua/lib;$(SolutionDir)\freetype\lib;$(SolutionDir)$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32.lib;glfw3.lib;opengl32.lib;winmm.lib;Common.lib;debug\lua5.1.lib;ws2_32.lib;lua5.1.lib;freetype262d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
