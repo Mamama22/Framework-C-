@@ -15,9 +15,12 @@ class Scene_ECS : public Scene
 	Mesh* sphere;
 
 	Entity testEnt;
+	Entity testEnt_1;
+	Entity testEnt_2;
+	bool added1, added2;	//added ent 1 and 2 as children alr?
 
 	//Add comp----------------------//
-	Vector3 startPos;
+	Vector3 offset, offset1, offset2;
 	int rendererCounter;
 	int meshType;
 
@@ -25,7 +28,9 @@ class Scene_ECS : public Scene
 	vector<Render_OnScreen> Render_OnScreen_List;
 
 	/******************** Add component to test **********************/
-	void AddRendererToTest();
+	void AddRendererToTest(Entity& addToMe, Vector3 offset);
+	void AddTestEnt1();
+	void AddTestEnt2();
 
 public:
 

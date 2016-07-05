@@ -28,18 +28,33 @@ public:
 	/** Put here for controller and model and character to access, got better way? **/
 	enum CONTROLS
 	{
-		W,	//w
-		S,	//s
-		A,	//a
-		D,	//d
-		Q,	//q
+		A,
+		B,
+		C,
+		D,
+		E,
+		F,
+		G,
+		H,
+		I,
+		J,
+		K,
+		L,
+		M,
+		N,
+		O,
+		P,
+		Q,
+		R,
+		S,
+		T,
+		U,
+		V,
+		W,
+		X,
+		Y,
+		Z,
 		SPACE,	//space bar
-		C,	//c
-		R,	//r
-		K,	//k
-		L,	//l
-		P,	//p
-		O,	//o
 
 		/* using mouse/controller... */
 		M_LEFT,	//mouse left
@@ -58,7 +73,7 @@ public:
 private:
 
 	//Variables--------------------------------------------------//
-	unsigned AlphabetMap[O];	//map alphabets to the corr. enum value
+	unsigned AlphabetMap[SPACE + 1];	//map alphabets to the corr. enum value
 
 	//Mouse variables--------------------------------------------------//
 	double mouse_last_x, mouse_last_y, mouse_current_x, mouse_current_y, mouse_diff_x, mouse_diff_y;

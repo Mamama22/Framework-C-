@@ -83,7 +83,7 @@ Rotates entity and children + components
 void Entity::Rotate(float angle)
 {
 	transform.angle += angle;
-	cout << transform.angle << endl;
+	
 	if (transform.angle < 0.f)
 		transform.angle += 360.f;
 	else if (transform.angle > 360.f)
@@ -91,28 +91,42 @@ void Entity::Rotate(float angle)
 
 	//Children/comp must move along arc of rotation-------------------------//
 	for (int i = 0; i < children.size(); ++i)
-		children[i]->RotateWithEntity(transform, angle);
+		children[i]->RotateWithEntity(transform.pos, children[i]->transform.pos - transform.pos, angle);
 	for (int i = 0; i < componentList.size(); ++i)
-		componentList[i]->RotateWithEntity(transform, angle);
+		componentList[i]->RotateWithEntity(transform.pos, componentList[i]->transform.pos - transform.pos, angle);
 }
 
 /********************************************************************************
 Rotate with entity (parent): when entity rotates, pos of this component
 changes along the axis entity rotates
 ********************************************************************************/
-void Entity::RotateWithEntity(Transformation& entTrans, float angle)
+void Entity::RotateWithEntity(Vector3 new_ParentPos, Vector3 parentChildOffset, float angle)
 {
+	Vector3 originalPos = transform.pos;
 	rotate.SetToIdentity();
 	translate.SetToIdentity();	//for translation to entity pos
 	translate2.SetToIdentity();	//for translatuon to new pos after following arc rotated by entity
 
-	translate.SetToTranslation(entTrans.pos.x, entTrans.pos.y, entTrans.pos.z);
-	Vector3 distFromEnt = transform.pos - entTrans.pos;	//dist from entity to comp
-	translate2.SetToTranslation(distFromEnt.x, distFromEnt.y, distFromEnt.z);
+	//Add angle------------------------------------//
+	transform.angle += angle;
+
+	if (transform.angle < 0.f)
+		transform.angle += 360.f;
+	else if (transform.angle > 360.f)
+		transform.angle -= 360.f;
+
+	translate.SetToTranslation(new_ParentPos.x, new_ParentPos.y, new_ParentPos.z);
+	translate2.SetToTranslation(parentChildOffset.x, parentChildOffset.y, parentChildOffset.z);
 	rotate.SetToRotation(angle, 0, 0, 1);
 
 	//Calculate new pos with TRS------------------------------------------------------//
 	translate = translate * rotate * translate2;
 	transform.pos.SetZero();
 	transform.pos = translate * transform.pos;
+
+	//Children/comp must move along arc of rotation-------------------------//
+	for (int i = 0; i < children.size(); ++i)
+		children[i]->RotateWithEntity(transform.pos, children[i]->transform.pos - originalPos, angle);
+	for (int i = 0; i < componentList.size(); ++i)
+		componentList[i]->RotateWithEntity(transform.pos, componentList[i]->transform.pos - originalPos, angle);
 }

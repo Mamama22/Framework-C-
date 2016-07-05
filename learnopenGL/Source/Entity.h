@@ -65,7 +65,7 @@ public:
 	virtual void Rotate(float angle);
 
 	/******************** Entity Transformation function: ENTITY USE ONLY **********************/
-	virtual void RotateWithEntity(Transformation& entTrans, float angle);
+	void RotateWithEntity(Vector3 new_ParentPos, Vector3 parentChildOffset, float angle);	//call rotate with parent
 
 	/********************************************************************************
 	get the component (specify its type when calling this function)

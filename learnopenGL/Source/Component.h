@@ -54,7 +54,7 @@ public:
 	virtual void Rotate(float angle);
 
 	/******************** Entity Transformation function: ENTITY USE ONLY **********************/
-	virtual void RotateWithEntity(Transformation& entTrans, float angle);
+	virtual void RotateWithEntity(Vector3 new_ParentPos, Vector3 parentChildOffset, float angle);
 
 	/******************** Get functions **********************/
 	const char* GetName();

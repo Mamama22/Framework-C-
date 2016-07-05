@@ -4,6 +4,7 @@ Scene_ECS::Scene_ECS()
 {
 	rendererCounter = 0;
 	meshType = 0;
+	added1 = added2 = false;
 }
 
 
@@ -29,17 +30,21 @@ void Scene_ECS::Init()
 	CU::view.AddSpotLight(Vector3(13.f, 1.f, 6.f), Vector3(15.f, 0.f, 6.f), 35.f);
 
 	//make 20 on screen renderers------------------------------------------//
-	Render_OnScreen_List.resize(20);
+	Render_OnScreen_List.resize(40);
 
 	testEnt.Init(Vector3(-100, -100, 0));
+	testEnt.Init(Vector3(-100, 50, 0));
+	testEnt.Init(Vector3(100, 100, 0));
 
 	//Add renderer to test----------------------------------------------------//
-	AddRendererToTest();
+	AddRendererToTest(testEnt, offset);
+	AddRendererToTest(testEnt_1, offset1);
+	AddRendererToTest(testEnt_2, offset2);
 }
 
-void Scene_ECS::AddRendererToTest()
+void Scene_ECS::AddRendererToTest(Entity& addToMe, Vector3 offset)
 {
-	Vector3 newPos = testEnt.transform.pos + startPos;
+	Vector3 newPos = addToMe.transform.pos + offset;
 	ss.str("");
 	ss << "renderer" << rendererCounter;
 
@@ -53,11 +58,24 @@ void Scene_ECS::AddRendererToTest()
 		meshType = 0;
 
 	Render_OnScreen_List[rendererCounter].SetActive(true);
-	testEnt.AddComponent(&Render_OnScreen_List[rendererCounter]);
-	startPos += Vector3(25, 25, 0);
+	addToMe.AddComponent(&Render_OnScreen_List[rendererCounter]);
 	++rendererCounter;
 }
 
+void Scene_ECS::AddTestEnt1()
+{
+	if (added1)
+		return;
+	added1 = true;
+	testEnt.AddChildren(&testEnt_1);
+}
+void Scene_ECS::AddTestEnt2()
+{
+	if (added2)
+		return;
+	added2 = true;
+	testEnt_1.AddChildren(&testEnt_2);
+}
 
 /********************************************************************************
 Run
@@ -68,10 +86,27 @@ void Scene_ECS::Run()
 	Scene::Run();
 
 	//Add new comp------------------------------------------------//
+	if (CU::input.IsKeyReleased(Input::I))
+	{
+		AddRendererToTest(testEnt, offset);
+		offset += Vector3(25, 25, 0);
+	}
+	if (CU::input.IsKeyReleased(Input::O))
+	{
+		AddRendererToTest(testEnt_1, offset1);
+		offset1 += Vector3(0, 20, 0);
+	}
 	if (CU::input.IsKeyReleased(Input::P))
 	{
-		AddRendererToTest();
+		AddRendererToTest(testEnt_2, offset2);
+		offset2 += Vector3(-20, -20, 0);
 	}
+
+	//Add entities to main test entity-------------------------------//
+	if (CU::input.IsKeyReleased(Input::K))
+		AddTestEnt1();
+	if (CU::input.IsKeyReleased(Input::L))
+		AddTestEnt2();
 
 	//Control---------------------------------------------------------------------//
 	//testEnt.GetComp<Render_OnScreen>("renderer")->Translate(Vector3(0, 1, 0));
@@ -84,7 +119,9 @@ void Scene_ECS::Run()
 	if (CU::input.IsKeyPressed(Input::D))
 		testEnt.Translate(Vector3(2, 0, 0));
 	if (CU::input.IsKeyPressed(Input::C))
-		testEnt.Rotate(2.f);
+		testEnt.Rotate(1.f);
+	if (CU::input.IsKeyPressed(Input::B))
+		testEnt_1.Rotate(1.f);
 }
 
 /********************************************************************************

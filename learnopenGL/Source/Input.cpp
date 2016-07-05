@@ -55,18 +55,34 @@ void Input::Init()
 	pitch = yaw = 0.f;
 
 	//Keyboard-------------------------------------------------//
-	AlphabetMap[W] = 'W';
-	AlphabetMap[S] = 'S';
 	AlphabetMap[A] = 'A';
-	AlphabetMap[D] = 'D';
-	AlphabetMap[Q] = 'Q';
-	AlphabetMap[SPACE] = ' ';
+	AlphabetMap[B] = 'B';
 	AlphabetMap[C] = 'C';
-	AlphabetMap[R] = 'R';
+	AlphabetMap[D] = 'D';
+	AlphabetMap[E] = 'E';
+	AlphabetMap[F] = 'F';
+	AlphabetMap[G] = 'G';
+	AlphabetMap[H] = 'H';
+	AlphabetMap[I] = 'I';
+	AlphabetMap[J] = 'J';
 	AlphabetMap[K] = 'K';
 	AlphabetMap[L] = 'L';
-	AlphabetMap[P] = 'P';
+	AlphabetMap[M] = 'M';
+	AlphabetMap[N] = 'N';
 	AlphabetMap[O] = 'O';
+	AlphabetMap[P] = 'P';
+	AlphabetMap[Q] = 'Q';
+	AlphabetMap[R] = 'R';
+	AlphabetMap[S] = 'S';
+	AlphabetMap[T] = 'T';
+	AlphabetMap[U] = 'U';
+	AlphabetMap[V] = 'V';
+	AlphabetMap[W] = 'W';
+	AlphabetMap[X] = 'X';
+	AlphabetMap[Y] = 'Y';
+	AlphabetMap[Z] = 'Z';
+	AlphabetMap[SPACE] = ' ';
+
 
 	for (int i = 0; i < TOTAL_CONTROLS; ++i)
 		KeyPressed[i] = KeyHeldDown[i] = KeyReleased[i] = false;
@@ -138,7 +154,7 @@ void Input::CheckForKeyPresses()
 	//check for key presses---------------------------------------------------//
 	a_key_released = a_key_is_pressed = a_key_held_down = false;
 
-	for (int i = 0; i < O; ++i)
+	for (int i = A; i <= SPACE; ++i)
 	{
 		KeyHeldDown[i] = KeyReleased[i] = false;	//make sure held down and released are ALWAYS SET TO FALSE FOR ALL FRAMES
 
