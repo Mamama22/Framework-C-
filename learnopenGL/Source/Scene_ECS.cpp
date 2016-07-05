@@ -119,7 +119,7 @@ void Scene_ECS::DrawOnScreen()
 	int findDot = theFPS.find('.');
 	theFPS = theFPS.substr(0, findDot);
 	CU::view.RenderText(theFPS, Vector2(-390.f, 250.f), 0.5f, Color(0.f, 255.f, 255.f));
-	CU::view.RenderText("Owl City", Vector2(50.f, -290.f), 1.f, Color(242.f, 242.f, 7.f));
+	CU::view.RenderText("OWL CITY", Vector2(50.f, -290.f), 1.f, Color(242.f, 242.f, 7.f));
 }
 
 /********************************************************************************
