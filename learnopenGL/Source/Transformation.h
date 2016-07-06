@@ -22,6 +22,7 @@ public:
 	Vector3 pos;
 	Vector3 scale;
 	Vector3 prevPos;	//previous pos
+	Vector3 vel;	//velocity
 
 	Transformation(){ angle = 0.f; }
 	~Transformation(){}

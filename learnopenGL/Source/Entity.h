@@ -40,8 +40,15 @@ protected:
 	//Static----------------------------------//
 	static Mtx44 rotate, translate, translate2, TRS;
 
+	/******************** Derive urself functions **********************/
+	virtual void UpdateEntity();
+
 public:
 	
+	//Transform comp-------------------------//
+	Transformation transform;
+
+	/******************** Constructor/destructor **********************/
 	Entity();
 	~Entity();
 	
@@ -51,16 +58,13 @@ public:
 	virtual void RemoveComponent(Component* comp);
 	virtual void RemoveChildren(Entity* child);
 
-	//Transform comp-------------------------//
-	Transformation transform;
-
+	/******************** Core functions **********************/
 	void Init(Vector3 pos);
 
-	/******************** abstract functions **********************/
-
 	//Will be called everytime BEFORE comp updates-------------------//
-	virtual void Update();
+	void Update();
 
+	/******************** abstract functions **********************/
 	virtual void Exit(){}
 
 	/******************** Transformation function **********************/

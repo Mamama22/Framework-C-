@@ -32,6 +32,9 @@ Update:
 ********************************************************************************/
 void Component::Update()
 {
+	//Get vel-----------------------------------------------//
+	transform.vel = transform.pos - transform.prevPos;
+
 	if (active)
 		UpdatingComp();
 
