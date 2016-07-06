@@ -10,7 +10,7 @@ Core component type
 Every entity/comp to have it
 
 Usage: 
--default 
+-To get velocity, pos - prevPos
 
 Author: Tan Yie Cher
 Date: 4/7/2016
@@ -21,7 +21,7 @@ public:
 	float angle;
 	Vector3 pos;
 	Vector3 scale;
-	Vector3 vel;
+	Vector3 prevPos;	//previous pos
 
 	Transformation(){ angle = 0.f; }
 	~Transformation(){}

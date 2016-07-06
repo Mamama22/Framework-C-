@@ -32,12 +32,11 @@ Update:
 ********************************************************************************/
 void Component::Update()
 {
-	//translate with vel---------------------------------------//
-	transform.pos += transform.vel;
-	transform.vel.SetZero();	//reset vel to zero (testing only)
-
 	if (active)
 		UpdatingComp();
+
+	//assign prev pos---------------------------------------//
+	transform.prevPos = transform.pos;
 }
 
 /********************************************************************************
@@ -73,9 +72,8 @@ void Component::RotateWithEntity(Vector3 new_ParentPos, Vector3 parentChildOffse
 	
 	//Calculate new pos and velocity with TRS------------------------------------------------------//
 	translate = translate * rotate * translate2;
-	Vector3 newPos;
-	newPos = translate * newPos;
-	transform.vel += newPos - transform.pos;
+	transform.pos.SetZero();
+	transform.pos = translate * transform.pos;
 
 	//rotate angle------------------------------------//
 	Rotate(angle);

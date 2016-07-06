@@ -123,9 +123,9 @@ void Scene_ECS::Run()
 	if (CU::input.IsKeyPressed(Input::D))
 		testEnt.Translate(Vector3(2, 0, 0));
 	if (CU::input.IsKeyPressed(Input::C))
-		testEnt.Rotate(1.f);
+		testEnt.Rotate(50.f);
 	if (CU::input.IsKeyPressed(Input::B))
-		testEnt_1.Rotate(1.f);
+		testEnt_1.Rotate(50.f);
 
 
 	//Entity update------------------------------------------------------//

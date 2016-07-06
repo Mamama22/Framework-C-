@@ -114,6 +114,8 @@ void Entity::RotateWithEntity(Vector3 new_ParentPos, Vector3 parentChildOffset, 
 {
 	Vector3 originalPos = transform.pos;
 
+	rotate.SetToIdentity();
+
 	//Add angle------------------------------------//
 	transform.angle += angle;
 
@@ -129,15 +131,14 @@ void Entity::RotateWithEntity(Vector3 new_ParentPos, Vector3 parentChildOffset, 
 
 	//Calculate new pos with TRS------------------------------------------------------//
 	translate = translate * rotate * translate2;
-	Vector3 newPos;
-	newPos = translate * newPos;
-	transform.vel += newPos - transform.pos;
+	transform.pos.SetZero();
+	transform.pos = translate * transform.pos;
 
 	//Children/comp must move along arc of rotation-------------------------//
 	for (int i = 0; i < children.size(); ++i)
-		children[i]->RotateWithEntity(newPos, children[i]->transform.pos - originalPos, angle);
+		children[i]->RotateWithEntity(transform.pos, children[i]->transform.pos - originalPos, angle);
 	for (int i = 0; i < componentList.size(); ++i)
-		componentList[i]->RotateWithEntity(newPos, componentList[i]->transform.pos - originalPos, angle);
+		componentList[i]->RotateWithEntity(transform.pos, componentList[i]->transform.pos - originalPos, angle);
 }
 
 /********************************************************************************
@@ -145,7 +146,8 @@ Update if active
 ********************************************************************************/
 void Entity::Update()
 {
-	//translate with vel---------------------------------------//
-	transform.pos += transform.vel;
-	transform.vel.SetZero();	//reset vel to zero (testing only)
+	//velocity based update---------------------------------//
+
+	//assign prev pos---------------------------------------//
+	transform.prevPos = transform.pos;
 }
