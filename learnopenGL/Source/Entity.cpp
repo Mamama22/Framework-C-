@@ -113,9 +113,6 @@ changes along the axis entity rotates
 void Entity::RotateWithEntity(Vector3 new_ParentPos, Vector3 parentChildOffset, float angle)
 {
 	Vector3 originalPos = transform.pos;
-	rotate.SetToIdentity();
-	translate.SetToIdentity();	//for translation to entity pos
-	translate2.SetToIdentity();	//for translatuon to new pos after following arc rotated by entity
 
 	//Add angle------------------------------------//
 	transform.angle += angle;

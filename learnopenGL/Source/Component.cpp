@@ -63,9 +63,7 @@ changes along the axis entity rotates
 ********************************************************************************/
 void Component::RotateWithEntity(Vector3 new_ParentPos, Vector3 parentChildOffset, float angle)
 {
-	rotate.SetToIdentity();
-	translate.SetToIdentity();	//for translation to entity pos
-	translate2.SetToIdentity();	//for translatuon to new pos after following arc rotated by entity
+
 
 	translate.SetToTranslation(new_ParentPos.x, new_ParentPos.y, new_ParentPos.z);
 	translate2.SetToTranslation(parentChildOffset.x, parentChildOffset.y, parentChildOffset.z);
