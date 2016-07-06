@@ -49,4 +49,18 @@ public:
 	void UpdatingComp();	//render
 };
 
+/*************************************************************
+Render in world
+
+Author: Tan Yie Cher
+Date: 4/7/2016
+/*************************************************************/
+class Render_InWorld : public Renderer
+{
+public:
+
+	/******************** abstract functions **********************/
+	void UpdatingComp();	//render
+};
+
 #endif

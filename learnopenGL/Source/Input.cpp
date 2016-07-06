@@ -28,10 +28,19 @@ void scroll(GLFWwindow* window, double x, double y)
 	Input::setScrollY(y);
 }
 
-bool Input::checkKeyPress(unsigned short key)
+bool Input::DetectKeyPress(unsigned short key, CONTROLS keyIndex)
 {
 	//typable characters--------------------------//
-	return ((GetAsyncKeyState(key) & 0x8001) != 0);
+	if (keyIndex <= ARROW_RIGHT)
+		return ((GetAsyncKeyState(key) & 0x8001) != 0);
+
+	//Mouse-------------------------------------//
+	if (key == M_LEFT)
+		return glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS;
+	else if (key == M_RIGHT)
+		return glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS;
+	
+	return false;
 }
 
 void Input::setScrollX(double p)
@@ -51,7 +60,7 @@ void Input::Init()
 {
 	//Mouse----------------------------------------------------//
 	mouse_last_x = mouse_last_y = mouse_current_x = mouse_current_y = mouse_diff_x = mouse_diff_y = 0.0;
-	m_window_deadzone = mouseRightButton = mouseLeftButton = 0;
+	m_window_deadzone = 0;
 	Mouse_DeadZone = false;
 	pitch = yaw = 0.f;
 
@@ -83,7 +92,15 @@ void Input::Init()
 	AlphabetMap[Y] = 'Y';
 	AlphabetMap[Z] = 'Z';
 	AlphabetMap[SPACE] = ' ';
-	
+	AlphabetMap[ARROW_UP] = VK_UP;
+	AlphabetMap[ARROW_DOWN] = VK_DOWN;
+	AlphabetMap[ARROW_LEFT] = VK_LEFT;
+	AlphabetMap[ARROW_RIGHT] = VK_RIGHT;
+	AlphabetMap[L_SHIFT] = VK_SHIFT;
+
+	//Mouse---------------------------------------//
+	AlphabetMap[M_LEFT] = ' ';
+	AlphabetMap[M_RIGHT] = ' ';
 
 	for (int i = 0; i < TOTAL_CONTROLS; ++i)
 		KeyPressed[i] = KeyHeldDown[i] = KeyReleased[i] = false;
@@ -155,12 +172,12 @@ void Input::CheckForKeyPresses()
 	//check for key presses---------------------------------------------------//
 	a_key_released = a_key_is_pressed = a_key_held_down = false;
 
-	for (int i = A; i <= SPACE; ++i)
+	for (int i = A; i < TOTAL_CONTROLS; ++i)
 	{
 		KeyHeldDown[i] = KeyReleased[i] = false;	//make sure held down and released are ALWAYS SET TO FALSE FOR ALL FRAMES
 
 		bool state_before_check = KeyPressed[i];
-		KeyPressed[i] = checkKeyPress(AlphabetMap[i]);
+		KeyPressed[i] = DetectKeyPress(AlphabetMap[i], (CONTROLS)i);
 
 		//if a key is pressed----------------------------------------//
 		if (KeyPressed[i])

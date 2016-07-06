@@ -25,10 +25,10 @@ class Scene_ECS : public Scene
 
 	/******************** tmp Component system **********************/
 	const static int TOTAL_RENDERER = 40;
-	Render_OnScreen Render_OnScreen_List[TOTAL_RENDERER];
+	Render_InWorld Render_InWorld_List[TOTAL_RENDERER];
 
 	/******************** Add component to test **********************/
-	void AddRendererToTest(Entity& addToMe, Vector3 offset);
+	void AddRendererToTest(Entity& addToMe, Vector3 offset, bool first);
 	void AddTestEnt1();
 	void AddTestEnt2();
 

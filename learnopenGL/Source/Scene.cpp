@@ -17,8 +17,8 @@ Run
 void Scene::Run()
 {
 	//cam/Mouse update----------------------------------------------//
-	//camera.Update(CU::dt);
-	//camera.UpdateInput(CU::dt);
+	camera.Update(CU::dt);
+	camera.UpdateInput(CU::dt);
 }
 
 /********************************************************************************

@@ -28,6 +28,7 @@ public:
 	/** Put here for controller and model and character to access, got better way? **/
 	enum CONTROLS
 	{
+		/************************************** keyboard ****************************************/
 		A,
 		B,
 		C,
@@ -56,18 +57,19 @@ public:
 		Z,
 		SPACE,	//space bar
 
-		/* using mouse/controller... */
-		M_LEFT,	//mouse left
-		M_RIGHT,	//mouse right
 		L_SHIFT,	//shift
 		ARROW_UP,
 		ARROW_DOWN,
 		ARROW_LEFT,
 		ARROW_RIGHT,
 
+		/************************************** Mouse ****************************************/
+		M_LEFT,	//mouse left
+		M_RIGHT,	//mouse right
+
 		TOTAL_CONTROLS,
 
-		//special-------------------------//
+		/************************************** Special ****************************************/
 		SCROLL_UP,	//mouse scroll
 		SCROLL_DOWN,	//mouse scroll
 	};
@@ -81,8 +83,6 @@ private:
 	double mouse_last_x, mouse_last_y, mouse_current_x, mouse_current_y, mouse_diff_x, mouse_diff_y;
 	int m_window_deadzone;
 	bool Mouse_DeadZone;	//update cursor with deadzone? if not, no mouse
-	int mouseRightButton;
-	int mouseLeftButton;
 	static double scrollxPos;
 	static double scrollyPos;
 	Vector3 cursorPos;
@@ -103,8 +103,8 @@ private:
 	void UpdateMouse();
 	void UpdateCursorPos();
 
-	//Key press------------------------//
-	bool checkKeyPress(unsigned short key);
+	//Detect press------------------------//
+	bool DetectKeyPress(unsigned short key, CONTROLS keyIndex);
 
 public:
 

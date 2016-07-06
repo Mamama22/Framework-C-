@@ -48,3 +48,15 @@ void Render_OnScreen::UpdatingComp()
 	CU::view.Scale(transform.scale.x, transform.scale.y, transform.scale.z);
 	CU::view.RenderMesh(*mesh);
 }
+
+/********************************************************************************
+Draw mesh on screen
+********************************************************************************/
+void Render_InWorld::UpdatingComp()
+{
+	CU::view.SetIdentity();
+	CU::view.Translate(transform.pos.x, transform.pos.y, transform.pos.z);
+	CU::view.Rotate(transform.angle, 0, 0, 1);
+	CU::view.Scale(transform.scale.x, transform.scale.y, transform.scale.z);
+	CU::view.RenderMesh(*mesh);
+}
