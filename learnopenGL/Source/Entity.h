@@ -59,7 +59,7 @@ public:
 	/******************** abstract functions **********************/
 
 	//Will be called everytime BEFORE comp updates-------------------//
-	virtual void Update(){}
+	virtual void Update();
 
 	virtual void Exit(){}
 

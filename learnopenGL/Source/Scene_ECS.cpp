@@ -126,6 +126,12 @@ void Scene_ECS::Run()
 		testEnt.Rotate(1.f);
 	if (CU::input.IsKeyPressed(Input::B))
 		testEnt_1.Rotate(1.f);
+
+
+	//Entity update------------------------------------------------------//
+	testEnt.Update();
+	testEnt_1.Update();
+	testEnt_2.Update();
 }
 
 /********************************************************************************

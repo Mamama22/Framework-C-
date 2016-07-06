@@ -21,6 +21,7 @@ public:
 	float angle;
 	Vector3 pos;
 	Vector3 scale;
+	Vector3 vel;
 
 	Transformation(){ angle = 0.f; }
 	~Transformation(){}

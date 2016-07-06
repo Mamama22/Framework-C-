@@ -60,20 +60,22 @@ public:
 		M_LEFT,	//mouse left
 		M_RIGHT,	//mouse right
 		L_SHIFT,	//shift
-		SCROLL_UP,	//mouse scroll
-		SCROLL_DOWN,	//mouse scroll
 		ARROW_UP,
 		ARROW_DOWN,
 		ARROW_LEFT,
 		ARROW_RIGHT,
 
 		TOTAL_CONTROLS,
+
+		//special-------------------------//
+		SCROLL_UP,	//mouse scroll
+		SCROLL_DOWN,	//mouse scroll
 	};
 
 private:
 
 	//Variables--------------------------------------------------//
-	unsigned AlphabetMap[SPACE + 1];	//map alphabets to the corr. enum value
+	unsigned AlphabetMap[TOTAL_CONTROLS];	//map alphabets to the corr. enum value
 
 	//Mouse variables--------------------------------------------------//
 	double mouse_last_x, mouse_last_y, mouse_current_x, mouse_current_y, mouse_diff_x, mouse_diff_y;

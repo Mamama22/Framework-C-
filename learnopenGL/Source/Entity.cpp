@@ -122,18 +122,30 @@ void Entity::RotateWithEntity(Vector3 new_ParentPos, Vector3 parentChildOffset, 
 	else if (transform.angle > 360.f)
 		transform.angle -= 360.f;
 
+	//Matrices operation-------------------------------------------------------------------//
 	translate.SetToTranslation(new_ParentPos.x, new_ParentPos.y, new_ParentPos.z);
 	translate2.SetToTranslation(parentChildOffset.x, parentChildOffset.y, parentChildOffset.z);
 	rotate.SetToRotation(angle, 0, 0, 1);
 
 	//Calculate new pos with TRS------------------------------------------------------//
 	translate = translate * rotate * translate2;
-	transform.pos.SetZero();
-	transform.pos = translate * transform.pos;
+	Vector3 newPos;
+	newPos = translate * newPos;
+	transform.vel += newPos - transform.pos;
 
 	//Children/comp must move along arc of rotation-------------------------//
 	for (int i = 0; i < children.size(); ++i)
-		children[i]->RotateWithEntity(transform.pos, children[i]->transform.pos - originalPos, angle);
+		children[i]->RotateWithEntity(newPos, children[i]->transform.pos - originalPos, angle);
 	for (int i = 0; i < componentList.size(); ++i)
-		componentList[i]->RotateWithEntity(transform.pos, componentList[i]->transform.pos - originalPos, angle);
+		componentList[i]->RotateWithEntity(newPos, componentList[i]->transform.pos - originalPos, angle);
+}
+
+/********************************************************************************
+Update if active
+********************************************************************************/
+void Entity::Update()
+{
+	//translate with vel---------------------------------------//
+	transform.pos += transform.vel;
+	transform.vel.SetZero();	//reset vel to zero (testing only)
 }

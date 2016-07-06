@@ -32,6 +32,10 @@ Update:
 ********************************************************************************/
 void Component::Update()
 {
+	//translate with vel---------------------------------------//
+	transform.pos += transform.vel;
+	transform.vel.SetZero();	//reset vel to zero (testing only)
+
 	if (active)
 		UpdatingComp();
 }
@@ -63,16 +67,15 @@ changes along the axis entity rotates
 ********************************************************************************/
 void Component::RotateWithEntity(Vector3 new_ParentPos, Vector3 parentChildOffset, float angle)
 {
-
-
 	translate.SetToTranslation(new_ParentPos.x, new_ParentPos.y, new_ParentPos.z);
 	translate2.SetToTranslation(parentChildOffset.x, parentChildOffset.y, parentChildOffset.z);
 	rotate.SetToRotation(angle, 0, 0, 1);
 	
-	//Calculate new pos with TRS------------------------------------------------------//
+	//Calculate new pos and velocity with TRS------------------------------------------------------//
 	translate = translate * rotate * translate2;
-	transform.pos.SetZero();
-	transform.pos = translate * transform.pos;
+	Vector3 newPos;
+	newPos = translate * newPos;
+	transform.vel += newPos - transform.pos;
 
 	//rotate angle------------------------------------//
 	Rotate(angle);

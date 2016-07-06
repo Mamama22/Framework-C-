@@ -30,6 +30,7 @@ void scroll(GLFWwindow* window, double x, double y)
 
 bool Input::checkKeyPress(unsigned short key)
 {
+	//typable characters--------------------------//
 	return ((GetAsyncKeyState(key) & 0x8001) != 0);
 }
 
@@ -82,7 +83,7 @@ void Input::Init()
 	AlphabetMap[Y] = 'Y';
 	AlphabetMap[Z] = 'Z';
 	AlphabetMap[SPACE] = ' ';
-
+	
 
 	for (int i = 0; i < TOTAL_CONTROLS; ++i)
 		KeyPressed[i] = KeyHeldDown[i] = KeyReleased[i] = false;
