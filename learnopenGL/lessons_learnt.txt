@@ -1,0 +1,3 @@
+-create new ostringstream everytime needed, no need to change internal state, which takes more resources to clear
+
+-Create constructor/destructor and copy constructor if class object is to be used with vectors: memonry leak issue

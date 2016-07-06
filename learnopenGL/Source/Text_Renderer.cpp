@@ -78,3 +78,14 @@ void FreeType_Text::Init()
 	FT_Done_Face(minecraft);
 	FT_Done_FreeType(ft);
 }
+
+/******************************************************************************
+Exit: cleanup
+******************************************************************************/
+void FreeType_Text::Exit()
+{
+	//cleanup textures----------------------------------//
+	for (GLubyte c = 0; c < 128; c++)
+		characters[c].Exit();
+	
+}

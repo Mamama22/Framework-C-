@@ -40,7 +40,8 @@ public:
 	Transformation transform;
 
 	Component();
-	~Component();
+	Component(Component& copyMe);
+	virtual ~Component();
 
 	/******************** comp functions **********************/
 	void Init(const char* name);

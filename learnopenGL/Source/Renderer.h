@@ -22,6 +22,11 @@ protected:
 
 public:
 
+	/******************** constructor/destructor **********************/
+	Renderer();
+	Renderer(Renderer& copyMe);
+	~Renderer();
+
 	/******************** comp functions **********************/
 	void Init(const char* name, Mesh* mesh, Vector3 pos, Vector3 scale);
 

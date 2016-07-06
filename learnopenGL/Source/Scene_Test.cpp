@@ -89,7 +89,7 @@ void Scene_Test::DrawOnScreen()
 	CU::view.UseShader(View::TEXT_SHADER);	//use light shader
 
 	//test quad-----------------------------------------//
-	ss.str("");
+	ostringstream ss;
 	ss << "FPS: " << CU::fps;
 	string theFPS = ss.str();
 	int findDot = theFPS.find('.');

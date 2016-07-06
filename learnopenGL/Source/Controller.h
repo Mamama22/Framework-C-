@@ -15,6 +15,8 @@ class Controller
 {
 	//Scenes--------------------------------//
 	Scene* current_scene;
+	Scene_Test sceneTest;
+	Scene_ECS sceneECS;
 
 	/********************** FPS **********************/
 	const static unsigned char Controller::FPS; // FPS of this game (ONLY RELEASE MODE CAN RUN SMOOTHLY AT 170FPS MAX)

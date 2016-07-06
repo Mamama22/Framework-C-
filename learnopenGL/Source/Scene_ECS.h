@@ -9,7 +9,6 @@ Date: 4/7/2016
 /*************************************************************/
 class Scene_ECS : public Scene
 {
-	ostringstream ss;
 	Mesh* axes;
 	Mesh* quad;
 	Mesh* sphere;
@@ -25,7 +24,8 @@ class Scene_ECS : public Scene
 	int meshType;
 
 	/******************** tmp Component system **********************/
-	vector<Render_OnScreen> Render_OnScreen_List;
+	const static int TOTAL_RENDERER = 40;
+	Render_OnScreen Render_OnScreen_List[TOTAL_RENDERER];
 
 	/******************** Add component to test **********************/
 	void AddRendererToTest(Entity& addToMe, Vector3 offset);

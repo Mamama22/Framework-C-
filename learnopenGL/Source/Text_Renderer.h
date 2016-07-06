@@ -17,6 +17,11 @@ struct Character
 	{
 		this->textureID = textureID; this->size = size; this->bearing = bearing; this->advance = advance;
 	}
+
+	void Exit()
+	{
+		glDeleteTextures(1, &textureID);
+	}
 };
 
 /******************************************************************************
@@ -44,6 +49,7 @@ public:
 
 	/********************** Core functions *****************************/
 	void Init();
+	void Exit();
 };
 
 #endif

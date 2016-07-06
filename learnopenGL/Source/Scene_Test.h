@@ -9,11 +9,15 @@ Date: 1/7/2016
 /*************************************************************/
 class Scene_Test : public Scene
 {
-	ostringstream ss;
 	Mesh* axes;
 	Mesh* quad;
 	Mesh* sphere;
 
+	Entity mama[1];
+
+	/******************** tmp Component system **********************/
+	const static int TOTAL_RENDERER = 20;
+	Render_OnScreen Render_OnScreen_List[TOTAL_RENDERER];
 public:
 
 	/******************** core functions: Extend the virtual ones!!! **********************/

@@ -42,6 +42,9 @@ protected:
 
 public:
 	
+	Entity();
+	~Entity();
+	
 	/******************** Addind/removing child/comp, overload for customisation **********************/
 	virtual void AddComponent(Component* comp);
 	virtual void AddChildren(Entity* child);

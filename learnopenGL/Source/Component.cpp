@@ -9,6 +9,11 @@ Component::Component()
 	active = false;
 }
 
+Component::Component(Component& copyMe)
+{
+	active = copyMe.active;
+}
+
 Component::~Component()
 {
 

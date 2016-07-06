@@ -29,9 +29,7 @@ void Scene_ECS::Init()
 	CU::view.AddSpotLight(Vector3(-12.f, 1.f, 7.f), Vector3(-12.5f, 0.f, 7.f), 30.f);
 	CU::view.AddSpotLight(Vector3(13.f, 1.f, 6.f), Vector3(15.f, 0.f, 6.f), 35.f);
 
-	//make 20 on screen renderers------------------------------------------//
-	Render_OnScreen_List.resize(40);
-
+	//Init entity-----------------------------------------------------------//
 	testEnt.Init(Vector3(-100, -100, 0));
 	testEnt.Init(Vector3(-100, 50, 0));
 	testEnt.Init(Vector3(100, 100, 0));
@@ -42,10 +40,13 @@ void Scene_ECS::Init()
 	AddRendererToTest(testEnt_2, offset2);
 }
 
+/********************************************************************************
+Add renderer comp to a entity
+********************************************************************************/
 void Scene_ECS::AddRendererToTest(Entity& addToMe, Vector3 offset)
 {
 	Vector3 newPos = addToMe.transform.pos + offset;
-	ss.str("");
+	ostringstream ss;
 	ss << "renderer" << rendererCounter;
 
 	if (meshType == 0)
@@ -62,6 +63,9 @@ void Scene_ECS::AddRendererToTest(Entity& addToMe, Vector3 offset)
 	++rendererCounter;
 }
 
+/********************************************************************************
+Add entity to parent
+********************************************************************************/
 void Scene_ECS::AddTestEnt1()
 {
 	if (added1)
@@ -145,14 +149,14 @@ void Scene_ECS::DrawOnScreen()
 	CU::view.RenderMesh(*axes);
 
 	//Renderer update (Draw)---------------------------------------------//
-	for (int i = 0; i < Render_OnScreen_List.size(); ++i)
+	for (int i = 0; i < TOTAL_RENDERER; ++i)
 		Render_OnScreen_List[i].Update();
 
 
 	CU::view.UseShader(View::TEXT_SHADER);	//use light shader
 
 	//test quad-----------------------------------------//
-	ss.str("");
+	ostringstream ss;
 	ss << "FPS: " << CU::fps;
 	string theFPS = ss.str();
 	int findDot = theFPS.find('.');

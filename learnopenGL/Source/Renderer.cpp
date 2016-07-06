@@ -2,6 +2,24 @@
 #include "CoreUtilities.h"
 
 /********************************************************************************
+Constructor/destructor
+********************************************************************************/
+Renderer::Renderer()
+{
+	mesh = NULL; 
+}
+
+Renderer::Renderer(Renderer& copyMe) : Component(copyMe)
+{ 
+	mesh = copyMe.mesh; 
+}
+
+Renderer::~Renderer()
+{ 
+	mesh = NULL; 
+}
+
+/********************************************************************************
 Add component
 ********************************************************************************/
 void Renderer::Init(const char* name, Mesh* mesh, Vector3 pos, Vector3 scale)

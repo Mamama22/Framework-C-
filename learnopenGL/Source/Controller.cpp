@@ -16,7 +16,8 @@ void Controller::Init()
 	CU::Init();
 	CU::input.SetMouse(true);
 
-	current_scene = new Scene_ECS();
+	//Init scene-----------------------------------//
+	current_scene = &sceneECS;
 	current_scene->Init();
 }
 
@@ -103,11 +104,9 @@ Exit stuff
 ********************************************************************************/
 void Controller::Exit()
 {
+	//Scene exit------------------------------------//
 	current_scene->Exit();
 
 	//Core utils exit------------------------------//
 	CU::Exit();
-
-	if (current_scene)
-		delete current_scene;
 }

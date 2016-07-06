@@ -477,6 +477,12 @@ Exit
 ********************************************************************************/
 void View::Exit()
 {
+	//text shader VAO and VBO-------------//
+	glDeleteBuffers(1, &text_vertexBuffer);
+
+	//Text manager-------------------------//
+	textMan.Exit();
+
 	//Close OpenGL window and terminate GLFW
 	glfwDestroyWindow(m_window);
 	//Finalize and clean up GLFW

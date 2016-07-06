@@ -6,6 +6,16 @@ Mtx44 Entity::translate;
 Mtx44 Entity::translate2;
 Mtx44 Entity::TRS;
 
+/********************************************************************************
+Constructor/destructor
+********************************************************************************/
+Entity::Entity(){}
+
+Entity::~Entity()
+{
+	componentList.clear(); 
+	children.clear(); 
+}
 
 /********************************************************************************
 Add component
