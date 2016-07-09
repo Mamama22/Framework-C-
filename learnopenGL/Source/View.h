@@ -81,6 +81,7 @@ public:
 	void PushMatrix();
 	void PopMatrix();
 	void SetIdentity();
+	void LoadMatrix(Mtx44& mat);
 
 	void Translate(float x, float y, float z);
 	void Rotate(float angle, float x, float y, float z);

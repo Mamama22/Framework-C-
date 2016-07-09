@@ -31,13 +31,18 @@ void Scene_ECS::Init()
 
 	//Init entity-----------------------------------------------------------//
 	testEnt.Init(Vector3(-10.f, -1.f, 0.f));
-	testEnt.Init(Vector3(-10.f, 5.f, 0.f));
-	testEnt.Init(Vector3(10.f, 10.f, 0.f));
+	testEnt_1.Init(Vector3(-10.f, 5.f, 0.f));
+	testEnt_2.Init(Vector3(10.f, 10.f, 0.f));
 
 	//Add renderer to test----------------------------------------------------//
 	AddRendererToTest(testEnt, offset, true);
 	AddRendererToTest(testEnt_1, offset1, true);
 	AddRendererToTest(testEnt_2, offset2, true);
+
+	//dir--------------------------------------------------------------------//
+	dir.Set(1, 0, 0);
+	right = dir.Cross(up);
+	up.Set(0, 1, 0);
 }
 
 /********************************************************************************
@@ -56,7 +61,7 @@ void Scene_ECS::AddRendererToTest(Entity& addToMe, Vector3 offset, bool first)
 	ss << "renderer" << rendererCounter;
 
 	if (meshType == 0)
-		Render_InWorld_List[rendererCounter].Init(ss.str().c_str(), sphere, newPos, RendererScale);	//assign available renderer
+		Render_InWorld_List[rendererCounter].Init(ss.str().c_str(), quad, newPos, RendererScale * 0.5f);	//assign available renderer
 	else if (meshType == 1)
 		Render_InWorld_List[rendererCounter].Init(ss.str().c_str(), sphere, newPos, RendererScale);	//assign available renderer
 
@@ -128,10 +133,24 @@ void Scene_ECS::Run()
 		testEnt.Translate(Vector3(-0.15f, 0, 0));
 	if (CU::input.IsKeyPressed(Input::ARROW_RIGHT))
 		testEnt.Translate(Vector3(0.15f, 0, 0));
+
+	//Rotation------------------------------------------//
+	/*dir = (Vector3(50, -50, 0) - Vector3(0,0,0)).Normalized();
+	right = dir.Cross(up);
+	up = right.Cross(dir).Normalized();
+
+	float pitch = 5.f;
+	float angleX = pitch * dir.x;
+	float angleZ = pitch * dir.z;*/
+
 	if (CU::input.IsKeyPressed(Input::C))
-		testEnt.Rotate(5.f);
+		testEnt.Rotate(10.f, Vector3(0, 1, 0));
 	if (CU::input.IsKeyPressed(Input::B))
-		testEnt_1.Rotate(5.f);
+	{
+		//cout << "Up: " << up << endl;
+		//cout << "X: " << angleX << "  Z: " << angleZ << endl;
+		testEnt_1.Rotate(10.f, Vector3(0, 1, 0));
+	}
 
 
 	//Entity update------------------------------------------------------//

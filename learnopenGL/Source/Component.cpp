@@ -1,8 +1,5 @@
 #include "Component.h"
-Mtx44 Component::rotate;
-Mtx44 Component::translate;
-Mtx44 Component::translate2;
-Mtx44 Component::TRS;
+Mtx44 Component::sharedMtx[5];
 
 Component::Component()
 {
@@ -24,7 +21,7 @@ Init:
 ********************************************************************************/
 void Component::Init(const char* name)
 {
-	this->name = name; 
+	this->name = name;
 }
 
 /********************************************************************************
@@ -32,14 +29,8 @@ Update:
 ********************************************************************************/
 void Component::Update()
 {
-	//Get vel-----------------------------------------------//
-	transform.vel = transform.pos - transform.prevPos;
-
 	if (active)
 		UpdatingComp();
-
-	//assign prev pos---------------------------------------//
-	transform.prevPos = transform.pos;
 }
 
 /********************************************************************************
@@ -47,39 +38,41 @@ Translate
 ********************************************************************************/
 void Component::Translate(Vector3 vel)	//overload if applicable
 {
-	transform.pos += vel;
+	transform.Translate(vel);
 }
 
 /********************************************************************************
 Rotate
 ********************************************************************************/
-void Component::Rotate(float angle)
+void Component::Rotate(float angle, Vector3 axis)
 {
-	transform.angle += angle;
+	transform.Rotate(angle, axis);
+}
 
-	if (transform.angle < 0.f)
-		transform.angle += 360.f;
-	else if (transform.angle > 360.f)
-		transform.angle -= 360.f;
+/********************************************************************************
+Added
+********************************************************************************/
+void Component::Added(Transformation& parentTrans)
+{
+	transform.AddedToParent(parentTrans);
+
+}
+
+/********************************************************************************
+Removed
+********************************************************************************/
+void Component::Removed()
+{
+	
 }
 
 /********************************************************************************
 Rotate with entity (parent): when entity rotates, pos of this component
 changes along the axis entity rotates
 ********************************************************************************/
-void Component::RotateWithEntity(Vector3 new_ParentPos, Vector3 parentChildOffset, float angle)
+void Component::CalculateTRS_WithParent(Mtx44& parentRotMat)
 {
-	translate.SetToTranslation(new_ParentPos.x, new_ParentPos.y, new_ParentPos.z);
-	translate2.SetToTranslation(parentChildOffset.x, parentChildOffset.y, parentChildOffset.z);
-	rotate.SetToRotation(angle, 0, 0, 1);
-	
-	//Calculate new pos and velocity with TRS------------------------------------------------------//
-	translate = translate * rotate * translate2;
-	transform.pos.SetZero();
-	transform.pos = translate * transform.pos;
-
-	//rotate angle------------------------------------//
-	Rotate(angle);
+	transform.finalTRS = parentRotMat * transform.TRS;
 }
 
 /********************************************************************************

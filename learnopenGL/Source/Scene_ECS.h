@@ -13,6 +13,10 @@ class Scene_ECS : public Scene
 	Mesh* quad;
 	Mesh* sphere;
 
+	Vector3 dir;
+	Vector3 up;
+	Vector3 right;
+
 	Entity testEnt;
 	Entity testEnt_1;
 	Entity testEnt_2;

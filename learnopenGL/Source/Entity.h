@@ -20,6 +20,13 @@ Entity, work in progress
 
 Contains components as well as children (entities)
 
+Usage:
+FOLLOW THE ORDER:
+1) Add/Remove child/comp
+2) Modify values, pos, scale, angle etc.
+3) Calculate final TRS
+4) update
+
 Author: Tan Yie Cher
 Date: 2/7/2016
 /*************************************************************/
@@ -38,7 +45,10 @@ class Entity
 protected:
 
 	//Static----------------------------------//
-	static Mtx44 rotate, translate, translate2, TRS;
+	static Mtx44 sharedMtx[5];	//for TRS calculations
+
+	//parent pointer----------------------------//
+	Entity* parent;
 
 	/******************** Derive urself functions **********************/
 	virtual void UpdateEntity();
@@ -57,6 +67,8 @@ public:
 	virtual void AddChildren(Entity* child);
 	virtual void RemoveComponent(Component* comp);
 	virtual void RemoveChildren(Entity* child);
+	void Added(Entity* parent);	//if this entity added, do something
+	void Removed();	//if this entity removed, do something
 
 	/******************** Core functions **********************/
 	void Init(Vector3 pos);
@@ -69,10 +81,11 @@ public:
 
 	/******************** Transformation function **********************/
 	virtual void Translate(Vector3 vel);	//overload if applicable
-	virtual void Rotate(float angle);
+	virtual void Rotate(float angle, Vector3 axis);
 
 	/******************** Entity Transformation function: ENTITY USE ONLY **********************/
-	void RotateWithEntity(Vector3 new_ParentPos, Vector3 parentChildOffset, float angle);	//call rotate with parent
+	virtual void CalculateTRS();
+	virtual void CalculateTRS_WithParent(Mtx44& parentRotMat);
 
 	/********************************************************************************
 	get the component (specify its type when calling this function)
@@ -94,6 +107,8 @@ public:
 
 		return static_cast<T*>(p);
 	}
+
+	Entity* GetParent();
 };
 
 #endif

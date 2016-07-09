@@ -12,6 +12,7 @@ Contains:
 
 Usage:
 -Inherit to create your own component types
+-All components MUST BE child of a entity
 
 Rules:
 -update called only when active == True
@@ -32,7 +33,7 @@ protected:
 	virtual void UpdatingComp() = 0;
 
 	//Static----------------------------------//
-	static Mtx44 rotate, translate, translate2, TRS;
+	static Mtx44 sharedMtx[5];	//for TRS calculations
 
 public:
 
@@ -50,12 +51,16 @@ public:
 	/******************** abstract functions **********************/
 	virtual void Exit() = 0;
 
+	/******************** Added/removed by Entity: ENTITY USE ONLY **********************/
+	void Added(Transformation& parentTrans);
+	void Removed();
+
 	/******************** Transformation function **********************/
 	virtual void Translate(Vector3 vel);	//overload if applicable
-	virtual void Rotate(float angle);
+	virtual void Rotate(float angle, Vector3 axis);
 
 	/******************** Entity Transformation function: ENTITY USE ONLY **********************/
-	virtual void RotateWithEntity(Vector3 new_ParentPos, Vector3 parentChildOffset, float angle);
+	virtual void CalculateTRS_WithParent(Mtx44& parentRotMat);
 
 	/******************** Get functions **********************/
 	const char* GetName();

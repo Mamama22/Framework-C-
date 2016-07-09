@@ -137,7 +137,7 @@ void View::Setup()
 	// Accept fragment if it closer to the camera than the former one
 	glDepthFunc(GL_LESS);
 
-	glEnable(GL_CULL_FACE);
+	//glEnable(GL_CULL_FACE);
 
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
@@ -406,6 +406,11 @@ void View::PopMatrix()
 void View::SetIdentity()
 {
 	modelStack.LoadIdentity();
+}
+
+void View::LoadMatrix(Mtx44& mat)
+{
+	modelStack.LoadMatrix(mat);
 }
 
 void View::Translate(float x, float y, float z)

@@ -19,6 +19,7 @@ protected:
 
 	/********************** var **********************/
 	Mesh* mesh;
+	Vector3 dir;
 
 public:
 

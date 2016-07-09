@@ -1,15 +1,12 @@
 #include "Entity.h"
 Component* Entity::p;
 vector<Component*>::iterator Entity::it;
-Mtx44 Entity::rotate;
-Mtx44 Entity::translate;
-Mtx44 Entity::translate2;
-Mtx44 Entity::TRS;
+Mtx44 Entity::sharedMtx[5];
 
 /********************************************************************************
 Constructor/destructor
 ********************************************************************************/
-Entity::Entity(){}
+Entity::Entity(){ parent = NULL; }
 
 Entity::~Entity()
 {
@@ -23,6 +20,7 @@ Add component
 void Entity::AddComponent(Component* comp)
 {
 	componentList.push_back(comp);
+	comp->Added(transform);
 }
 
 /********************************************************************************
@@ -31,6 +29,21 @@ Add child (Entity)
 void Entity::AddChildren(Entity* child)
 {
 	children.push_back(child);
+	child->Added(this);
+
+	//Do preparations for being a child-----------------------------------------//
+	Entity* parent_ptr = this;
+
+	//Get the highest parent------------------//
+	vector<Entity*> parentList;
+	while (parent_ptr)
+	{
+		parentList.push_back(parent_ptr);
+		parent_ptr = parent_ptr->parent;
+	}
+
+	for (int i = parentList.size() - 1; i >= 0; --i)
+		child->transform.AddedToParent(parentList[i]->transform);
 }
 
 /********************************************************************************
@@ -43,6 +56,7 @@ void Entity::RemoveComponent(Component* comp)
 		if (comp == componentList[i])
 		{
 			componentList[i] = componentList.back();
+			comp->Removed();
 			componentList.pop_back();
 			break;
 		}
@@ -59,6 +73,7 @@ void Entity::RemoveChildren(Entity* child)
 		if (child == children[i])
 		{
 			children[i] = children.back();
+			child->Removed();
 			children.pop_back();
 			break;
 		}
@@ -66,12 +81,24 @@ void Entity::RemoveChildren(Entity* child)
 }
 
 /********************************************************************************
+if this entity added/removed, do something
+********************************************************************************/
+void Entity::Added(Entity* parent)
+{
+	this->parent = parent;
+	Entity* parent_ptr = this->parent;
+}
+void Entity::Removed()
+{
+	parent = NULL;
+}
+
+/********************************************************************************
 Init func
 ********************************************************************************/
 void Entity::Init(Vector3 pos)
 {
-	transform.pos = pos;
-	transform.scale = Vector3(1, 1, 1);	//default
+	transform.Set(pos, Vector3(1, 1, 1));
 }
 
 /********************************************************************************
@@ -79,66 +106,46 @@ Translate entity and children + components
 ********************************************************************************/
 void Entity::Translate(Vector3 vel)
 {
-	transform.pos += vel;
-
-	for (int i = 0; i < children.size(); ++i)
-		children[i]->Translate(vel);
-	for (int i = 0; i < componentList.size(); ++i)
-		componentList[i]->Translate(vel);
+	transform.Translate(vel);
 }
 
 /********************************************************************************
-Rotates entity and children + components
+Rotates entity
 ********************************************************************************/
-void Entity::Rotate(float angle)
+void Entity::Rotate(float angle, Vector3 axis)
 {
-	transform.angle += angle;
-	
-	if (transform.angle < 0.f)
-		transform.angle += 360.f;
-	else if (transform.angle > 360.f)
-		transform.angle -= 360.f;
-
-	//Children/comp must move along arc of rotation-------------------------//
-	for (int i = 0; i < children.size(); ++i)
-		children[i]->RotateWithEntity(transform.pos, children[i]->transform.pos - transform.pos, angle);
-	for (int i = 0; i < componentList.size(); ++i)
-		componentList[i]->RotateWithEntity(transform.pos, componentList[i]->transform.pos - transform.pos, angle);
+	transform.Rotate(angle, axis);
 }
+
+/********************************************************************************
+Calculate overall TRS as well as for children, 
+********************************************************************************/
+void Entity::CalculateTRS()
+{
+	if (parent)	//if have parent, TRS calculated before
+		return;
+
+	transform.finalTRS = transform.TRS;
+
+	for (int i = 0; i < children.size(); ++i)
+		children[i]->CalculateTRS_WithParent(transform.finalTRS);
+	for (int i = 0; i < componentList.size(); ++i)
+		componentList[i]->CalculateTRS_WithParent(transform.finalTRS);
+}
+
 
 /********************************************************************************
 Rotate with entity (parent): when entity rotates, pos of this component
 changes along the axis entity rotates
 ********************************************************************************/
-void Entity::RotateWithEntity(Vector3 new_ParentPos, Vector3 parentChildOffset, float angle)
+void Entity::CalculateTRS_WithParent(Mtx44& parentRotMat)
 {
-	Vector3 originalPos = transform.pos;
+	transform.finalTRS = parentRotMat * transform.TRS;
 
-	rotate.SetToIdentity();
-
-	//Add angle------------------------------------//
-	transform.angle += angle;
-
-	if (transform.angle < 0.f)
-		transform.angle += 360.f;
-	else if (transform.angle > 360.f)
-		transform.angle -= 360.f;
-
-	//Matrices operation-------------------------------------------------------------------//
-	translate.SetToTranslation(new_ParentPos.x, new_ParentPos.y, new_ParentPos.z);
-	translate2.SetToTranslation(parentChildOffset.x, parentChildOffset.y, parentChildOffset.z);
-	rotate.SetToRotation(angle, 0, 0, 1);
-
-	//Calculate new pos with TRS------------------------------------------------------//
-	translate = translate * rotate * translate2;
-	transform.pos.SetZero();
-	transform.pos = translate * transform.pos;
-
-	//Children/comp must move along arc of rotation-------------------------//
 	for (int i = 0; i < children.size(); ++i)
-		children[i]->RotateWithEntity(transform.pos, children[i]->transform.pos - originalPos, angle);
+		children[i]->CalculateTRS_WithParent(transform.finalTRS);
 	for (int i = 0; i < componentList.size(); ++i)
-		componentList[i]->RotateWithEntity(transform.pos, componentList[i]->transform.pos - originalPos, angle);
+		componentList[i]->CalculateTRS_WithParent(transform.finalTRS);
 }
 
 /********************************************************************************
@@ -146,13 +153,10 @@ Update if active
 ********************************************************************************/
 void Entity::Update()
 {
-	//Get vel-----------------------------------------------//
-	transform.vel = transform.pos - transform.prevPos;
+	//calculate TRS-----------------------------------------//
+	CalculateTRS();
 
 	UpdateEntity();
-
-	//assign prev pos---------------------------------------//
-	transform.prevPos = transform.pos;
 }
 
 
@@ -162,3 +166,8 @@ Update entity
 void Entity::UpdateEntity()
 {
 }
+
+/********************************************************************************
+Get
+********************************************************************************/
+Entity* Entity::GetParent(){ return parent; }

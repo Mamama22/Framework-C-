@@ -273,7 +273,6 @@ Mtx44 Mtx44::operator*(const Mtx44& rhs) const {
 			//ret.a[i * 4 + j] = a[0 * 4 + j] * rhs.a[i * 4 + 0] + a[1 * 4 + j] * rhs.a[i * 4 + 1] + a[2 * 4 + j] * rhs.a[i * 4 + 2] + a[3 * 4 + j] * rhs.a[i * 4 + 3];
 		}
 	}
-
 	return ret;
 }
 
