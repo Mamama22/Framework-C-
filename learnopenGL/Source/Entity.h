@@ -44,11 +44,12 @@ class Entity
 	
 protected:
 
-	//Static----------------------------------//
-	static Mtx44 sharedMtx[5];	//for TRS calculations
-
 	//parent pointer----------------------------//
 	Entity* parent;
+
+	/******************** Added/removed **********************/
+	void Added(Entity* parent);	//if this entity added, do something
+	void Removed();	//if this entity removed, do something
 
 	/******************** Derive urself functions **********************/
 	virtual void UpdateEntity();
@@ -67,11 +68,9 @@ public:
 	virtual void AddChildren(Entity* child);
 	virtual void RemoveComponent(Component* comp);
 	virtual void RemoveChildren(Entity* child);
-	void Added(Entity* parent);	//if this entity added, do something
-	void Removed();	//if this entity removed, do something
 
 	/******************** Core functions **********************/
-	void Init(Vector3 pos);
+	void Init(Vector3 pos, Vector3 scale);
 
 	//Will be called everytime BEFORE comp updates-------------------//
 	void Update();
@@ -80,12 +79,27 @@ public:
 	virtual void Exit(){}
 
 	/******************** Transformation function **********************/
-	virtual void Translate(Vector3 vel);	//overload if applicable
-	virtual void Rotate(float angle, Vector3 axis);
+	void Translate(Vector3 vel);
+	void Rotate(float angle, Vector3 axis);
+
+	//Customisable--------------------------------------//
+	virtual void RotateSpecial(float angle, Vector3 axis);
 
 	/******************** Entity Transformation function: ENTITY USE ONLY **********************/
 	virtual void CalculateTRS();
-	virtual void CalculateTRS_WithParent(Mtx44& parentRotMat);
+	virtual void CalculateTRS_WithParent(const Mtx44& parentRotMat);
+
+	/******************** Get set **********************/
+	Entity* GetParent();
+
+
+
+
+
+
+
+
+
 
 	/********************************************************************************
 	get the component (specify its type when calling this function)
@@ -107,8 +121,6 @@ public:
 
 		return static_cast<T*>(p);
 	}
-
-	Entity* GetParent();
 };
 
 #endif

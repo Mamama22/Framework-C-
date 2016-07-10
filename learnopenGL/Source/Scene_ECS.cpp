@@ -30,14 +30,14 @@ void Scene_ECS::Init()
 	CU::view.AddSpotLight(Vector3(13.f, 1.f, 6.f), Vector3(15.f, 0.f, 6.f), 35.f);
 
 	//Init entity-----------------------------------------------------------//
-	testEnt.Init(Vector3(-10.f, -1.f, 0.f));
-	testEnt_1.Init(Vector3(-10.f, 5.f, 0.f));
-	testEnt_2.Init(Vector3(10.f, 10.f, 0.f));
+	testEnt.Init(Vector3(-10.f, -1.f, 0.f), Vector3(1.f, 1.f, 1.f));
+	testEnt_1.Init(Vector3(-10.f, 5.f, 0.f), Vector3(1.f, 1.f, 1.f));
+	testEnt_2.Init(Vector3(10.f, 10.f, 0.f), Vector3(1.f, 1.f, 1.f));
 
 	//Add renderer to test----------------------------------------------------//
 	AddRendererToTest(testEnt, offset, true);
-	AddRendererToTest(testEnt_1, offset1, true);
-	AddRendererToTest(testEnt_2, offset2, true);
+	AddRendererToTest(testEnt_1, offset1, false);
+	AddRendererToTest(testEnt_2, offset2, false);
 
 	//dir--------------------------------------------------------------------//
 	dir.Set(1, 0, 0);
@@ -52,16 +52,16 @@ void Scene_ECS::AddRendererToTest(Entity& addToMe, Vector3 offset, bool first)
 {
 	Vector3 RendererScale;
 	if (first)
-		RendererScale.Set(3.f, 3.f, 3.f);
+		RendererScale.Set(15.f, 15.f, 15.f);
 	else
-		RendererScale.Set(1.5f, 1.5f, 1.5f);
+		RendererScale.Set(1.f, 1.f, 1.f);
 
 	Vector3 newPos = addToMe.transform.pos + offset;
 	ostringstream ss;
 	ss << "renderer" << rendererCounter;
 
 	if (meshType == 0)
-		Render_InWorld_List[rendererCounter].Init(ss.str().c_str(), quad, newPos, RendererScale * 0.5f);	//assign available renderer
+		Render_InWorld_List[rendererCounter].Init(ss.str().c_str(), quad, newPos, RendererScale);	//assign available renderer
 	else if (meshType == 1)
 		Render_InWorld_List[rendererCounter].Init(ss.str().c_str(), sphere, newPos, RendererScale);	//assign available renderer
 
@@ -100,6 +100,8 @@ void Scene_ECS::Run()
 	//Call parent--------------------------------------//
 	Scene::Run();
 
+	//Stage 1: States, flags and values update ===========================================================//
+
 	//Add new comp------------------------------------------------//
 	if (CU::input.IsKeyReleased(Input::I))
 	{
@@ -134,29 +136,21 @@ void Scene_ECS::Run()
 	if (CU::input.IsKeyPressed(Input::ARROW_RIGHT))
 		testEnt.Translate(Vector3(0.15f, 0, 0));
 
-	//Rotation------------------------------------------//
-	/*dir = (Vector3(50, -50, 0) - Vector3(0,0,0)).Normalized();
-	right = dir.Cross(up);
-	up = right.Cross(dir).Normalized();
-
-	float pitch = 5.f;
-	float angleX = pitch * dir.x;
-	float angleZ = pitch * dir.z;*/
-
 	if (CU::input.IsKeyPressed(Input::C))
 		testEnt.Rotate(10.f, Vector3(0, 1, 0));
 	if (CU::input.IsKeyPressed(Input::B))
-	{
-		//cout << "Up: " << up << endl;
-		//cout << "X: " << angleX << "  Z: " << angleZ << endl;
 		testEnt_1.Rotate(10.f, Vector3(0, 1, 0));
-	}
 
 
+	//Stage 2 and 3a: TRS calculations for Entity and Comp --> Entity update ===========================================================//
 	//Entity update------------------------------------------------------//
 	testEnt.Update();
 	testEnt_1.Update();
 	testEnt_2.Update();
+
+	//3b: Comp update ===========================================================//
+	for (int i = 0; i < TOTAL_RENDERER; ++i)
+		Render_InWorld_List[i].Update();
 }
 
 /********************************************************************************
@@ -166,9 +160,10 @@ void Scene_ECS::DrawInWorld()
 {
 	CU::view.UseShader(View::LIGHT_SHADER);	//use light shader
 
+	//Stage 2a: Renderer comp update ===========================================================//
 	//Renderer update (Draw)---------------------------------------------//
 	for (int i = 0; i < TOTAL_RENDERER; ++i)
-		Render_InWorld_List[i].Update();
+		Render_InWorld_List[i].Draw();
 
 	CU::view.UseShader(View::BASIC_SHADER);	//use basic shader
 

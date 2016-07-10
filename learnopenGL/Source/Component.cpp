@@ -1,5 +1,4 @@
 #include "Component.h"
-Mtx44 Component::sharedMtx[5];
 
 Component::Component()
 {
@@ -13,7 +12,6 @@ Component::Component(Component& copyMe)
 
 Component::~Component()
 {
-
 }
 
 /********************************************************************************
@@ -31,6 +29,14 @@ void Component::Update()
 {
 	if (active)
 		UpdatingComp();
+}
+
+/********************************************************************************
+Comp update
+********************************************************************************/
+void Component::UpdatingComp()
+{
+
 }
 
 /********************************************************************************
@@ -55,7 +61,6 @@ Added
 void Component::Added(Transformation& parentTrans)
 {
 	transform.AddedToParent(parentTrans);
-
 }
 
 /********************************************************************************
@@ -70,9 +75,9 @@ void Component::Removed()
 Rotate with entity (parent): when entity rotates, pos of this component
 changes along the axis entity rotates
 ********************************************************************************/
-void Component::CalculateTRS_WithParent(Mtx44& parentRotMat)
+void Component::CalculateTRS_WithParent(const Mtx44& parentRotMat)
 {
-	transform.finalTRS = parentRotMat * transform.TRS;
+	transform.Calculate_TRS_withParent(parentRotMat);
 }
 
 /********************************************************************************

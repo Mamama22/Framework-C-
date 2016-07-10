@@ -32,7 +32,7 @@ public:
 	void Init(const char* name, Mesh* mesh, Vector3 pos, Vector3 scale);
 
 	/******************** abstract functions **********************/
-
+	virtual void Draw() = 0;	//All renderer need it, called after all stages finished
 	void Exit();
 };
 
@@ -47,7 +47,7 @@ class Render_OnScreen : public Renderer
 public:
 
 	/******************** abstract functions **********************/
-	void UpdatingComp();	//render
+	void Draw();	//render
 };
 
 /*************************************************************
@@ -61,7 +61,7 @@ class Render_InWorld : public Renderer
 public:
 
 	/******************** abstract functions **********************/
-	void UpdatingComp();	//render
+	void Draw();	//render
 };
 
 #endif

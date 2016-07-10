@@ -2,7 +2,7 @@
 Transformation::Transformation(){ angle = 0.f; axis.Set(0, 1, 0); }
 Transformation::~Transformation(){}
 TransformNode Transformation::shareNode;
-Mtx44 Transformation::sharedMtx;
+Mtx44 Transformation::sharedMtx[5];
 
 /********************************************************************************
 Set transformation
@@ -13,12 +13,10 @@ void Transformation::Set(Vector3 pos, Vector3 scale)
 	this->pos = pos;
 
 	//Add default transform: T, R and S-----------------------------//
-	Add_Translate(pos);
-	Add_Rotate(angle, axis);
-	Add_Scale(scale);
 
 	//Set the TRS to initial value---------------------------------//
-	Calculate_TRS();
+	TRS.SetToIdentity();
+	Calculate_transformList();	//Calculate TRS and pass on mat
 }
 
 /********************************************************************************
@@ -27,10 +25,9 @@ Translate
 void Transformation::Translate(Vector3 vel)
 {
 	this->pos += vel;
-	Modify_Translate(0, this->pos);	//update transformList
 
-	sharedMtx.SetToTranslation(vel.x, vel.y, vel.z);
-	TRS = TRS * sharedMtx;
+	sharedMtx[0].SetToTranslation(vel.x, vel.y, vel.z);
+	TRS = TRS * sharedMtx[0];
 }
 
 /********************************************************************************
@@ -39,7 +36,6 @@ Scale
 void Transformation::Scale(Vector3 scale)
 {
 	this->scale += scale;
-	//Modify_Scale(2, this->scale);
 }
 
 /********************************************************************************
@@ -51,49 +47,9 @@ void Transformation::Rotate(float angle, Vector3 axis)
 	this->angle += angle;
 	if (this->angle < 0.f)this->angle += 360.f;
 	else if (this->angle > 360.f)this->angle -= 360.f;
-	Modify_Rotate(1, this->angle, this->axis);	//update transformList
 
-	sharedMtx.SetToRotation(angle, axis.x, axis.y, axis.z);
-	TRS = TRS * sharedMtx;
-}
-
-/********************************************************************************
-Add transformation step
-********************************************************************************/
-void Transformation::Add_Translate(Vector3 translate)
-{
-	shareNode.SetTranslate(translate.x, translate.y, translate.z);
-	transformList.push_back(shareNode);
-}
-
-void Transformation::Add_Rotate(float angle, Vector3 axis)
-{
-	shareNode.SetRotate(angle, axis.x, axis.y, axis.z);
-	transformList.push_back(shareNode);
-}
-
-void Transformation::Add_Scale(Vector3 scale)
-{
-	shareNode.SetScale(scale.x, scale.y, scale.z);
-	transformList.push_back(shareNode);
-}
-
-/********************************************************************************
-Modify transformation: make sure you keep track of the indexes
-********************************************************************************/
-void Transformation::Modify_Translate(int index, Vector3 translate)
-{
-	transformList[index].SetTranslate(translate.x, translate.y, translate.z);
-}
-
-void Transformation::Modify_Rotate(int index, float angle, Vector3 axis)
-{
-	transformList[index].SetRotate(angle, axis.x, axis.y, axis.z);
-}
-
-void Transformation::Modify_Scale(int index, Vector3 scale)
-{
-	transformList[index].SetScale(scale.x, scale.y, scale.z);
+	sharedMtx[0].SetToRotation(angle, axis.x, axis.y, axis.z);
+	TRS = TRS * sharedMtx[0];
 }
 
 /********************************************************************************
@@ -108,31 +64,41 @@ void Transformation::AddedToParent(Transformation& trans)
 
 /********************************************************************************
 Calculate TRS based on transformation list
+Scale not counted in TRS but at Final TRS
 ********************************************************************************/
 void Transformation::Calculate_transformList()
 {
-	for (int i = 0; i < transformList.size(); ++i)
-	{
-		if (transformList[i].type == 0)	//translate
-			sharedMtx.SetToTranslation(transformList[i].v1, transformList[i].v2, transformList[i].v3);
-		else if (transformList[i].type == 1)	//rotate
-			sharedMtx.SetToRotation(transformList[i].v1, transformList[i].v2, transformList[i].v3, transformList[i].v4);
-		else	//scale
-			sharedMtx.SetToScale(transformList[i].v1, transformList[i].v2, transformList[i].v3);
+	sharedMtx[0].SetToTranslation(pos.x, pos.y, pos.z);
+	sharedMtx[1].SetToRotation(angle, axis.x, axis.y, axis.z);
 
-		TRS *= sharedMtx;
-	}
+	TRS = TRS * sharedMtx[0] * sharedMtx[1];
 }
 
 /********************************************************************************
-Calculate TRS based on transformation list
-
-Returns Mtx44: the matrix all children of this entity will transform with (Excludes scale if is last)
+Calculate final TRS
 ********************************************************************************/
-void Transformation::Calculate_TRS()
+Mtx44 Transformation::Calculate_TRS()
 {
-	TRS.SetToIdentity();
-	Calculate_transformList();	//Calculate TRS and pass on mat
+	//Final TRS + scale--------------------------------------------------//
+	sharedMtx[2].SetToScale(scale.x, scale.y, scale.z);
+	finalTRS = TRS * sharedMtx[2];
+	return TRS;
+}
+
+/********************************************************************************
+Calculate final TRS + applied with parent transformations
+parentRotMat: the transformation intended for children
+********************************************************************************/
+Mtx44 Transformation::Calculate_TRS_withParent(const Mtx44& parentRotMat)
+{
+	//Final TRS + scale--------------------------------------------------//
+	sharedMtx[2].SetToScale(scale.x, scale.y, scale.z);
+
+	//apply parent TRS, then local TRS, then scaling
+	Mtx44 returnRot;
+	returnRot = parentRotMat * TRS;
+	finalTRS = returnRot * sharedMtx[2];
+	return returnRot;
 }
 
 /********************************************************************************

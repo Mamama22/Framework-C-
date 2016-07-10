@@ -62,7 +62,11 @@ class Transformation
 {
 	//Static---------------------------------//
 	static TransformNode shareNode;
-	static Mtx44 sharedMtx;	//for TRS calculations
+	static Mtx44 sharedMtx[5];	//for TRS calculations
+
+	//Custom transform---------------------------------//
+	static Mtx44 CustomTrans_Mtx;
+	static bool apply_ToChildren;
 
 	/******************** Utilities **********************/
 	void Calculate_transformList();
@@ -76,8 +80,6 @@ public:
 	Vector3 scale;
 	Mtx44 TRS, finalTRS;	//overall transformation matrix
 
-	vector<TransformNode> transformList;
-
 	/******************** constructor/destructor **********************/
 	Transformation();
 	~Transformation();
@@ -90,18 +92,17 @@ public:
 	void Scale(Vector3 scale);
 	void Rotate(float angle, Vector3 axis);
 
-	/******************** Add/modify transformation **********************/
-	void Add_Translate(Vector3 translate);
-	void Add_Rotate(float angle, Vector3 axis);
-	void Add_Scale(Vector3 scale);
-
-	void Modify_Translate(int index, Vector3 translate);
-	void Modify_Rotate(int index, float angle, Vector3 axis);
-	void Modify_Scale(int index, Vector3 scale);
+	/******************** Custom Transformation **********************/
+	void Start_CustomTrans(bool applyToChildren);
+	void Custom_Translate(Vector3 vel);
+	void Custom_Rotate(float angle, Vector3 axis);
+	void Custom_Scale(Vector3 scale);
+	void End_CustomTrans();
 
 	/******************** Calculate TRS **********************/
 	void AddedToParent(Transformation& trans);	//to offset child to be based on parent TRS
-	void Calculate_TRS();
+	Mtx44 Calculate_TRS();
+	Mtx44 Calculate_TRS_withParent(const Mtx44& parentRotMat);
 	
 	/******************** Get functions **********************/
 	Vector3 GetPos();

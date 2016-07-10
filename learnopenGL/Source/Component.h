@@ -22,18 +22,13 @@ Date: 2/7/2016
 /*************************************************************/
 class Component
 {
-private:
+protected:
 
 	const char* name;
 	bool active;	//only updates when active
 
-protected:
-
 	/******************** abstract functions **********************/
-	virtual void UpdatingComp() = 0;
-
-	//Static----------------------------------//
-	static Mtx44 sharedMtx[5];	//for TRS calculations
+	virtual void UpdatingComp();
 
 public:
 
@@ -60,7 +55,7 @@ public:
 	virtual void Rotate(float angle, Vector3 axis);
 
 	/******************** Entity Transformation function: ENTITY USE ONLY **********************/
-	virtual void CalculateTRS_WithParent(Mtx44& parentRotMat);
+	virtual void CalculateTRS_WithParent(const Mtx44& parentRotMat);
 
 	/******************** Get functions **********************/
 	const char* GetName();

@@ -40,17 +40,19 @@ void Renderer::Exit()
 /********************************************************************************
 Draw mesh on screen
 ********************************************************************************/
-void Render_OnScreen::UpdatingComp()
+void Render_OnScreen::Draw()
 {
-
 }
 
 /********************************************************************************
 Draw mesh on screen
 ********************************************************************************/
-void Render_InWorld::UpdatingComp()
+void Render_InWorld::Draw()
 {
-	CU::view.SetIdentity();
-	CU::view.LoadMatrix(transform.finalTRS);
-	CU::view.RenderMesh(*mesh);
+	if (active)
+	{
+		CU::view.SetIdentity();
+		CU::view.LoadMatrix(transform.finalTRS);
+		CU::view.RenderMesh(*mesh);
+	}
 }
