@@ -6,8 +6,8 @@
 //bigger byt still small: 900, 675
 //big screen size: 1000, 750
 //Extra big: 1150, 862.5
-float Screen::SCREEN_WIDTH = 1000;
-float Screen::SCREEN_HEIGHT = 750;
+float Screen::SCREEN_WIDTH = 800;
+float Screen::SCREEN_HEIGHT = 600;
 unsigned short Screen::CAMERA_WIDTH = 800.f;	//camera view size X 
 unsigned short Screen::CAMERA_HEIGHT = 600.f;	//camera view size Y
 float Screen::zoom_percent = 1.f;

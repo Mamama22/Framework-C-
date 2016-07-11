@@ -66,6 +66,8 @@ class Transformation
 
 	//Custom transform---------------------------------//
 	static Mtx44 CustomTrans_Mtx;
+	static TransformNode customTrans[20];
+	static int totalTrans;
 	static bool apply_ToChildren;
 
 	/******************** Utilities **********************/

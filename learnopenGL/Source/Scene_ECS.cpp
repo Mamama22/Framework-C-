@@ -137,7 +137,15 @@ void Scene_ECS::Run()
 		testEnt.Translate(Vector3(0.15f, 0, 0));
 
 	if (CU::input.IsKeyPressed(Input::C))
-		testEnt.Rotate(10.f, Vector3(0, 1, 0));
+	{
+		//custom rotate---------------------------//
+		//testEnt.Rotate(10.f, Vector3(0, 1, 0));
+		testEnt.transform.Start_CustomTrans(true);
+		testEnt.transform.Custom_Translate(Vector3(-7.5f, 0.f, 0.f));
+		testEnt.transform.Custom_Rotate(2.f, Vector3(0, 1, 0));
+		testEnt.transform.Custom_Translate(Vector3(7.5f, 0.f, 0.f));
+		testEnt.transform.End_CustomTrans();
+	}
 	if (CU::input.IsKeyPressed(Input::B))
 		testEnt_1.Rotate(10.f, Vector3(0, 1, 0));
 

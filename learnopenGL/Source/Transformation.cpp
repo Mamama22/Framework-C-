@@ -3,6 +3,10 @@ Transformation::Transformation(){ angle = 0.f; axis.Set(0, 1, 0); }
 Transformation::~Transformation(){}
 TransformNode Transformation::shareNode;
 Mtx44 Transformation::sharedMtx[5];
+Mtx44 Transformation::CustomTrans_Mtx;
+bool Transformation::apply_ToChildren = true;
+TransformNode Transformation::customTrans[20];
+int Transformation::totalTrans = 0;
 
 /********************************************************************************
 Set transformation
@@ -75,6 +79,58 @@ void Transformation::Calculate_transformList()
 }
 
 /********************************************************************************
+Start custom transform
+********************************************************************************/
+void Transformation::Start_CustomTrans(bool applyToChildren)
+{
+	totalTrans = 0;
+	apply_ToChildren = applyToChildren;
+}
+
+void Transformation::Custom_Translate(Vector3 vel)
+{
+	customTrans[totalTrans++].SetTranslate(vel.x, vel.y, vel.z);
+}
+
+void Transformation::Custom_Rotate(float angle, Vector3 axis)
+{
+	customTrans[totalTrans++].SetRotate(angle, axis.x, axis.y, axis.z);
+}
+	
+void Transformation::Custom_Scale(Vector3 scale)
+{
+	customTrans[totalTrans++].SetScale(scale.x, scale.y, scale.z);
+}
+
+void Transformation::End_CustomTrans()
+{
+	Mtx44 trans;
+	Mtx44 jaja;
+	jaja.SetToIdentity();
+
+	for (int i = 0; i < totalTrans; ++i)
+	{
+		if (customTrans[i].type == 0)	//translate
+		{
+			trans.SetToTranslation(customTrans[i].v1, customTrans[i].v2, customTrans[i].v3);
+			jaja *= trans;
+		}
+		else if (customTrans[i].type == 1)	//rotate
+		{
+			trans.SetToRotation(customTrans[i].v1, customTrans[i].v2, customTrans[i].v3, customTrans[i].v4);
+			jaja *= trans;
+		}
+		else if (customTrans[i].type == 2)	//scale
+		{
+			trans.SetToScale(customTrans[i].v1, customTrans[i].v2, customTrans[i].v3);
+			jaja *= trans;
+		}
+	}
+
+	TRS = TRS * jaja;
+}
+
+/********************************************************************************
 Calculate final TRS
 ********************************************************************************/
 Mtx44 Transformation::Calculate_TRS()
@@ -89,13 +145,13 @@ Mtx44 Transformation::Calculate_TRS()
 Calculate final TRS + applied with parent transformations
 parentRotMat: the transformation intended for children
 ********************************************************************************/
+Mtx44 returnRot;
 Mtx44 Transformation::Calculate_TRS_withParent(const Mtx44& parentRotMat)
 {
 	//Final TRS + scale--------------------------------------------------//
 	sharedMtx[2].SetToScale(scale.x, scale.y, scale.z);
 
 	//apply parent TRS, then local TRS, then scaling
-	Mtx44 returnRot;
 	returnRot = parentRotMat * TRS;
 	finalTRS = returnRot * sharedMtx[2];
 	return returnRot;
