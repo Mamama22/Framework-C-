@@ -58,9 +58,10 @@ void Component::Rotate(float angle, Vector3 axis)
 /********************************************************************************
 Added
 ********************************************************************************/
-void Component::Added(Transformation& parentTrans)
+void Component::Added(Transformation& parentTrans, int parentHandle)
 {
 	transform.AddedToParent(parentTrans);
+	this->parentHandle = parentHandle;
 }
 
 /********************************************************************************

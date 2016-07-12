@@ -31,6 +31,7 @@ void Transformation::Translate(Vector3 vel)
 	this->pos += vel;
 
 	sharedMtx[0].SetToTranslation(vel.x, vel.y, vel.z);
+
 	TRS = TRS * sharedMtx[0];
 }
 
@@ -53,6 +54,7 @@ void Transformation::Rotate(float angle, Vector3 axis)
 	else if (this->angle > 360.f)this->angle -= 360.f;
 
 	sharedMtx[0].SetToRotation(angle, axis.x, axis.y, axis.z);
+
 	TRS = TRS * sharedMtx[0];
 }
 
@@ -163,6 +165,20 @@ Get pos from TRS
 Vector3 Transformation::GetPos()
 {
 	Vector3 pos;
-	pos = TRS * pos;
+	pos = finalTRS * pos;
 	return pos;
+}
+
+/********************************************************************************
+operator overloads
+********************************************************************************/
+Transformation& Transformation::operator= (Transformation& copyMe)
+{
+	angle = copyMe.angle;
+	axis = copyMe.axis;
+	pos = copyMe.pos;
+	scale = copyMe.scale;
+	TRS = copyMe.TRS;
+	finalTRS = copyMe.finalTRS;	//overall transformation matrix
+	return *this;
 }

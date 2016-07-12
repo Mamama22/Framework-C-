@@ -108,6 +108,9 @@ public:
 	
 	/******************** Get functions **********************/
 	Vector3 GetPos();
+
+	/******************** Operator overload **********************/
+	Transformation& operator= (Transformation& copyMe);
 };
 
 #endif

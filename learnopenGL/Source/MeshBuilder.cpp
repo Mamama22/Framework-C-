@@ -81,6 +81,33 @@ Mesh* MeshBuilder::GenerateAxes(float lengthX, float lengthY, float lengthZ)
 }
 
 /******************************************************************************
+Generate a line
+******************************************************************************/
+Mesh* MeshBuilder::GenerateLine(Color color)
+{
+	Vertex v;
+	Mesh *mesh = new Mesh();
+
+	std::vector<Vertex> vertex_buffer_data;
+	std::vector<GLuint> index_buffer_data;
+
+	vertex_buffer_data;
+	v.pos.Set(0, 0, 0);
+	v.color = color;
+	vertex_buffer_data.push_back(v);
+	v.pos.Set(1, 0, 0);
+	v.color = color;
+	vertex_buffer_data.push_back(v);
+
+	index_buffer_data.push_back(0);
+	index_buffer_data.push_back(1);
+
+	BindBuffers(*mesh, vertex_buffer_data, index_buffer_data, GL_LINES);
+
+	return mesh;
+}
+
+/******************************************************************************
 Generate a quad
 ******************************************************************************/
 Mesh* MeshBuilder::GenerateQuad(float length, float texCoord, bool start0)
@@ -139,6 +166,44 @@ Mesh* MeshBuilder::GenerateQuad(float length, float texCoord, bool start0)
 	index_buffer_data.push_back(0);
 
 	BindBuffers(*mesh, vertex_buffer_data, index_buffer_data, GL_TRIANGLES);
+
+	return mesh;
+}
+
+/******************************************************************************
+Generate a debug quad
+******************************************************************************/
+Mesh* MeshBuilder::GenerateDebugQuad(Color color)
+{
+	Mesh *mesh = new Mesh();
+	Vertex v;
+
+	std::vector<Vertex> vertex_buffer_data;
+	std::vector<GLuint> index_buffer_data;
+
+	v.pos.Set(-0.5f, -0.5f, 0.f);//0
+	v.color = color;
+	vertex_buffer_data.push_back(v);
+	v.pos.Set(0.5f, -0.5f, 0.f);	//1
+	v.color = color;
+	vertex_buffer_data.push_back(v);
+	v.pos.Set(0.5f, 0.5f, 0.f);	//2
+	v.color = color;
+	vertex_buffer_data.push_back(v);
+	v.pos.Set(-0.5f, 0.5f, 0.f);//3
+	v.color = color;
+	vertex_buffer_data.push_back(v);
+
+	index_buffer_data.push_back(0);
+	index_buffer_data.push_back(1);
+	index_buffer_data.push_back(1);
+	index_buffer_data.push_back(2);
+	index_buffer_data.push_back(2);
+	index_buffer_data.push_back(3);
+	index_buffer_data.push_back(3);
+	index_buffer_data.push_back(0);
+
+	BindBuffers(*mesh, vertex_buffer_data, index_buffer_data, GL_LINES);
 
 	return mesh;
 }

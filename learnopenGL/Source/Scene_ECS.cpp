@@ -2,7 +2,7 @@
 
 Scene_ECS::Scene_ECS()
 {
-	rendererCounter = 0;
+	rendererCounter = colliderCounter = 0;
 	meshType = 0;
 	added1 = added2 = false;
 }
@@ -22,6 +22,7 @@ void Scene_ECS::Init()
 	sphere = MeshBuilder::GenerateSphere(36, 36, 0.5f);
 	quad = MeshBuilder::GenerateQuad(1.f, 1.f, false);
 	axes = MeshBuilder::GenerateAxes();
+	collisionLine = MeshBuilder::GenerateLine(Color(199, 149, 34));
 
 	//Lighting: Call before View init() !!!-------------------------------------//
 	CU::view.AddDirLight(Vector3(0.f, -1.f, 0.f), Color(255.f, 255.f, 255.f));
@@ -60,6 +61,7 @@ void Scene_ECS::AddRendererToTest(Entity& addToMe, Vector3 offset, bool first)
 	ostringstream ss;
 	ss << "renderer" << rendererCounter;
 
+	//Set renderer-----------------------------------------------------------//
 	if (meshType == 1)
 		Render_InWorld_List[rendererCounter].Init(ss.str().c_str(), quad, newPos, RendererScale);	//assign available renderer
 	else if (meshType == 0)
@@ -69,8 +71,19 @@ void Scene_ECS::AddRendererToTest(Entity& addToMe, Vector3 offset, bool first)
 	if (meshType > 1)
 		meshType = 0;
 
+	//Add a renderer-----------------------------------------------------------//
 	Render_InWorld_List[rendererCounter].SetActive(true);
 	addToMe.AddComponent(&Render_InWorld_List[rendererCounter]);
+
+	//Add a box collider-----------------------------------------------------------//
+	//if (first)
+	{
+		BoxCollision_List[colliderCounter].SetActive(true);
+		BoxCollision_List[colliderCounter].Init("collider", addToMe.transform.pos, RendererScale * 1.2f);
+		addToMe.AddComponent(&BoxCollision_List[colliderCounter]);
+	}
+
+	++colliderCounter;
 	++rendererCounter;
 }
 
@@ -147,7 +160,7 @@ void Scene_ECS::Run()
 		testEnt.transform.End_CustomTrans();
 	}
 	if (CU::input.IsKeyPressed(Input::B))
-		testEnt_1.Rotate(10.f, Vector3(0, 0, 1));
+		testEnt_1.Rotate(2.f, Vector3(0, 0, 1));
 
 	//Stage 2: TRS calculations for Entity and Comp ===========================================================//
 	testEnt.CalculateTRS();
@@ -162,8 +175,15 @@ void Scene_ECS::Run()
 	testEnt_2.Update();
 
 	//Comp update-----------------------------------------------------//
-	for (int i = 0; i < TOTAL_RENDERER; ++i)
+	for (int i = 0; i < TOTAL_RENDERER; ++i)	//renderer
 		Render_InWorld_List[i].Update();
+	for (int i = 0; i < TOTAL_AABB; ++i)	//collider
+		BoxCollision_List[i].Update();
+
+	//Repeat Stage 2: post-update TRS calculations for Entity and Comp ===========================================================//
+	testEnt.CalculateTRS();
+	testEnt_1.CalculateTRS();
+	testEnt_2.CalculateTRS();
 }
 
 /********************************************************************************
@@ -171,26 +191,7 @@ Draw in world
 ********************************************************************************/
 void Scene_ECS::DrawInWorld()
 {
-	CU::view.UseShader(View::LIGHT_SHADER);	//use light shader
-
 	CU::view.UseShader(View::BASIC_SHADER);	//use basic shader
-
-	////Point light----------------------------------//
-	//CU::view.SetIdentity();
-	//CU::view.Translate(-2.f, 2.f, 2.5f);
-	//CU::view.Scale(0.3f, 0.3f, 0.3f);
-	//CU::view.RenderMesh(*sphere);
-
-	////spot light------------------------------------//
-	//CU::view.SetIdentity();
-	//CU::view.Translate(-12.f, 1.f, 7.f);
-	//CU::view.Scale(0.2f, 0.2f, 0.2f);
-	//CU::view.RenderMesh(*sphere);
-
-	//CU::view.SetIdentity();
-	//CU::view.Translate(13.f, 1.f, 6.f);
-	//CU::view.Scale(0.2f, 0.2f, 0.2f);
-	//CU::view.RenderMesh(*sphere);
 }
 
 /********************************************************************************
@@ -198,7 +199,12 @@ Draw on screen
 ********************************************************************************/
 void Scene_ECS::DrawOnScreen()
 {
-	//CU::view.UseShader(View::BASIC_SHADER);	//use basic shader
+	//Collision line-----------------------------------------//
+	CU::view.SetIdentity();
+	CU::view.Translate(TEST_COLLISION_X, -300.f, 0.f);
+	CU::view.Scale(1000.f, 1000.f, 1000.f);
+	CU::view.Rotate(90.f, 0, 0, 1);
+	CU::view.RenderMesh(*collisionLine);
 
 	//Axes----------------------------------------------------//
 	CU::view.SetIdentity();
@@ -209,6 +215,10 @@ void Scene_ECS::DrawOnScreen()
 	//Renderer update (Draw)---------------------------------------------//
 	for (int i = 0; i < TOTAL_RENDERER; ++i)
 		Render_InWorld_List[i].Draw();
+
+	//Collision bound draw-----------------------------------------------//
+	for (int i = 0; i < TOTAL_AABB; ++i)
+		BoxCollision_List[i].DrawBound();
 
 	CU::view.UseShader(View::TEXT_SHADER);	//use light shader
 
@@ -230,6 +240,7 @@ void Scene_ECS::Exit()
 	delete sphere;
 	delete quad;
 	delete axes;
+	delete collisionLine;
 
 	//Call parent--------------------------------------//
 	Scene::Exit();

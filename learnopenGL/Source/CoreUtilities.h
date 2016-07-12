@@ -2,6 +2,9 @@
 #define COREUTIL_H
 #include "View.h"
 #include "Input.h"
+#include "SharedResources.h"
+#include "EntityManager.h"
+#define TEST_COLLISION_X 250.f
 
 /*************************************************************
 Core utility class. Contains:
@@ -18,6 +21,8 @@ public:
 	/******************** core utilities **********************/
 	static View view;
 	static Input input;
+	static SharedResources sharedResources;
+	static EntityManager entityMan;
 	static double dt;
 	static float fps;
 
@@ -26,11 +31,13 @@ public:
 	{
 		input.Init();
 		view.Init();
+		sharedResources.Init();
 	}
 
 	static void Exit()
 	{
 		view.Exit();
+		sharedResources.Exit();
 	}
 };
 

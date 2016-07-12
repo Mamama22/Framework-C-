@@ -4,6 +4,7 @@
 
 //component types-----------------------------//
 #include "Renderer.h"
+#include "BoxCollision.h"
 
 /********************************************************************************
 error
@@ -44,8 +45,9 @@ class Entity
 	
 protected:
 
-	//parent pointer----------------------------//
+	/******************** Var **********************/
 	Entity* parent;
+	int handle;
 
 	/******************** Added/removed **********************/
 	void Added(Entity* parent);	//if this entity added, do something
@@ -56,7 +58,7 @@ protected:
 
 public:
 	
-	//Transform comp-------------------------//
+	/******************** public var **********************/
 	Transformation transform;
 
 	/******************** Constructor/destructor **********************/
@@ -75,15 +77,9 @@ public:
 	//Will be called everytime BEFORE comp updates-------------------//
 	void Update();
 
-	/******************** abstract functions **********************/
-	virtual void Exit(){}
-
 	/******************** Transformation function **********************/
 	void Translate(Vector3 vel);
 	void Rotate(float angle, Vector3 axis);
-
-	//Customisable--------------------------------------//
-	virtual void RotateSpecial(float angle, Vector3 axis);
 
 	/******************** Entity Transformation function: ENTITY USE ONLY **********************/
 	virtual void CalculateTRS();
@@ -91,12 +87,12 @@ public:
 
 	/******************** Get set **********************/
 	Entity* GetParent();
+	Entity* GetTopParent();	//get the very top parent
+	int Gethandle();
+	void Sethandle(int handle);
 
-
-
-
-
-
+	/******************** abstract functions **********************/
+	virtual void Exit(){}
 
 
 

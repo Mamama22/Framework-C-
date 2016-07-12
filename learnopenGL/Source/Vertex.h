@@ -19,6 +19,11 @@ struct Color
 		Set(r, g, b);
 	}
 	void Set(float r, float g, float b) { this->r = r / 255.f; this->g = g / 255.f; this->b = b / 255.f; }
+
+	Color& operator= (Color& copyMe){
+		r = copyMe.r;g = copyMe.g;b = copyMe.b;
+		return *this;
+	}
 };
 
 struct Color4

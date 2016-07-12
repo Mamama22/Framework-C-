@@ -24,6 +24,7 @@ class Component
 {
 protected:
 
+	int parentHandle;
 	const char* name;
 	bool active;	//only updates when active
 
@@ -47,7 +48,7 @@ public:
 	virtual void Exit() = 0;
 
 	/******************** Added/removed by Entity: ENTITY USE ONLY **********************/
-	void Added(Transformation& parentTrans);
+	void Added(Transformation& parentTrans, int parentHandle);
 	void Removed();
 
 	/******************** Transformation function **********************/

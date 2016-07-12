@@ -12,6 +12,7 @@ Renderer::Renderer()
 Renderer::Renderer(Renderer& copyMe) : Component(copyMe)
 { 
 	mesh = copyMe.mesh; 
+	transform = copyMe.transform;
 }
 
 Renderer::~Renderer()
@@ -20,7 +21,7 @@ Renderer::~Renderer()
 }
 
 /********************************************************************************
-Add component
+Init
 ********************************************************************************/
 void Renderer::Init(const char* name, Mesh* mesh, Vector3 pos, Vector3 scale)
 {
