@@ -14,7 +14,7 @@ void FreeType_Text::Init()
 
 	//Load and init font as face---------------------------------------//
 
-	if (FT_New_Face(ft, "fonts/SEASRN__.ttf", 0, &minecraft))
+	if (FT_New_Face(ft, "fonts/KarmaticArcade.otf", 0, &minecraft))
 		cout << "Error: failed to load font" << endl;
 
 	//extract font size--------------------------------------------------//

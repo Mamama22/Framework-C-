@@ -149,20 +149,25 @@ void Scene_ECS::Run()
 	if (CU::input.IsKeyPressed(Input::B))
 		testEnt_1.Rotate(10.f, Vector3(0, 0, 1));
 
+	//Stage 2: TRS calculations for Entity and Comp ===========================================================//
+	testEnt.CalculateTRS();
+	testEnt_1.CalculateTRS();
+	testEnt_2.CalculateTRS();
 
-	//Stage 2 and 3a: TRS calculations for Entity and Comp --> Entity update ===========================================================//
+	//Stage 3: Entity and Comp update ===========================================================//
+
 	//Entity update------------------------------------------------------//
 	testEnt.Update();
 	testEnt_1.Update();
 	testEnt_2.Update();
 
-	//3b: Comp update ===========================================================//
+	//Comp update-----------------------------------------------------//
 	for (int i = 0; i < TOTAL_RENDERER; ++i)
 		Render_InWorld_List[i].Update();
 }
 
 /********************************************************************************
-Draw in worldq
+Draw in world
 ********************************************************************************/
 void Scene_ECS::DrawInWorld()
 {
@@ -200,7 +205,7 @@ void Scene_ECS::DrawOnScreen()
 	CU::view.Scale(2000.f, 2000.f, 2000.f);
 	CU::view.RenderMesh(*axes);
 
-	//Stage 2a: Renderer comp update ===========================================================//
+	//Special: Renderer components has a draw function====================================================================//
 	//Renderer update (Draw)---------------------------------------------//
 	for (int i = 0; i < TOTAL_RENDERER; ++i)
 		Render_InWorld_List[i].Draw();
