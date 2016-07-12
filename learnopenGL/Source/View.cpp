@@ -6,8 +6,8 @@
 //bigger byt still small: 900, 675
 //big screen size: 1000, 750
 //Extra big: 1150, 862.5
-float Screen::SCREEN_WIDTH = 800;
-float Screen::SCREEN_HEIGHT = 600;
+float Screen::SCREEN_WIDTH = 1150;
+float Screen::SCREEN_HEIGHT = 862.5;
 unsigned short Screen::CAMERA_WIDTH = 800.f;	//camera view size X 
 unsigned short Screen::CAMERA_HEIGHT = 600.f;	//camera view size Y
 float Screen::zoom_percent = 1.f;
@@ -382,7 +382,7 @@ void View::CameraAndProj_OnScreen(float offsetX, float offsetY)
 {
 	glDisable(GL_DEPTH_TEST);
 
-	ortho.SetToOrtho(offsetX, Screen::CAMERA_WIDTH + offsetX, offsetY, Screen::CAMERA_HEIGHT + offsetY, -10.f, 10.f);
+	ortho.SetToOrtho(offsetX, Screen::CAMERA_WIDTH + offsetX, offsetY, Screen::CAMERA_HEIGHT + offsetY, -100.f, 100.f);
 	projectionStack.PushMatrix();
 	projectionStack.LoadMatrix(ortho);
 	viewStack.PushMatrix();
