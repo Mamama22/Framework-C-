@@ -9,8 +9,8 @@ void Scene_Test::Init()
 	Scene::Init();
 
 	//Meshes---------------------------------------//
-	sphere = MeshBuilder::GenerateSphere(36, 36, 0.5f);
-	quad = MeshBuilder::GenerateQuad(1.f, 1.f, false);
+	sphere = MeshBuilder::GenerateSphere(Color(0, 255, 0), 36, 36, 0.5f);
+	quad = MeshBuilder::GenerateQuad(Color(0,255,0), 1.f, 1.f, false);
 	axes = MeshBuilder::GenerateAxes();
 
 	//Lighting: Call before View init() !!!-------------------------------------//

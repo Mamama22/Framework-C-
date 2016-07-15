@@ -19,8 +19,8 @@ void Scene_ECS::Init()
 	Scene::Init();
 
 	//Meshes---------------------------------------//
-	sphere = MeshBuilder::GenerateSphere(36, 36, 0.5f);
-	quad = MeshBuilder::GenerateQuad(1.f, 1.f, false);
+	sphere = MeshBuilder::GenerateSphere(Color(255, 255, 0), 36, 36, 0.5f);
+	quad = MeshBuilder::GenerateQuad(Color(0,255,0), 1.f, 1.f, false);
 	axes = MeshBuilder::GenerateAxes();
 	collisionLine = MeshBuilder::GenerateLine(Color(199, 149, 34));
 

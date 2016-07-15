@@ -84,6 +84,7 @@ public:
 
 	/******************** constructor/destructor **********************/
 	Transformation();
+	Transformation(const Transformation& copy);
 	~Transformation();
 
 	/******************** Init **********************/
@@ -110,7 +111,7 @@ public:
 	Vector3 GetPos();
 
 	/******************** Operator overload **********************/
-	Transformation& operator= (Transformation& copyMe);
+	Transformation& operator= (const Transformation& copyMe);
 };
 
 #endif

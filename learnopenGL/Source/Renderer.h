@@ -25,7 +25,7 @@ public:
 
 	/******************** constructor/destructor **********************/
 	Renderer();
-	Renderer(Renderer& copyMe);
+	Renderer(const Renderer& copyMe);
 	~Renderer();
 
 	/******************** comp functions **********************/

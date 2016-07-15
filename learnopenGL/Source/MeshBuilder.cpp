@@ -83,7 +83,7 @@ Mesh* MeshBuilder::GenerateAxes(float lengthX, float lengthY, float lengthZ)
 /******************************************************************************
 Generate a line
 ******************************************************************************/
-Mesh* MeshBuilder::GenerateLine(Color color)
+Mesh* MeshBuilder::GenerateLine(Color color, bool start0)
 {
 	Vertex v;
 	Mesh *mesh = new Mesh();
@@ -92,10 +92,18 @@ Mesh* MeshBuilder::GenerateLine(Color color)
 	std::vector<GLuint> index_buffer_data;
 
 	vertex_buffer_data;
-	v.pos.Set(0, 0, 0);
+	
+	if (start0)
+		v.pos.Set(0, 0, 0);
+	else
+		v.pos.Set(-0.5f, 0, 0);
 	v.color = color;
 	vertex_buffer_data.push_back(v);
-	v.pos.Set(1, 0, 0);
+
+	if (start0)
+		v.pos.Set(1, 0, 0);
+	else
+		v.pos.Set(0.5f, 0, 0);
 	v.color = color;
 	vertex_buffer_data.push_back(v);
 
@@ -110,10 +118,9 @@ Mesh* MeshBuilder::GenerateLine(Color color)
 /******************************************************************************
 Generate a quad
 ******************************************************************************/
-Mesh* MeshBuilder::GenerateQuad(float length, float texCoord, bool start0)
+Mesh* MeshBuilder::GenerateQuad(Color color, float length, float texCoord, bool start0)
 {
 	Mesh *mesh = new Mesh();
-	Color color(0.f, 255.f, 0.f);
 	Vertex v;
 
 	std::vector<Vertex> vertex_buffer_data;
@@ -208,6 +215,46 @@ Mesh* MeshBuilder::GenerateDebugQuad(Color color)
 	return mesh;
 }
 
+/******************************************************************************
+Generate a triangle
+******************************************************************************/
+Mesh* MeshBuilder::GenerateRTriangle(Color color)
+{
+	Mesh *mesh = new Mesh();
+	Vertex v;
+
+	std::vector<Vertex> vertex_buffer_data;
+	std::vector<GLuint> index_buffer_data;
+
+	v.pos.Set(-0.5f , -0.5f , 0);
+	v.color = color;
+	v.normal.Set(0, 0, 1);
+	vertex_buffer_data.push_back(v);
+	v.pos.Set(0.5f , -0.5f , 0);
+	v.color = color;
+	v.normal.Set(0, 0, 1);
+	vertex_buffer_data.push_back(v);
+	v.pos.Set(0.5f , 0.5f , 0);
+	v.color = color;
+	v.normal.Set(0, 0, 1);
+	vertex_buffer_data.push_back(v);
+	v.pos.Set(-0.5f , 0.5f , 0);
+	v.color = color;
+	v.normal.Set(0, 0, 1);
+	vertex_buffer_data.push_back(v);
+
+	index_buffer_data.push_back(0);
+	index_buffer_data.push_back(1);
+	index_buffer_data.push_back(3);
+	index_buffer_data.push_back(3);
+	index_buffer_data.push_back(1);
+	index_buffer_data.push_back(0);
+
+	BindBuffers(*mesh, vertex_buffer_data, index_buffer_data, GL_TRIANGLES);
+
+	return mesh;
+}
+
 float sphereX(float phi, float theta)
 {
 	return cos(Math::DegreeToRadian(phi)) * cos(Math::DegreeToRadian(theta));
@@ -224,10 +271,9 @@ float sphereZ(float phi, float theta)
 /******************************************************************************
 Generate a sphere
 ******************************************************************************/
-Mesh* MeshBuilder::GenerateSphere(unsigned numStack, unsigned numSlice, float radius)
+Mesh* MeshBuilder::GenerateSphere(Color color, unsigned numStack, unsigned numSlice, float radius)
 {
 	Mesh *mesh = new Mesh();
-	Color color(255.f, 255.f, 0.f);
 
 	std::vector<Vertex> vertex_buffer_data;
 	std::vector<GLuint> index_buffer_data;

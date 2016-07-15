@@ -25,7 +25,7 @@ public:
 
 	/******************** constructor/destructor **********************/
 	BoxCollision();
-	BoxCollision(BoxCollision& copyMe);
+	BoxCollision(const BoxCollision& copyMe);
 	~BoxCollision();
 
 	/******************** comp functions **********************/

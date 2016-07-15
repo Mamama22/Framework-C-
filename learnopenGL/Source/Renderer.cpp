@@ -9,7 +9,7 @@ Renderer::Renderer()
 	mesh = NULL; 
 }
 
-Renderer::Renderer(Renderer& copyMe) : Component(copyMe)
+Renderer::Renderer(const Renderer& copyMe) : Component(copyMe)
 { 
 	mesh = copyMe.mesh; 
 	transform = copyMe.transform;

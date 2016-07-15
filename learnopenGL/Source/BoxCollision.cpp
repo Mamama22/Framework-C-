@@ -8,7 +8,7 @@ BoxCollision::BoxCollision()
 {
 }
 
-BoxCollision::BoxCollision(BoxCollision& copyMe) : Component(copyMe)
+BoxCollision::BoxCollision(const BoxCollision& copyMe) : Component(copyMe)
 {
 }
 

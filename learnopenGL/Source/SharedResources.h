@@ -15,10 +15,18 @@ public:
 
 	/******************** shared resources **********************/
 	Mesh* boundingBox_Mesh;
+	Mesh* sphere;
+	Mesh* sphere_1;
+	Mesh* line_1;
+	Mesh* line_2;
 
 	/******************** core **********************/
 	void Init();
 	void Exit();
+	
+	/******************** shared functions **********************/
+	void DrawLine(Mesh* line, Vector3 startPos, float angle, float length, float thickness);
+	void DrawMesh(Mesh* mesh, Vector3 pos, float scale);
 };
 
 

@@ -5,6 +5,8 @@
 #include "CoreUtilities.h"
 #include "FPS_Camera.h"
 #include "MeshBuilder.h"
+#include "Line.h"
+#include "Shape.h"
 
 //Entity types---------------------------//
 #include "Entity.h"

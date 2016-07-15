@@ -37,7 +37,7 @@ public:
 	Transformation transform;
 
 	Component();
-	Component(Component& copyMe);
+	Component(const Component& copyMe);
 	virtual ~Component();
 
 	/******************** comp functions **********************/

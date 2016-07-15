@@ -5,7 +5,7 @@ Component::Component()
 	active = false;
 }
 
-Component::Component(Component& copyMe)
+Component::Component(const Component& copyMe)
 {
 	active = copyMe.active;
 }

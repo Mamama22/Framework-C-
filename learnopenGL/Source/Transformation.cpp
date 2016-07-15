@@ -1,5 +1,6 @@
 #include "Transformation.h"
 Transformation::Transformation(){ angle = 0.f; axis.Set(0, 1, 0); }
+Transformation::Transformation(const Transformation& copy){ *this = copy; }
 Transformation::~Transformation(){}
 TransformNode Transformation::shareNode;
 Mtx44 Transformation::sharedMtx[5];
@@ -172,7 +173,7 @@ Vector3 Transformation::GetPos()
 /********************************************************************************
 operator overloads
 ********************************************************************************/
-Transformation& Transformation::operator= (Transformation& copyMe)
+Transformation& Transformation::operator= (const Transformation& copyMe)
 {
 	angle = copyMe.angle;
 	axis = copyMe.axis;
