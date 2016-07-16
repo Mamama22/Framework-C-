@@ -53,7 +53,11 @@ void Scene_SAT_Test::Run()
 	//Call parent--------------------------------------//
 	Scene::Run();
 
+	//Stage 1: States, flags and values update ===========================================================//
 	Update_Shapes();
+
+	//Stage 2: TRS calculations for Entity and Comp ===========================================================//
+	testShape.RecalculatePoints();	//called by calculate TRS with parents but for now stand-alone since no entity adds this
 }
 
 /********************************************************************************

@@ -118,17 +118,17 @@ Translate: translate in direction of shape
 void Shape::Translate(Vector3 vel)
 {
 	Component::Translate(vel);
-	
-	for (int i = 0; i < faceList.size(); ++i)
-	{
-		CU::sharedResources.mtx[2].SetToTranslation(faceList[i].offset.x, faceList[i].offset.y, 0.f);
+	//
+	//for (int i = 0; i < faceList.size(); ++i)
+	//{
+	//	CU::sharedResources.mtx[2].SetToTranslation(faceList[i].offset.x, faceList[i].offset.y, 0.f);
 
-		//final transformation matrix-----------------------------//
-		CU::sharedResources.mtx[3] = transform.TRS * CU::sharedResources.mtx[2];
+	//	//final transformation matrix-----------------------------//
+	//	CU::sharedResources.mtx[3] = transform.TRS * CU::sharedResources.mtx[2];
 
-		faceList[i].start.Set(1, 1, 1);
-		faceList[i].start = CU::sharedResources.mtx[3] * faceList[i].start;
-	}
+	//	faceList[i].start.Set(1, 1, 1);
+	//	faceList[i].start = CU::sharedResources.mtx[3] * faceList[i].start;
+	//}
 }
 
 /********************************************************************************
@@ -141,6 +141,26 @@ void Shape::Rotate(float angle)
 	//rotate and change pos------------------------//
 	for (int i = 0; i < faceList.size(); ++i)
 	{
+		//CU::sharedResources.mtx[2].SetToTranslation(faceList[i].offset.x, faceList[i].offset.y, 0.f);
+
+		////final transformation matrix-----------------------------//
+		//CU::sharedResources.mtx[3] = transform.TRS * CU::sharedResources.mtx[2];
+
+		//faceList[i].start.Set(1, 1, 1);
+		//faceList[i].start = CU::sharedResources.mtx[3] * faceList[i].start;
+
+		//rotate--------------------------------------------//
+		faceList[i].Rotate(angle);
+	}
+}
+
+/********************************************************************************
+Draw outlines
+********************************************************************************/
+void Shape::RecalculatePoints()
+{
+	for (int i = 0; i < faceList.size(); ++i)
+	{
 		CU::sharedResources.mtx[2].SetToTranslation(faceList[i].offset.x, faceList[i].offset.y, 0.f);
 
 		//final transformation matrix-----------------------------//
@@ -148,9 +168,6 @@ void Shape::Rotate(float angle)
 
 		faceList[i].start.Set(1, 1, 1);
 		faceList[i].start = CU::sharedResources.mtx[3] * faceList[i].start;
-
-		//rotate--------------------------------------------//
-		faceList[i].Rotate(angle);
 	}
 }
 

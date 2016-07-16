@@ -67,6 +67,7 @@ public:
 
 	void GetProjection(Vector3& dir, Line& projectedVec);
 
+	void RecalculatePoints();
 	void Draw();	//draws the outline of the shape
 };
 
