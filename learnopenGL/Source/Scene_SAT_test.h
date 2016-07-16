@@ -26,6 +26,7 @@ class Scene_SAT_Test : public Scene
 
 	/******************** wrapper functions **********************/
 	void Init_Shapes();
+	void Update_Shapes();
 	void Draw_Shapes();
 
 public:

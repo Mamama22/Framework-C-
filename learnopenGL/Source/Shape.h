@@ -26,9 +26,11 @@ public:
 	float angle;
 	Vector3 dir;
 	Vector3 normal;
+	Vector3 offset;	//offset from shape pos
 
 	/******************** core functions **********************/
-	void Set(Vector3 start, Vector3 end);
+	void Set(Vector3 start, Vector3 end, Vector3 shapePos);
+	void Rotate(float angle);
 	void Draw();
 };
 
@@ -36,7 +38,7 @@ public:
 Shape class with SAT collision
 
 Instructions:
--NO CONVEX SHAPES, ONLY CONCAVE
+-NO CONCAVE SHAPES, ONLY CONVEX
 -points will be linked in order of list
 
 Author: Tan Yie Cher
@@ -57,7 +59,7 @@ public:
 
 	/******************** Transformation: added on to parent's **********************/
 	void Translate(Vector3 vel);	
-	void Rotate(float angle, Vector3 axis);
+	void Rotate(float angle);
 
 	/******************** core functions **********************/
 	void Init(const char* name);

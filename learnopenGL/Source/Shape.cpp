@@ -13,19 +13,42 @@ Face::Face(const Face& copy)
 	this->len = copy.len;
 	this->normal = copy.normal;
 	this->angle = copy.angle;
+	this->offset = copy.offset;
 }
 Face::~Face(){}
 
 /********************************************************************************
 Face init
 ********************************************************************************/
-void Face::Set(Vector3 start, Vector3 end)
+void Face::Set(Vector3 start, Vector3 end, Vector3 shapePos)
 {
 	this->start = start;
 	this->dir = (end - start).Normalized();
 	this->len = (end - start).Length();
 	this->normal = this->dir.Cross(Vector3(0, 0, 1));
 	this->angle = Vector3::getAngleFromDir(dir.x, dir.y);
+	this->offset = this->start - shapePos;
+}
+
+/********************************************************************************
+rotate by angle
+angle, normal and direction changes
+********************************************************************************/
+void Face::Rotate(float angle)
+{
+	//angle-------------------------------------------------------//
+	this->angle += angle;
+
+	if (this->angle > 360.f)
+		this->angle -= 360.f;
+	else if (this->angle < 0.f)
+		this->angle += 360.f;
+
+	//dir-------------------------------------------------------//
+	this->dir.x = cos(Math::DegreeToRadian(this->angle));
+	this->dir.y = sin(Math::DegreeToRadian(this->angle));
+
+	this->normal = this->dir.Cross(Vector3(0, 0, 1));
 }
 
 /********************************************************************************
@@ -77,7 +100,7 @@ Add point
 void Shape::AddFace(Vector3 start, Vector3 end)
 {
 	Face newFace;
-	newFace.Set(start, end);
+	newFace.Set(start, end, transform.pos);
 	faceList.push_back(newFace);
 }
 
@@ -90,19 +113,45 @@ void Shape::GetProjection(Vector3& dir, Line& projectedVec)
 }
 
 /********************************************************************************
-Translate
+Translate: translate in direction of shape
 ********************************************************************************/
 void Shape::Translate(Vector3 vel)
 {
 	Component::Translate(vel);
+	
+	for (int i = 0; i < faceList.size(); ++i)
+	{
+		CU::sharedResources.mtx[2].SetToTranslation(faceList[i].offset.x, faceList[i].offset.y, 0.f);
+
+		//final transformation matrix-----------------------------//
+		CU::sharedResources.mtx[3] = transform.TRS * CU::sharedResources.mtx[2];
+
+		faceList[i].start.Set(1, 1, 1);
+		faceList[i].start = CU::sharedResources.mtx[3] * faceList[i].start;
+	}
 }
 
 /********************************************************************************
 Roatae: recalculate pos
 ********************************************************************************/
-void Shape::Rotate(float angle, Vector3 axis)
+void Shape::Rotate(float angle)
 {
-	Component::Rotate(angle, axis);
+	Component::Rotate(angle, Vector3(0,0,1));
+
+	//rotate and change pos------------------------//
+	for (int i = 0; i < faceList.size(); ++i)
+	{
+		CU::sharedResources.mtx[2].SetToTranslation(faceList[i].offset.x, faceList[i].offset.y, 0.f);
+
+		//final transformation matrix-----------------------------//
+		CU::sharedResources.mtx[3] = transform.TRS * CU::sharedResources.mtx[2];
+
+		faceList[i].start.Set(1, 1, 1);
+		faceList[i].start = CU::sharedResources.mtx[3] * faceList[i].start;
+
+		//rotate--------------------------------------------//
+		faceList[i].Rotate(angle);
+	}
 }
 
 /********************************************************************************

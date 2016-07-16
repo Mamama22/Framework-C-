@@ -19,6 +19,7 @@ public:
 	Mesh* sphere_1;
 	Mesh* line_1;
 	Mesh* line_2;
+	Mtx44 mtx[10];
 
 	/******************** core **********************/
 	void Init();

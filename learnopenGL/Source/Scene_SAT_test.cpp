@@ -33,6 +33,8 @@ Init shapes
 ********************************************************************************/
 void Scene_SAT_Test::Init_Shapes()
 {
+	testShape.Init("farkle");
+
 	//rectangle shape-------------------------------------------//
 	testShape.AddFace(Vector3(-100.f, -100.f, 0.f), Vector3(100.f, -100.f, 0.f));
 	testShape.AddFace(Vector3(100.f, -100.f, 0.f), Vector3(100.f, 100.f, 0.f));
@@ -51,6 +53,29 @@ void Scene_SAT_Test::Run()
 	//Call parent--------------------------------------//
 	Scene::Run();
 
+	Update_Shapes();
+}
+
+/********************************************************************************
+update shapes
+********************************************************************************/
+void Scene_SAT_Test::Update_Shapes()
+{
+	//translation----------------------------------------//
+	if (CU::input.IsKeyPressed(Input::ARROW_UP))
+		testShape.Translate(Vector3(0, 2.f, 0));
+	if (CU::input.IsKeyPressed(Input::ARROW_DOWN))
+		testShape.Translate(Vector3(0, -2.f, 0));
+	if (CU::input.IsKeyPressed(Input::ARROW_LEFT))
+		testShape.Translate(Vector3(-2.f, 0, 0));
+	if (CU::input.IsKeyPressed(Input::ARROW_RIGHT))
+		testShape.Translate(Vector3(2.f, 0, 0));
+
+	//rotation----------------------------------------//
+	if (CU::input.IsKeyPressed(Input::K))
+		testShape.Rotate(2.f);
+	if (CU::input.IsKeyPressed(Input::L))
+		testShape.Rotate(-2.f);
 }
 
 /********************************************************************************
