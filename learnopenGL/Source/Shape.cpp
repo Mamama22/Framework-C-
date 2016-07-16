@@ -3,6 +3,23 @@
 Vector3 Face::shareVec;
 
 /********************************************************************************
+Constructor/dextructor for point
+********************************************************************************/
+Point::Point(){}
+Point::Point(const Point& copy)
+{
+	this->pos = copy.pos;
+	this->offset = copy.offset;
+}
+Point::~Point(){}
+
+void Point::Set(Vector3 pos, Vector3 shapePos)
+{
+	this->pos = pos;
+	this->offset = this->pos - shapePos;
+}
+
+/********************************************************************************
 Constructor/dextructor
 ********************************************************************************/
 Face::Face(){}
@@ -13,21 +30,23 @@ Face::Face(const Face& copy)
 	this->len = copy.len;
 	this->normal = copy.normal;
 	this->angle = copy.angle;
-	this->offset = copy.offset;
 }
 Face::~Face(){}
 
 /********************************************************************************
 Face init
 ********************************************************************************/
-void Face::Set(Vector3 start, Vector3 end, Vector3 shapePos)
+void Face::Set(int startPoint_index, int endPoint_index, vector<Point>& pList, Vector3 shapePos)
 {
-	this->start = start;
-	this->dir = (end - start).Normalized();
-	this->len = (end - start).Length();
+	//Indexes--------------------------------------------------------//
+	this->start = startPoint_index;
+	this->end = endPoint_index;
+
+	//
+	this->dir = (pList[end].pos - pList[start].pos).Normalized();
+	this->len = (pList[end].pos - pList[start].pos).Length();
 	this->normal = this->dir.Cross(Vector3(0, 0, 1));
 	this->angle = Vector3::getAngleFromDir(dir.x, dir.y);
-	this->offset = this->start - shapePos;
 }
 
 /********************************************************************************
@@ -54,20 +73,20 @@ void Face::Rotate(float angle)
 /********************************************************************************
 Face draw
 ********************************************************************************/
-void Face::Draw()
+void Face::Draw(vector<Point>& pointList)
 {
 	//Draw the point---------------------------------//
-	CU::sharedResources.DrawMesh(CU::sharedResources.sphere, this->start, 10.f);
+	CU::shared.DrawMesh(CU::shared.sphere, pointList[start].pos, 10.f);
 
 	//Draw the dir---------------------------------//
-	CU::sharedResources.DrawLine(CU::sharedResources.line_1, this->start, this->angle, this->len, 3.f);
+	CU::shared.DrawLine(CU::shared.line_1, pointList[start].pos, this->angle, this->len, 3.f);
 
 	//Draw the normal---------------------------------//
 	float normalAngle = Vector3::getAngleFromDir(normal.x, normal.y);
-	shareVec = this->start;
+	shareVec = pointList[start].pos;
 	shareVec.x += len * 0.5f * dir.x;
 	shareVec.y += len * 0.5f * dir.y;
-	CU::sharedResources.DrawLine(CU::sharedResources.line_2, shareVec, normalAngle, 50.f, 1.f);
+	CU::shared.DrawLine(CU::shared.line_2, shareVec, normalAngle, 50.f, 1.f);
 }
 
 /********************************************************************************
@@ -97,19 +116,39 @@ void Shape::Init(const char* name)
 /********************************************************************************
 Add point
 ********************************************************************************/
-void Shape::AddFace(Vector3 start, Vector3 end)
+void Shape::AddPoint(Vector3 pos)
 {
-	Face newFace;
-	newFace.Set(start, end, transform.pos);
-	faceList.push_back(newFace);
+	Point point;
+	point.Set(pos, transform.pos);
+	pointList.push_back(point);
 }
 
 /********************************************************************************
-Get projection (2 points facing the axis)
+calculate faces after all points added
 ********************************************************************************/
-void Shape::GetProjection(Vector3& dir, Line& projectedVec)
+void Shape::CalculateFaces()
 {
+	Face face;
+	for (int i = 0; i < pointList.size(); ++i)
+	{
+		if (i < pointList.size() - 1)
+			face.Set(i, i + 1, pointList, transform.pos);
+		else
+			face.Set(i, 0, pointList, transform.pos);
+		faceList.push_back(face);
+	}
+}
 
+/********************************************************************************
+Get projection of all points
+Note: Pass in a Vec3 array with enough mem. allocated for total points in this shape
+********************************************************************************/
+void Shape::GetProjections(Vector3& dir, Vector3 list[])
+{
+	for (int i = 0; i < pointList.size(); ++i)
+	{
+		list[i] = CU::shared.vectorProjection(pointList[i].pos, dir);
+	}
 }
 
 /********************************************************************************
@@ -118,17 +157,6 @@ Translate: translate in direction of shape
 void Shape::Translate(Vector3 vel)
 {
 	Component::Translate(vel);
-	//
-	//for (int i = 0; i < faceList.size(); ++i)
-	//{
-	//	CU::sharedResources.mtx[2].SetToTranslation(faceList[i].offset.x, faceList[i].offset.y, 0.f);
-
-	//	//final transformation matrix-----------------------------//
-	//	CU::sharedResources.mtx[3] = transform.TRS * CU::sharedResources.mtx[2];
-
-	//	faceList[i].start.Set(1, 1, 1);
-	//	faceList[i].start = CU::sharedResources.mtx[3] * faceList[i].start;
-	//}
 }
 
 /********************************************************************************
@@ -141,14 +169,6 @@ void Shape::Rotate(float angle)
 	//rotate and change pos------------------------//
 	for (int i = 0; i < faceList.size(); ++i)
 	{
-		//CU::sharedResources.mtx[2].SetToTranslation(faceList[i].offset.x, faceList[i].offset.y, 0.f);
-
-		////final transformation matrix-----------------------------//
-		//CU::sharedResources.mtx[3] = transform.TRS * CU::sharedResources.mtx[2];
-
-		//faceList[i].start.Set(1, 1, 1);
-		//faceList[i].start = CU::sharedResources.mtx[3] * faceList[i].start;
-
 		//rotate--------------------------------------------//
 		faceList[i].Rotate(angle);
 	}
@@ -159,15 +179,15 @@ Draw outlines
 ********************************************************************************/
 void Shape::RecalculatePoints()
 {
-	for (int i = 0; i < faceList.size(); ++i)
+	for (int i = 0; i < pointList.size(); ++i)
 	{
-		CU::sharedResources.mtx[2].SetToTranslation(faceList[i].offset.x, faceList[i].offset.y, 0.f);
+		CU::shared.mtx[2].SetToTranslation(pointList[i].offset.x, pointList[i].offset.y, 0.f);
 
 		//final transformation matrix-----------------------------//
-		CU::sharedResources.mtx[3] = transform.TRS * CU::sharedResources.mtx[2];
+		CU::shared.mtx[3] = transform.TRS * CU::shared.mtx[2];
 
-		faceList[i].start.Set(1, 1, 1);
-		faceList[i].start = CU::sharedResources.mtx[3] * faceList[i].start;
+		pointList[i].pos.Set(1, 1, 1);
+		pointList[i].pos = CU::shared.mtx[3] * pointList[i].pos;
 	}
 }
 
@@ -176,9 +196,17 @@ Draw outlines
 ********************************************************************************/
 void Shape::Draw()
 {
-	Vector3 pointVec, dir;
 	for (int i = 0; i < faceList.size(); ++i)
 	{
-		faceList[i].Draw();
+		//point-----------------------------//
+		faceList[i].Draw(pointList);
+
+		//line------------------------------//
+
 	}
 }
+
+/********************************************************************************
+get/set
+********************************************************************************/
+int Shape::Get_TotalPoints(){ return pointList.size(); }

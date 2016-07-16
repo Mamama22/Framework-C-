@@ -16,6 +16,7 @@ class Scene_SAT_Test : public Scene
 	Mesh* axes;
 	Mesh* quad;
 	Mesh* sphere;
+	Mesh* sphere_1;
 	Mesh* line_1;
 	Mesh* line_2;
 	Mesh* line_3;
@@ -24,9 +25,23 @@ class Scene_SAT_Test : public Scene
 	//Shape--------------------------------------------//
 	Shape testShape;
 
+	//axis and offset-----------------------------------//
+	Vector3 axisDir;
+	float axisAngle;
+
+	Vector3 offset;
+	float dist;
+
+	//shape projection points----------------------------//
+	Vector3 shapeProjPoints[20];
+
 	/******************** wrapper functions **********************/
 	void Init_Shapes();
+	
 	void Update_Shapes();
+	void Update_Axis();
+	void Calculate_ShapeProjections();
+
 	void Draw_Shapes();
 
 public:

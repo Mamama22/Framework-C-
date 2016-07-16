@@ -26,8 +26,13 @@ public:
 	void Exit();
 	
 	/******************** shared functions **********************/
+	void DrawLine_Offset(Mesh* line, Vector3 startPos, float angle, float length, float thickness, Vector3 offset);
 	void DrawLine(Mesh* line, Vector3 startPos, float angle, float length, float thickness);
 	void DrawMesh(Mesh* mesh, Vector3 pos, float scale);
+	void CalculateOffset(Vector3& offset, Vector3& dir, float dist);
+
+	//Math--------------------------------------------//
+	Vector3 vectorProjection(Vector3& projected, Vector3& dir);
 };
 
 

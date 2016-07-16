@@ -61,12 +61,12 @@ void Line::Draw(Mesh* line, float thickness, Vector3 offset)
 	CU::view.SetIdentity();
 	CU::view.Translate(start.x + offset.x, start.y + offset.y, start.z);
 	CU::view.Scale(10.f, 10.f, 1.f);
-	CU::view.RenderMesh(*CU::sharedResources.sphere);
+	CU::view.RenderMesh(*CU::shared.sphere);
 
 	CU::view.SetIdentity();
 	CU::view.Translate(end.x + offset.x, end.y + offset.y, end.z);
 	CU::view.Scale(10.f, 10.f, 1.f);
-	CU::view.RenderMesh(*CU::sharedResources.sphere);
+	CU::view.RenderMesh(*CU::shared.sphere);
 
 	//Line----------------------------------------------------------//
 	glLineWidth(thickness);

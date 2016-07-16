@@ -27,8 +27,49 @@ void SharedResources::Exit()
 }
 
 /********************************************************************************
+calculate offset (dir angle + 90)
+********************************************************************************/
+void SharedResources::CalculateOffset(Vector3& offset, Vector3& dir, float dist)
+{
+	float angle = Vector3::getAngleFromDir(dir.x, dir.y);
+	angle += 90.f;
+
+	float xDir = cos(Math::DegreeToRadian(angle));
+	float yDir = sin(Math::DegreeToRadian(angle));
+
+	offset.Set(xDir * dist, yDir * dist, 0.f);
+}
+
+/********************************************************************************
+project vector onto axis of dir
+********************************************************************************/
+Vector3 SharedResources::vectorProjection(Vector3& projected, Vector3& dir)
+{
+	Vector3 part1;
+	part1.x = projected.Dot(dir);
+	part1.y = dir.Dot(dir);
+
+	Vector3 returnVec;
+	returnVec.x = (part1.x * dir.x) / part1.y;
+	returnVec.y = (part1.x * dir.y) / part1.y;
+
+	return returnVec;
+}
+
+/********************************************************************************
 Exit
 ********************************************************************************/
+void SharedResources::DrawLine_Offset(Mesh* line, Vector3 startPos, float angle, float length, float thickness, Vector3 offset)
+{
+	glLineWidth(thickness);
+	CU::view.SetIdentity();
+	CU::view.Translate(startPos.x + offset.x, startPos.y + offset.y, 0.f);
+	CU::view.Rotate(angle, 0, 0, 1);
+	CU::view.Scale(length, 1.f, 1.f);
+	CU::view.RenderMesh(*line);
+	glLineWidth(1.f);
+}
+
 void SharedResources::DrawLine(Mesh* line, Vector3 startPos, float angle, float length, float thickness)
 {
 	glLineWidth(thickness);

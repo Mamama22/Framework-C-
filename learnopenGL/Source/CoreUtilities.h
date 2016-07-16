@@ -21,7 +21,7 @@ public:
 	/******************** core utilities **********************/
 	static View view;
 	static Input input;
-	static SharedResources sharedResources;
+	static SharedResources shared;
 	static EntityManager entityMan;
 	static double dt;
 	static float fps;
@@ -31,13 +31,13 @@ public:
 	{
 		input.Init();
 		view.Init();
-		sharedResources.Init();
+		shared.Init();
 	}
 
 	static void Exit()
 	{
 		view.Exit();
-		sharedResources.Exit();
+		shared.Exit();
 	}
 };
 

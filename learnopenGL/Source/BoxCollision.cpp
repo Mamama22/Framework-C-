@@ -60,7 +60,7 @@ void BoxCollision::DrawBound()
 	{
 		CU::view.SetIdentity();
 		CU::view.LoadMatrix(transform.finalTRS);
-		CU::view.RenderMesh(*CU::sharedResources.boundingBox_Mesh);
+		CU::view.RenderMesh(*CU::shared.boundingBox_Mesh);
 	}
 }
 
