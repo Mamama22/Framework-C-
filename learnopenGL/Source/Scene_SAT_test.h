@@ -33,12 +33,12 @@ class Scene_SAT_Test : public Scene
 	float dist;
 
 	//shape 1----------------------------//
-	Vector3** shapeProjPoints;	//to store shape projected points
-	Vector3** shapeProjPoints_2ndCheck;	//to store shape projected points for checking another shape
+	float** shapeProjPoints;	//to store shape projected points
+	float** shapeProjPoints_2ndCheck;	//to store shape projected points for checking another shape
 
 	//shape 2----------------------------//
-	Vector3** shapeProjPoints_2;	//to store shape projected points
-	Vector3** shapeProjPoints_2_2ndCheck; //to store shape projected points for checking another shape
+	float** shapeProjPoints_2;	//to store shape projected points
+	float** shapeProjPoints_2_2ndCheck; //to store shape projected points for checking another shape
 
 	/******************** wrapper functions **********************/
 	void Init_Shapes();
@@ -53,10 +53,7 @@ class Scene_SAT_Test : public Scene
 	void DrawShapeAxes(Mesh* line, Shape& shape, float offsetDist);
 	void DrawAxis(Mesh* line, Vector3& axis, Vector3 offset);
 
-	bool Cal_Min_Points(Vector3& currentMin, const Vector3& checkMin, float dirX, float dirY);
-	bool Cal_Max_Points(Vector3& currentMax, const Vector3& checkMax, float dirX, float dirY);
-
-	void Draw_ProjectedShape(Mesh* lineMesh, Mesh* projectedPoint_Mesh, Shape& projectee, Shape& projected, Vector3** shapeProjPoints);
+	void Draw_ProjectedShape(Mesh* lineMesh, Mesh* projectedPoint_Mesh, Shape& projectee, Shape& projected, float** shapeProjPoints);
 	void Draw_ProjectedPoints(Mesh* lineMesh, Mesh* projectedPoint_Mesh, Vector3& pointPos, Vector3& projPos, Vector3 axisDir);
 
 public:

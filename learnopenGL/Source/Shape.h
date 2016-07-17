@@ -41,7 +41,7 @@ public:
 	Face(const Face& copy);
 	~Face();
 
-	unsigned start, end;	//index to start and end point
+	unsigned start, end;	//index to start and end point handle
 	float len;
 	float angle;
 	Vector3 dir;
@@ -79,17 +79,22 @@ public:
 	/******************** Transformation: added on to parent's **********************/
 	void Translate(Vector3 vel);	
 	void Rotate(float angle);
+	void RecalculatePoints();
 
-	/******************** core functions **********************/
+	/******************** Init functions **********************/
 	void Init(const char* name);
 	void AddPoint(Vector3 pos);
 	void CalculateFaces();	//CALL AFTER ALL POINTS ADDED
 
-	void ProjectShapeOntoThis(Shape& projectMe, Vector3** list);	//project passed in shape onto this shape
-	void GetProjections(Vector3& dir, Vector3 list[]); //get list of projection on a axis
+	/******************** Projection functions **********************/
+	void ProjectShapeOntoThis(Shape& projectMe, float** list);	//project passed in shape onto this shape
+	void GetProjections(Vector3& dir, float list[]); //get list of projection on a axis
 	
-	void RecalculatePoints();
-	void Draw();	//draws the outline of the shape
+	/******************** for display functions **********************/
+	void GetProjectedPointsPos(Vector3** )
+
+	/******************** Draw functions **********************/
+	void Draw();
 
 	/******************** Get set functions **********************/
 	int Get_TotalPoints();

@@ -143,10 +143,10 @@ void Shape::CalculateFaces()
 Get projection of all points
 Note: Pass in a Vec3 array with enough mem. allocated for total points in this shape
 ********************************************************************************/
-void Shape::GetProjections(Vector3& dir, Vector3 list[])
+void Shape::GetProjections(Vector3& dir, float list[])
 {
 	for (int i = 0; i < pointList.size(); ++i)
-		list[i] = CU::shared.vectorProjection(pointList[i].pos, dir);
+		list[i] = pointList[i].pos.Dot(dir);
 }
 
 /********************************************************************************
@@ -154,8 +154,9 @@ project passed in shape onto this shape
 Note: Pass in a array of Vec3 array with enough mem. allocated for total sides for this shape and
 total points for projected shape
 ********************************************************************************/
-void Shape::ProjectShapeOntoThis(Shape& projectMe, Vector3** list)
+void Shape::ProjectShapeOntoThis(Shape& projectMe, float** list)
 {
+	//For all
 	for (int i = 0; i < faceList.size(); ++i)
 	{
 		projectMe.GetProjections(faceList[i].normal, list[i]);

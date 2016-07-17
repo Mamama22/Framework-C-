@@ -44,21 +44,21 @@ void Scene_SAT_Test::Init_Shapes()
 	dist = 260.f;
 
 	//Projection points-------------------------------------------------//
-	shapeProjPoints = new Vector3*[20];
+	shapeProjPoints = new float*[20];
 	for (int i = 0; i < 20; ++i)
-		shapeProjPoints[i] = new Vector3[20];
+		shapeProjPoints[i] = new float[20];
 
-	shapeProjPoints_2ndCheck = new Vector3*[20];
+	shapeProjPoints_2ndCheck = new float*[20];
 	for (int i = 0; i < 20; ++i)
-		shapeProjPoints_2ndCheck[i] = new Vector3[20];
+		shapeProjPoints_2ndCheck[i] = new float[20];
 
-	shapeProjPoints_2 = new Vector3*[20];
+	shapeProjPoints_2 = new float*[20];
 	for (int i = 0; i < 20; ++i)
-		shapeProjPoints_2[i] = new Vector3[20];
+		shapeProjPoints_2[i] = new float[20];
 
-	shapeProjPoints_2_2ndCheck = new Vector3*[20];
+	shapeProjPoints_2_2ndCheck = new float*[20];
 	for (int i = 0; i < 20; ++i)
-		shapeProjPoints_2_2ndCheck[i] = new Vector3[20];
+		shapeProjPoints_2_2ndCheck[i] = new float[20];
 
 	testShape.Init("farkle");
 
@@ -225,9 +225,9 @@ void Scene_SAT_Test::Draw_ShapeProjection()
 /********************************************************************************
 Draw projected shape on another shapes's axes
 ********************************************************************************/
-Vector3 min_ProjPt, max_ProjPt;	//min and max projected points
+float min_ProjPt, max_ProjPt;	//min and max projected points
 Vector3 min_pos, max_pos;
-void Scene_SAT_Test::Draw_ProjectedShape(Mesh* lineMesh, Mesh* projectedPoint_Mesh, Shape& projectee, Shape& projected, Vector3** shapeProjPoints)
+void Scene_SAT_Test::Draw_ProjectedShape(Mesh* lineMesh, Mesh* projectedPoint_Mesh, Shape& projectee, Shape& projected, float** shapeProjPoints)
 {
 	Vector3 offset, projPos, axis;
 
@@ -239,72 +239,36 @@ void Scene_SAT_Test::Draw_ProjectedShape(Mesh* lineMesh, Mesh* projectedPoint_Me
 		CU::shared.CalculateOffset(offset, projectee.faceList[i].normal, dist);
 
 		//Point 0---------------------------------------------------------------------//
-		projPos = shapeProjPoints[i][0] + offset;
+		//projPos = Vector3(shapeProjPoints[i][0] * axis.x, shapeProjPoints[i][0] * axis.y, 0) + offset;
 		min_pos = max_pos = projected.pointList[0].pos;
-		min_ProjPt = max_ProjPt = projPos;
+		min_ProjPt = max_ProjPt = shapeProjPoints[i][0];
 
 		//loop through all points of projected, find the min and max point----------------------------------//
 		for (int j = 1; j < projected.pointList.size(); ++j)
 		{
 			//calculate projected point--------------------------------------------//
-			projPos = shapeProjPoints[i][j] + offset;
+			projPos = Vector3(shapeProjPoints[i][j] * axis.x, shapeProjPoints[i][j] * axis.y, 0) + offset;
 
 			//cal min and max point------------------------------------//
-			if (Cal_Min_Points(min_ProjPt, projPos, axis.x, axis.y))
+			if (shapeProjPoints[i][j] < min_ProjPt)
+			{
+				min_ProjPt = shapeProjPoints[i][j];
 				min_pos = projected.pointList[j].pos;
-			else if (Cal_Max_Points(max_ProjPt, projPos, axis.x, axis.y))
+			}
+			else if (shapeProjPoints[i][j] >= max_ProjPt)
+			{
+				max_ProjPt = shapeProjPoints[i][j];
 				max_pos = projected.pointList[j].pos;
+			}
 		}
 
 		//Draw min and max projected  points---------------------------------//
-		Draw_ProjectedPoints(lineMesh, projectedPoint_Mesh, min_pos, min_ProjPt, projectee.faceList[i].normal);
-		Draw_ProjectedPoints(lineMesh, projectedPoint_Mesh, max_pos, max_ProjPt, projectee.faceList[i].normal);
+		Vector3 minProj = Vector3(min_ProjPt * axis.x, min_ProjPt * axis.y, 0) + offset;
+		Vector3 maxProj = Vector3(max_ProjPt * axis.x, max_ProjPt * axis.y, 0) + offset;
+
+		Draw_ProjectedPoints(lineMesh, projectedPoint_Mesh, min_pos, minProj, projectee.faceList[i].normal);
+		Draw_ProjectedPoints(lineMesh, projectedPoint_Mesh, max_pos, maxProj, projectee.faceList[i].normal);
 	}
-}
-
-/********************************************************************************
-calculate min/max points
-********************************************************************************/
-bool Scene_SAT_Test::Cal_Min_Points(Vector3& currentMin, const Vector3& checkMin, float dirX, float dirY)
-{
-	bool replaceVal = false;
-
-	if (dirX > 0.f && dirY > 0.f && checkMin.x < currentMin.x && checkMin.y < currentMin.y)
-		replaceVal = true;
-
-	else if (dirX > 0.f && dirY <= 0.f && checkMin.x < currentMin.x && checkMin.y >= currentMin.y)
-		replaceVal = true;
-
-	else if (dirX <= 0.f && dirY > 0.f && checkMin.x >= currentMin.x && checkMin.y < currentMin.y)
-		replaceVal = true;
-
-	else if (dirX <= 0.f && dirY <= 0.f && checkMin.x >= currentMin.x && checkMin.y >= currentMin.y)
-		replaceVal = true;
-
-	if (replaceVal)
-		currentMin = checkMin;
-	return replaceVal;
-}
-
-bool Scene_SAT_Test::Cal_Max_Points(Vector3& currentMax, const Vector3& checkMax, float dirX, float dirY)
-{
-	bool replaceVal = false;
-
-	if (dirX > 0.f && dirY > 0.f && checkMax.x > currentMax.x && checkMax.y > currentMax.y)
-		replaceVal = true;
-
-	else if (dirX > 0.f && dirY <= 0.f && checkMax.x > currentMax.x && checkMax.y <= currentMax.y)
-		replaceVal = true;
-
-	else if (dirX <= 0.f && dirY > 0.f && checkMax.x <= currentMax.x && checkMax.y > currentMax.y)
-		replaceVal = true;
-
-	else if (dirX <= 0.f && dirY <= 0.f && checkMax.x <= currentMax.x && checkMax.y <= currentMax.y)
-		replaceVal = true;
-
-	if (replaceVal)
-		currentMax = checkMax;
-	return replaceVal;
 }
 
 /********************************************************************************
