@@ -40,6 +40,8 @@ Init shapes
 ********************************************************************************/
 void Scene_SAT_Test::Init_Shapes()
 {
+	Shape::InitStatic();
+
 	//Offseting-------------------------------------------------//
 	dist = 260.f;
 
@@ -77,7 +79,7 @@ void Scene_SAT_Test::Init_Shapes()
 
 	testShape_2.AddPoint(Vector3(-50.f, -50.f, 0.f));
 	testShape_2.AddPoint(Vector3(60.f, -50.f, 0.f));
-	testShape_2.AddPoint(Vector3(60.f, 100.f, 0.f));
+	testShape_2.AddPoint(Vector3(0.f, 100.f, 0.f));
 
 	//calculate faces for this shape--------------------------//
 	testShape_2.CalculateFaces();
@@ -101,8 +103,12 @@ void Scene_SAT_Test::Run()
 	//stage 3: Update with changes ===========================================================//
 	Calculate_ShapeProjections();
 
+	//collision check----------------------------------------//
+	testShape.CollisionCheck(testShape_2);
+
 	//Stage 4: 2nd TRS calculations for Entity and Comp (For those with changes) ===========================================================//
-	
+	testShape.RecalculatePoints();	//called by calculate TRS with parents but for now stand-alone since no entity adds this
+	testShape_2.RecalculatePoints();
 }
 
 /********************************************************************************
@@ -115,14 +121,16 @@ void Scene_SAT_Test::Update_Shapes()
 		switchShapes = !switchShapes;
 
 	//translation----------------------------------------//
+	Vector3 vel;
 	if (CU::input.IsKeyPressed(Input::ARROW_UP))
-		testShape.Translate(Vector3(0, 2.f, 0));
+		vel += Vector3(0, 2.f, 0);
 	if (CU::input.IsKeyPressed(Input::ARROW_DOWN))
-		testShape.Translate(Vector3(0, -2.f, 0));
+		vel += Vector3(0, -2.f, 0);
 	if (CU::input.IsKeyPressed(Input::ARROW_LEFT))
-		testShape.Translate(Vector3(-2.f, 0, 0));
+		vel += Vector3(-2.f, 0, 0);
 	if (CU::input.IsKeyPressed(Input::ARROW_RIGHT))
-		testShape.Translate(Vector3(2.f, 0, 0));
+		vel += Vector3(2.f, 0, 0);
+	testShape.Translate(vel);
 
 	//rotation----------------------------------------//
 	if (CU::input.IsKeyPressed(Input::K))
@@ -160,17 +168,17 @@ Draw on screen
 ********************************************************************************/
 void Scene_SAT_Test::DrawOnScreen()
 {
-	//projected axis-----------------------------------------//
-	if (switchShapes)	//shape 1's axes
-		DrawShapeAxes(line_axis, testShape, dist);
-	else    //shape 2's axes
-		DrawShapeAxes(line_axis, testShape_2, dist);
+	////projected axis-----------------------------------------//
+	//if (switchShapes)	//shape 1's axes
+	//	DrawShapeAxes(line_axis, testShape, dist);
+	//else    //shape 2's axes
+	//	DrawShapeAxes(line_axis, testShape_2, dist);
 
 	//Draw shapes------------------------------------------------//
 	Draw_Shapes();
 
 	//Draw shapes projection------------------------------------------------//
-	Draw_ShapeProjection();
+	//Draw_ShapeProjection();
 
 	CU::view.UseShader(View::TEXT_SHADER);	//use light shader
 
@@ -212,13 +220,13 @@ void Scene_SAT_Test::Draw_ShapeProjection()
 	if (switchShapes)
 	{
 		//lineMesh, projectedPoint_Mesh, projectee, projected, shapeProjPoints)
-		Draw_ProjectedShape(line_4, sphere_4, testShape, testShape_2, shapeProjPoints_2_2ndCheck);
-		Draw_ProjectedShape(line_2, sphere_2, testShape, testShape, shapeProjPoints_2ndCheck);
+		Draw_ProjectedShape(line_4, line_4, sphere_4, testShape, testShape_2, shapeProjPoints_2_2ndCheck);
+		Draw_ProjectedShape(line_2, line_2, sphere_2, testShape, testShape, shapeProjPoints_2ndCheck);
 	}
 	else
 	{
-		Draw_ProjectedShape(line_4, sphere_4, testShape_2, testShape, shapeProjPoints);
-		Draw_ProjectedShape(line_2, sphere_2, testShape_2, testShape_2, shapeProjPoints_2);
+		Draw_ProjectedShape(line_4, line_4, sphere_4, testShape_2, testShape, shapeProjPoints);
+		Draw_ProjectedShape(line_2, line_2, sphere_2, testShape_2, testShape_2, shapeProjPoints_2);
 	}
 }
 
@@ -227,7 +235,7 @@ Draw projected shape on another shapes's axes
 ********************************************************************************/
 float min_ProjPt, max_ProjPt;	//min and max projected points
 Vector3 min_pos, max_pos;
-void Scene_SAT_Test::Draw_ProjectedShape(Mesh* lineMesh, Mesh* projectedPoint_Mesh, Shape& projectee, Shape& projected, float** shapeProjPoints)
+void Scene_SAT_Test::Draw_ProjectedShape(Mesh* lineMesh_min, Mesh* lineMesh_max, Mesh* projectedPoint_Mesh, Shape& projectee, Shape& projected, float** shapeProjPoints)
 {
 	Vector3 offset, projPos, axis;
 
@@ -266,8 +274,8 @@ void Scene_SAT_Test::Draw_ProjectedShape(Mesh* lineMesh, Mesh* projectedPoint_Me
 		Vector3 minProj = Vector3(min_ProjPt * axis.x, min_ProjPt * axis.y, 0) + offset;
 		Vector3 maxProj = Vector3(max_ProjPt * axis.x, max_ProjPt * axis.y, 0) + offset;
 
-		Draw_ProjectedPoints(lineMesh, projectedPoint_Mesh, min_pos, minProj, projectee.faceList[i].normal);
-		Draw_ProjectedPoints(lineMesh, projectedPoint_Mesh, max_pos, maxProj, projectee.faceList[i].normal);
+		Draw_ProjectedPoints(lineMesh_min, projectedPoint_Mesh, min_pos, minProj, projectee.faceList[i].normal);
+		Draw_ProjectedPoints(lineMesh_max, projectedPoint_Mesh, max_pos, maxProj, projectee.faceList[i].normal);
 	}
 }
 
@@ -281,11 +289,6 @@ void Scene_SAT_Test::Draw_ProjectedPoints(Mesh* lineMesh, Mesh* projectedPoint_M
 	Vector3 ptDir = line.Normalized();
 	float angle = Vector3::getAngleFromDir(ptDir.x, ptDir.y);
 	CU::shared.DrawLine(lineMesh, pointPos, angle, line.Length(), 1.5f);
-
-	//Accuracy test: successful-----------------------------------------------------//
-	float dotProd = ptDir.Dot(axisDir);
-	if (dotProd >= 0.0001f)
-		cout << "Dot: " << ptDir.Dot(axisDir) << endl;
 }
 
 /********************************************************************************

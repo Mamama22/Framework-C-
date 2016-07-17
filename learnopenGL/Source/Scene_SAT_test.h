@@ -53,7 +53,7 @@ class Scene_SAT_Test : public Scene
 	void DrawShapeAxes(Mesh* line, Shape& shape, float offsetDist);
 	void DrawAxis(Mesh* line, Vector3& axis, Vector3 offset);
 
-	void Draw_ProjectedShape(Mesh* lineMesh, Mesh* projectedPoint_Mesh, Shape& projectee, Shape& projected, float** shapeProjPoints);
+	void Draw_ProjectedShape(Mesh* lineMesh_min, Mesh* lineMesh_max, Mesh* projectedPoint_Mesh, Shape& projectee, Shape& projected, float** shapeProjPoints);
 	void Draw_ProjectedPoints(Mesh* lineMesh, Mesh* projectedPoint_Mesh, Vector3& pointPos, Vector3& projPos, Vector3 axisDir);
 
 public:

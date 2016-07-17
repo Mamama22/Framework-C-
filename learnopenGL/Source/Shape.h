@@ -65,11 +65,28 @@ Date: 16/7/2016
 /*************************************************************/
 class Shape : public Renderer
 {
+	//this proj. onto obstacle----------------------------//
+	static float** shapeProjPoints;	//to store shape projected points
+	static float** shapeProjPoints_2ndCheck;	//to store shape projected points for checking another shape
+
+	//obstacle proj. to this----------------------------//
+	static float** shapeProjPoints_2;	//to store shape projected points
+	static float** shapeProjPoints_2_2ndCheck; //to store shape projected points for checking another shape
+
+	//store min max-------------------------//
+	static float** minMax_this;
+	static float** minMax_this_2ndCheck;
+
+	static float** minMax_projected;
+	static float** minMax_projected_2ndCheck;
+
 public:
 
 	/******************************************** var ***************************************************/
 	vector<Point> pointList;
 	vector<Face> faceList;	//list of points
+	Vector3 prevPos;
+	Vector3 vel;
 
 	/******************** constructor/destructor **********************/
 	Shape();
@@ -82,18 +99,22 @@ public:
 	void RecalculatePoints();
 
 	/******************** Init functions **********************/
+	static void InitStatic();
 	void Init(const char* name);
 	void AddPoint(Vector3 pos);
 	void CalculateFaces();	//CALL AFTER ALL POINTS ADDED
+
+	/******************** collision functions **********************/
+	void CollisionCheck(Shape& obstacle);
+	void GetMinMax(Shape& projected, float** projectedPoints, float** storeHere);	//returns smallest intersection
+	bool IntersectionTest(float** minMax_This, float** minMaxProjected, Vector3& axisDir, float& bounceVal);
 
 	/******************** Projection functions **********************/
 	void ProjectShapeOntoThis(Shape& projectMe, float** list);	//project passed in shape onto this shape
 	void GetProjections(Vector3& dir, float list[]); //get list of projection on a axis
 	
-	/******************** for display functions **********************/
-	void GetProjectedPointsPos(Vector3** )
-
 	/******************** Draw functions **********************/
+	void Update();
 	void Draw();
 
 	/******************** Get set functions **********************/

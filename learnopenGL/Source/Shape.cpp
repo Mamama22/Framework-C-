@@ -1,6 +1,14 @@
 #include "Shape.h"
 #include "CoreUtilities.h"
 Vector3 Face::shareVec;
+float** Shape::shapeProjPoints;	
+float** Shape::shapeProjPoints_2ndCheck;
+float** Shape::shapeProjPoints_2;	
+float** Shape::shapeProjPoints_2_2ndCheck;
+float** Shape::minMax_this;
+float** Shape::minMax_projected;
+float** Shape::minMax_this_2ndCheck;
+float** Shape::minMax_projected_2ndCheck;
 
 /********************************************************************************
 Constructor/dextructor for point
@@ -104,6 +112,43 @@ Shape::~Shape()
 {
 }
 
+void Shape::InitStatic()
+{
+	//Projection points-------------------------------------------------//
+	shapeProjPoints = new float*[20];
+	for (int i = 0; i < 20; ++i)
+		shapeProjPoints[i] = new float[20];
+
+	shapeProjPoints_2ndCheck = new float*[20];
+	for (int i = 0; i < 20; ++i)
+		shapeProjPoints_2ndCheck[i] = new float[20];
+
+	shapeProjPoints_2 = new float*[20];
+	for (int i = 0; i < 20; ++i)
+		shapeProjPoints_2[i] = new float[20];
+
+	shapeProjPoints_2_2ndCheck = new float*[20];
+	for (int i = 0; i < 20; ++i)
+		shapeProjPoints_2_2ndCheck[i] = new float[20];
+
+	//
+	minMax_this = new float*[20];
+	for (int i = 0; i < 20; ++i)
+		minMax_this[i] = new float[20];
+
+	minMax_this_2ndCheck = new float*[20];
+	for (int i = 0; i < 20; ++i)
+		minMax_this_2ndCheck[i] = new float[20];
+
+	minMax_projected = new float*[20];
+	for (int i = 0; i < 20; ++i)
+		minMax_projected[i] = new float[20];
+
+	minMax_projected_2ndCheck = new float*[20];
+	for (int i = 0; i < 20; ++i)
+		minMax_projected_2ndCheck[i] = new float[20];
+}
+
 /********************************************************************************
 Add point
 ********************************************************************************/
@@ -111,6 +156,7 @@ void Shape::Init(const char* name)
 {
 	Component::Init(name);
 	transform.Set(Vector3(0, 0, 0), Vector3(1,1,1));
+	prevPos.SetZero();
 }
 
 /********************************************************************************
@@ -156,11 +202,8 @@ total points for projected shape
 ********************************************************************************/
 void Shape::ProjectShapeOntoThis(Shape& projectMe, float** list)
 {
-	//For all
 	for (int i = 0; i < faceList.size(); ++i)
-	{
 		projectMe.GetProjections(faceList[i].normal, list[i]);
-	}
 }
 
 /********************************************************************************
@@ -169,6 +212,7 @@ Translate: translate in direction of shape
 void Shape::Translate(Vector3 vel)
 {
 	Component::Translate(vel);
+	this->vel = vel;	//if never translate, last vel before stationary is stored
 }
 
 /********************************************************************************
@@ -201,6 +245,174 @@ void Shape::RecalculatePoints()
 		pointList[i].pos.Set(1, 1, 1);
 		pointList[i].pos = CU::shared.mtx[3] * pointList[i].pos;
 	}
+}
+
+/********************************************************************************
+collision check
+********************************************************************************/
+void Shape::CollisionCheck(Shape& obstacle)
+{
+	//this onto obstacle-----------------------------------------------------//
+	obstacle.ProjectShapeOntoThis(*this, shapeProjPoints);	//project this onto obstacle
+	obstacle.ProjectShapeOntoThis(obstacle, shapeProjPoints_2);	//its own points must be projected too
+
+	//Switch shapes-----------------------------------------------//
+	ProjectShapeOntoThis(obstacle, shapeProjPoints_2_2ndCheck);
+	ProjectShapeOntoThis(*this, shapeProjPoints_2ndCheck);	//its own points must be projected too
+
+	//Get the min and max points of both shapes on both axis--------------------------------//
+	obstacle.GetMinMax(*this, shapeProjPoints, minMax_this);
+	obstacle.GetMinMax(obstacle, shapeProjPoints_2, minMax_projected);
+
+	//Switch shapes-----------------------------------------------//
+	GetMinMax(obstacle, shapeProjPoints_2_2ndCheck, minMax_projected_2ndCheck);
+	GetMinMax(*this, shapeProjPoints_2ndCheck, minMax_this_2ndCheck);
+
+	//intersection test------------------------------------------//
+	Vector3 dir1, dir2;
+	float bounceVal_1 = 0.f;
+	float bounceVal_2 = 0.f;
+	bool collided_1 = false;
+	bool collided_2 = false;
+
+	collided_1 = obstacle.IntersectionTest(minMax_projected, minMax_this, dir1, bounceVal_1);
+	collided_2 = IntersectionTest(minMax_this_2ndCheck, minMax_projected_2ndCheck, dir2, bounceVal_2);
+
+	//Get vector-------------------------------------//
+	vel = transform.pos - obstacle.transform.pos;
+
+	//check collision-------------------------------------//
+	if (collided_1 && collided_2)
+	{
+		//Use obstacle normal------------------------//
+		if (bounceVal_1 < bounceVal_2)
+		{
+			if (dir1.x != 0.f)
+			{
+				if (vel.x < 0.f)
+					dir1.x = -abs(dir1.x);
+				else
+					dir1.x = abs(dir1.x);
+			}
+
+			if (dir1.y != 0.f)
+			{
+				if (vel.y < 0.f)
+					dir1.y = -abs(dir1.y);
+				else
+					dir1.y = abs(dir1.y);
+			}
+
+			Vector3 offsetAway = dir1 * abs(bounceVal_1);
+			//cout << "Dir: " << dir1 << endl;
+			Translate(offsetAway);
+		}
+
+		//Use own normal------------------------//
+		else
+		{
+			if (dir2.x != 0.f)
+			{
+				if (vel.x < 0.f)
+					dir2.x = -abs(dir2.x);
+				else
+					dir2.x = abs(dir2.x);
+			}
+
+			if (dir2.y != 0.f)
+			{
+				if (vel.y < 0.f)
+					dir2.y = -abs(dir2.y);
+				else
+					dir2.y = abs(dir2.y);
+			}
+
+			Vector3 offsetAway = dir2 * abs(bounceVal_2);
+			//cout << "Dir: " << dir2 << endl;
+			Translate(offsetAway);
+		}
+	}
+}
+
+bool isBetweenOrdered(float val, float lowerBound, float upperBound) {
+	return lowerBound <= val && val <= upperBound;
+}
+bool overlaps(float min1, float max1, float min2, float max2)
+{
+	return isBetweenOrdered(min2, min1, max1) || isBetweenOrdered(min1, min2, max2);
+}
+
+/********************************************************************************
+Get min max points of shape onto THIS SHAPE'S AXIS
+********************************************************************************/
+bool Shape::IntersectionTest(float** minMax_This, float** minMaxProjected, Vector3& axisDir, float& bounceVal)
+{
+	float shortestLength = 100000000000000.f;
+
+	//loop through this shapes axes------------------//
+	for (int i = 0; i < faceList.size(); ++i)
+	{
+		//calculate total length-------------------------------------//
+		float totalLength = (minMax_This[i][1] - minMax_This[i][0]) + (minMaxProjected[i][1] - minMaxProjected[i][0]);
+
+		//check overlap-------------------------------------//
+		if (!overlaps(minMax_This[i][0], minMax_This[i][1], minMaxProjected[i][0], minMaxProjected[i][1]))
+		{
+			return false;
+		}
+
+		//if overlap, check if shortest-------------------------------------//
+		else
+		{
+			//get the intersected length---------------------//
+			float min = (minMax_This[i][0] > minMaxProjected[i][0]) ? minMaxProjected[i][0] : minMax_This[i][0];
+			float max = (minMax_This[i][1] > minMaxProjected[i][1]) ? minMax_This[i][1] : minMaxProjected[i][1];
+			float intersectedLen = totalLength - (max - min);
+
+			if (shortestLength > intersectedLen)
+			{
+				shortestLength = intersectedLen;
+				axisDir = faceList[i].normal;
+				bounceVal = intersectedLen;
+			}
+		}
+	}
+	return true;
+}
+
+/********************************************************************************
+Get min max points of shape onto THIS SHAPE'S AXIS
+********************************************************************************/
+void Shape::GetMinMax(Shape& projected, float** projectedPoints, float** storeHere)
+{
+	float min_ProjPt, max_ProjPt;	//min and max projected points
+
+	//Loop through all axis of projectee shape----------------------------------//
+	for (int i = 0; i < faceList.size(); ++i)
+	{
+		//Point 0---------------------------------------------------------------------//
+		min_ProjPt = max_ProjPt = projectedPoints[i][0];
+
+		//loop through all points of projected, find the min and max point----------------------------------//
+		for (int j = 1; j < projected.pointList.size(); ++j)
+		{
+			//cal min and max point------------------------------------//
+			if (projectedPoints[i][j] < min_ProjPt)
+				min_ProjPt = projectedPoints[i][j];
+
+			else if (projectedPoints[i][j] >= max_ProjPt)
+				max_ProjPt = projectedPoints[i][j];
+		}
+
+		//store the min max of projected shape onto THIS in array----------------------------//
+		storeHere[i][0] = min_ProjPt;
+		storeHere[i][1] = max_ProjPt;
+	}
+}
+
+void Shape::Update()
+{
+	
 }
 
 /********************************************************************************
