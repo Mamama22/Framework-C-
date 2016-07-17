@@ -85,11 +85,11 @@ public:
 	void AddPoint(Vector3 pos);
 	void CalculateFaces();	//CALL AFTER ALL POINTS ADDED
 
-	void GetProjections(Vector3& dir, Vector3 list[]);
-
+	void ProjectShapeOntoThis(Shape& projectMe, Vector3** list);	//project passed in shape onto this shape
+	void GetProjections(Vector3& dir, Vector3 list[]); //get list of projection on a axis
+	
 	void RecalculatePoints();
 	void Draw();	//draws the outline of the shape
-
 
 	/******************** Get set functions **********************/
 	int Get_TotalPoints();

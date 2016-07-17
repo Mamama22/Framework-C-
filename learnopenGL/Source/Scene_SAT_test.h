@@ -16,33 +16,48 @@ class Scene_SAT_Test : public Scene
 	Mesh* axes;
 	Mesh* quad;
 	Mesh* sphere;
-	Mesh* sphere_1;
+	Mesh* sphere_2;
+	Mesh* sphere_4;
 	Mesh* line_1;
 	Mesh* line_2;
 	Mesh* line_3;
+	Mesh* line_4;
 	Mesh* line_axis;
 
 	//Shape--------------------------------------------//
 	Shape testShape;
+	Shape testShape_2;
+	bool switchShapes;	//switch to display another shape projection
 
-	//axis and offset-----------------------------------//
-	Vector3 axisDir;
-	float axisAngle;
-
-	Vector3 offset;
+	//Offset------------------------------------------//
 	float dist;
 
-	//shape projection points----------------------------//
-	Vector3 shapeProjPoints[20];
+	//shape 1----------------------------//
+	Vector3** shapeProjPoints;	//to store shape projected points
+	Vector3** shapeProjPoints_2ndCheck;	//to store shape projected points for checking another shape
+
+	//shape 2----------------------------//
+	Vector3** shapeProjPoints_2;	//to store shape projected points
+	Vector3** shapeProjPoints_2_2ndCheck; //to store shape projected points for checking another shape
 
 	/******************** wrapper functions **********************/
 	void Init_Shapes();
 	
 	void Update_Shapes();
-	void Update_Axis();
 	void Calculate_ShapeProjections();
 
 	void Draw_Shapes();
+	void Draw_ShapeProjection();
+
+	/******************** Uti functions **********************/
+	void DrawShapeAxes(Mesh* line, Shape& shape, float offsetDist);
+	void DrawAxis(Mesh* line, Vector3& axis, Vector3 offset);
+
+	bool Cal_Min_Points(Vector3& currentMin, const Vector3& checkMin, float dirX, float dirY);
+	bool Cal_Max_Points(Vector3& currentMax, const Vector3& checkMax, float dirX, float dirY);
+
+	void Draw_ProjectedShape(Mesh* lineMesh, Mesh* projectedPoint_Mesh, Shape& projectee, Shape& projected, Vector3** shapeProjPoints);
+	void Draw_ProjectedPoints(Mesh* lineMesh, Mesh* projectedPoint_Mesh, Vector3& pointPos, Vector3& projPos, Vector3 axisDir);
 
 public:
 

@@ -17,13 +17,19 @@ void Scene_SAT_Test::Init()
 
 	//Meshes---------------------------------------//
 	sphere = MeshBuilder::GenerateSphere(Color(0, 255, 0), 36, 36, 0.5f);
-	sphere_1 = MeshBuilder::GenerateSphere(Color(217, 180, 240), 36, 36, 0.5f);
+
+	sphere_2 = MeshBuilder::GenerateSphere(Color(56.f, 255.f, 46.f), 36, 36, 0.5f);
+	sphere_4 = MeshBuilder::GenerateSphere(Color(223, 213, 224), 36, 36, 0.5f);
+
 	quad = MeshBuilder::GenerateQuad(Color(0, 255, 0), 1.f, 1.f, false);
 	axes = MeshBuilder::GenerateAxes();
 	line_1 = MeshBuilder::GenerateLine(Color(51.f, 211.f, 219.f));
 	line_2 = MeshBuilder::GenerateLine(Color(56.f, 255.f, 46.f));
 	line_3 = MeshBuilder::GenerateLine(Color(245.f, 76.f, 245.f));
+	line_4 = MeshBuilder::GenerateLine(Color(223, 213, 224));
 	line_axis = MeshBuilder::GenerateLine(Color(176.f, 85.f, 19.f), false);
+
+	switchShapes = true;
 
 	//Init Shapes--------------------------------------//
 	Init_Shapes();
@@ -34,17 +40,29 @@ Init shapes
 ********************************************************************************/
 void Scene_SAT_Test::Init_Shapes()
 {
-	//axis-------------------------------------------------//
-	axisDir.Set(1,0,0);
-	axisAngle = 0.f;
-
 	//Offseting-------------------------------------------------//
-	dist = 300.f;
-	CU::shared.CalculateOffset(offset, axisDir, dist);
+	dist = 260.f;
+
+	//Projection points-------------------------------------------------//
+	shapeProjPoints = new Vector3*[20];
+	for (int i = 0; i < 20; ++i)
+		shapeProjPoints[i] = new Vector3[20];
+
+	shapeProjPoints_2ndCheck = new Vector3*[20];
+	for (int i = 0; i < 20; ++i)
+		shapeProjPoints_2ndCheck[i] = new Vector3[20];
+
+	shapeProjPoints_2 = new Vector3*[20];
+	for (int i = 0; i < 20; ++i)
+		shapeProjPoints_2[i] = new Vector3[20];
+
+	shapeProjPoints_2_2ndCheck = new Vector3*[20];
+	for (int i = 0; i < 20; ++i)
+		shapeProjPoints_2_2ndCheck[i] = new Vector3[20];
 
 	testShape.Init("farkle");
 
-	//rectangle shape-------------------------------------------//
+	//Test shape 1---------------------------------------//
 	testShape.AddPoint(Vector3(-50.f, -50.f, 0.f));
 	testShape.AddPoint(Vector3(50.f, -50.f, 0.f));
 	testShape.AddPoint(Vector3(50.f, 50.f, 0.f));
@@ -53,6 +71,16 @@ void Scene_SAT_Test::Init_Shapes()
 
 	//calculate faces for this shape--------------------------//
 	testShape.CalculateFaces();
+	
+	//Test shape 2---------------------------------------//
+	testShape_2.Init("farkle2");
+
+	testShape_2.AddPoint(Vector3(-50.f, -50.f, 0.f));
+	testShape_2.AddPoint(Vector3(60.f, -50.f, 0.f));
+	testShape_2.AddPoint(Vector3(60.f, 100.f, 0.f));
+
+	//calculate faces for this shape--------------------------//
+	testShape_2.CalculateFaces();
 }
 
 /********************************************************************************
@@ -64,11 +92,11 @@ void Scene_SAT_Test::Run()
 	Scene::Run();
 
 	//Stage 1: States, flags and values update ===========================================================//
-	Update_Axis();
 	Update_Shapes();
 
 	//Stage 2: TRS calculations for Entity and Comp ===========================================================//
 	testShape.RecalculatePoints();	//called by calculate TRS with parents but for now stand-alone since no entity adds this
+	testShape_2.RecalculatePoints();
 
 	//stage 3: Update with changes ===========================================================//
 	Calculate_ShapeProjections();
@@ -82,6 +110,10 @@ update shapes
 ********************************************************************************/
 void Scene_SAT_Test::Update_Shapes()
 {
+	//change display state--------------------------------------//
+	if (CU::input.IsKeyReleased(Input::O))
+		switchShapes = !switchShapes;
+
 	//translation----------------------------------------//
 	if (CU::input.IsKeyPressed(Input::ARROW_UP))
 		testShape.Translate(Vector3(0, 2.f, 0));
@@ -100,35 +132,19 @@ void Scene_SAT_Test::Update_Shapes()
 }
 
 /********************************************************************************
-Update_Axis
-********************************************************************************/
-void Scene_SAT_Test::Update_Axis()
-{
-	//rotate axis----------------------------------------//
-	if (CU::input.IsKeyPressed(Input::O))
-		axisAngle += 1.f;
-	if (CU::input.IsKeyPressed(Input::P))
-		axisAngle -= 1.f;
-
-	if (axisAngle < 0.f)axisAngle += 360.f;
-	else if (axisAngle > 360.f)axisAngle -= 360.f;
-
-	//cal dir---------------------------------------------//
-	axisDir.x = cos(Math::DegreeToRadian(axisAngle));
-	axisDir.y = sin(Math::DegreeToRadian(axisAngle));
-
-	//Offseting-------------------------------------------------//
-	float xDir = cos(Math::DegreeToRadian(axisAngle + 90.f));
-	float yDir = sin(Math::DegreeToRadian(axisAngle + 90.f));
-	offset.Set(xDir * dist, yDir * dist, 0.f);
-}
-
-/********************************************************************************
 cal shape projection
 ********************************************************************************/
 void Scene_SAT_Test::Calculate_ShapeProjections()
 {
-	testShape.GetProjections(axisDir, shapeProjPoints);
+	//Shape 1-----------------------------------------------------//
+	testShape_2.ProjectShapeOntoThis(testShape, shapeProjPoints);	//project shape onto this
+
+	//Shape 2-----------------------------------------------------//
+	testShape_2.ProjectShapeOntoThis(testShape_2, shapeProjPoints_2);	//its own points must be projected too
+
+	//Switch shapes-----------------------------------------------//
+	testShape.ProjectShapeOntoThis(testShape_2, shapeProjPoints_2_2ndCheck);	
+	testShape.ProjectShapeOntoThis(testShape, shapeProjPoints_2ndCheck);	//its own points must be projected too
 }
 
 /********************************************************************************
@@ -144,17 +160,17 @@ Draw on screen
 ********************************************************************************/
 void Scene_SAT_Test::DrawOnScreen()
 {
-	//Axes----------------------------------------------------//
-	CU::view.SetIdentity();
-	CU::view.Scale(2000.f, 2000.f, 2000.f);
-	CU::view.RenderMesh(*axes);
-
-	//projected axis------------------------------------------------//
-	float angle = Vector3::getAngleFromDir(axisDir.x, axisDir.y);
-	CU::shared.DrawLine_Offset(line_axis, Vector3(0, 0, 0), angle, 1000.f, 3.f, offset);
+	//projected axis-----------------------------------------//
+	if (switchShapes)	//shape 1's axes
+		DrawShapeAxes(line_axis, testShape, dist);
+	else    //shape 2's axes
+		DrawShapeAxes(line_axis, testShape_2, dist);
 
 	//Draw shapes------------------------------------------------//
 	Draw_Shapes();
+
+	//Draw shapes projection------------------------------------------------//
+	Draw_ShapeProjection();
 
 	CU::view.UseShader(View::TEXT_SHADER);	//use light shader
 
@@ -169,31 +185,152 @@ void Scene_SAT_Test::DrawOnScreen()
 }
 
 /********************************************************************************
-Draw shapes
+draw shape axes
+********************************************************************************/
+void Scene_SAT_Test::DrawShapeAxes(Mesh* line, Shape& shape, float offsetDist)
+{
+	Vector3 offset;
+	for (int i = 0; i < shape.faceList.size(); ++i)
+	{
+		offset.Set(offsetDist * shape.faceList[i].dir.x, offsetDist * shape.faceList[i].dir.y, 0.f);
+		DrawAxis(line, shape.faceList[i].normal, offset);
+	}
+}
+
+/********************************************************************************
+Wrappers
 ********************************************************************************/
 void Scene_SAT_Test::Draw_Shapes()
 {
 	testShape.Draw();
-	Vector3 ptPos, ptDir;
+	testShape_2.Draw();
+}
 
-	//Draw the projected points-----------------------//
-	for (int i = 0; i < testShape.Get_TotalPoints(); ++i)
+void Scene_SAT_Test::Draw_ShapeProjection()
+{
+	//shape 1's projection
+	if (switchShapes)
 	{
-		//Draw the point---------------------------------//
-		ptPos = shapeProjPoints[i] + offset;
-		CU::shared.DrawMesh(sphere_1, ptPos, 10.f);
-
-		//Draw the line-----------------------------------//
-		Vector3 line = ptPos - testShape.pointList[i].pos;
-		ptDir = line.Normalized();
-		float angle = Vector3::getAngleFromDir(ptDir.x, ptDir.y);
-		CU::shared.DrawLine(line_3, testShape.pointList[i].pos, angle, line.Length(), 2.5f);
-
-		//Accuracy test: successful-----------------------------------------------------//
-		float dotProd = ptDir.Dot(axisDir);
-		if (dotProd >= 0.0001f)
-			cout << "Dot: " << ptDir.Dot(axisDir) << endl;
+		//lineMesh, projectedPoint_Mesh, projectee, projected, shapeProjPoints)
+		Draw_ProjectedShape(line_4, sphere_4, testShape, testShape_2, shapeProjPoints_2_2ndCheck);
+		Draw_ProjectedShape(line_2, sphere_2, testShape, testShape, shapeProjPoints_2ndCheck);
 	}
+	else
+	{
+		Draw_ProjectedShape(line_4, sphere_4, testShape_2, testShape, shapeProjPoints);
+		Draw_ProjectedShape(line_2, sphere_2, testShape_2, testShape_2, shapeProjPoints_2);
+	}
+}
+
+/********************************************************************************
+Draw projected shape on another shapes's axes
+********************************************************************************/
+Vector3 min_ProjPt, max_ProjPt;	//min and max projected points
+Vector3 min_pos, max_pos;
+void Scene_SAT_Test::Draw_ProjectedShape(Mesh* lineMesh, Mesh* projectedPoint_Mesh, Shape& projectee, Shape& projected, Vector3** shapeProjPoints)
+{
+	Vector3 offset, projPos, axis;
+
+	//Loop through all axis of projectee shape----------------------------------//
+	for (int i = 0; i < projectee.faceList.size(); ++i)
+	{
+		//Set axis and offset---------------------------------------------------------------------//
+		axis = projectee.faceList[i].normal;	//the axis
+		CU::shared.CalculateOffset(offset, projectee.faceList[i].normal, dist);
+
+		//Point 0---------------------------------------------------------------------//
+		projPos = shapeProjPoints[i][0] + offset;
+		min_pos = max_pos = projected.pointList[0].pos;
+		min_ProjPt = max_ProjPt = projPos;
+
+		//loop through all points of projected, find the min and max point----------------------------------//
+		for (int j = 1; j < projected.pointList.size(); ++j)
+		{
+			//calculate projected point--------------------------------------------//
+			projPos = shapeProjPoints[i][j] + offset;
+
+			//cal min and max point------------------------------------//
+			if (Cal_Min_Points(min_ProjPt, projPos, axis.x, axis.y))
+				min_pos = projected.pointList[j].pos;
+			else if (Cal_Max_Points(max_ProjPt, projPos, axis.x, axis.y))
+				max_pos = projected.pointList[j].pos;
+		}
+
+		//Draw min and max projected  points---------------------------------//
+		Draw_ProjectedPoints(lineMesh, projectedPoint_Mesh, min_pos, min_ProjPt, projectee.faceList[i].normal);
+		Draw_ProjectedPoints(lineMesh, projectedPoint_Mesh, max_pos, max_ProjPt, projectee.faceList[i].normal);
+	}
+}
+
+/********************************************************************************
+calculate min/max points
+********************************************************************************/
+bool Scene_SAT_Test::Cal_Min_Points(Vector3& currentMin, const Vector3& checkMin, float dirX, float dirY)
+{
+	bool replaceVal = false;
+
+	if (dirX > 0.f && dirY > 0.f && checkMin.x < currentMin.x && checkMin.y < currentMin.y)
+		replaceVal = true;
+
+	else if (dirX > 0.f && dirY <= 0.f && checkMin.x < currentMin.x && checkMin.y >= currentMin.y)
+		replaceVal = true;
+
+	else if (dirX <= 0.f && dirY > 0.f && checkMin.x >= currentMin.x && checkMin.y < currentMin.y)
+		replaceVal = true;
+
+	else if (dirX <= 0.f && dirY <= 0.f && checkMin.x >= currentMin.x && checkMin.y >= currentMin.y)
+		replaceVal = true;
+
+	if (replaceVal)
+		currentMin = checkMin;
+	return replaceVal;
+}
+
+bool Scene_SAT_Test::Cal_Max_Points(Vector3& currentMax, const Vector3& checkMax, float dirX, float dirY)
+{
+	bool replaceVal = false;
+
+	if (dirX > 0.f && dirY > 0.f && checkMax.x > currentMax.x && checkMax.y > currentMax.y)
+		replaceVal = true;
+
+	else if (dirX > 0.f && dirY <= 0.f && checkMax.x > currentMax.x && checkMax.y <= currentMax.y)
+		replaceVal = true;
+
+	else if (dirX <= 0.f && dirY > 0.f && checkMax.x <= currentMax.x && checkMax.y > currentMax.y)
+		replaceVal = true;
+
+	else if (dirX <= 0.f && dirY <= 0.f && checkMax.x <= currentMax.x && checkMax.y <= currentMax.y)
+		replaceVal = true;
+
+	if (replaceVal)
+		currentMax = checkMax;
+	return replaceVal;
+}
+
+/********************************************************************************
+Drwa projected points
+********************************************************************************/
+void Scene_SAT_Test::Draw_ProjectedPoints(Mesh* lineMesh, Mesh* projectedPoint_Mesh, Vector3& pointPos, Vector3& projPos, Vector3 axisDir)
+{
+	//Draw the line-----------------------------------//
+	Vector3 line = projPos - pointPos;
+	Vector3 ptDir = line.Normalized();
+	float angle = Vector3::getAngleFromDir(ptDir.x, ptDir.y);
+	CU::shared.DrawLine(lineMesh, pointPos, angle, line.Length(), 1.5f);
+
+	//Accuracy test: successful-----------------------------------------------------//
+	float dotProd = ptDir.Dot(axisDir);
+	if (dotProd >= 0.0001f)
+		cout << "Dot: " << ptDir.Dot(axisDir) << endl;
+}
+
+/********************************************************************************
+Drwa axis
+********************************************************************************/
+void Scene_SAT_Test::DrawAxis(Mesh* line, Vector3& axis, Vector3 offset)
+{
+	float angle = Vector3::getAngleFromDir(axis.x, axis.y);
+	CU::shared.DrawLine_Offset(line, Vector3(0, 0, 0), angle, 1000.f, 3.f, offset);
 }
 
 /********************************************************************************
@@ -202,13 +339,31 @@ Exit
 void Scene_SAT_Test::Exit()
 {
 	delete sphere;
-	delete sphere_1;
+	delete sphere_2;
+	delete sphere_4;
 	delete quad;
 	delete axes;
 	delete line_1;
 	delete line_2;
 	delete line_3;
+	delete line_4;
 	delete line_axis;
+
+	for (int i = 0; i < 20; ++i)
+		delete[] shapeProjPoints[i];
+	delete[] shapeProjPoints;
+
+	for (int i = 0; i < 20; ++i)
+		delete[] shapeProjPoints_2ndCheck[i];
+	delete[] shapeProjPoints_2ndCheck;
+
+	for (int i = 0; i < 20; ++i)
+		delete[] shapeProjPoints_2[i];
+	delete[] shapeProjPoints_2;
+
+	for (int i = 0; i < 20; ++i)
+		delete[] shapeProjPoints_2_2ndCheck[i];
+	delete[] shapeProjPoints_2_2ndCheck;
 
 	//Call parent--------------------------------------//
 	Scene::Exit();

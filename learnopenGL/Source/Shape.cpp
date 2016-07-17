@@ -76,17 +76,17 @@ Face draw
 void Face::Draw(vector<Point>& pointList)
 {
 	//Draw the point---------------------------------//
-	CU::shared.DrawMesh(CU::shared.sphere, pointList[start].pos, 10.f);
+	CU::shared.DrawMesh(CU::shared.sphere, pointList[start].pos, 5.f);
 
 	//Draw the dir---------------------------------//
 	CU::shared.DrawLine(CU::shared.line_1, pointList[start].pos, this->angle, this->len, 3.f);
 
 	//Draw the normal---------------------------------//
-	float normalAngle = Vector3::getAngleFromDir(normal.x, normal.y);
-	shareVec = pointList[start].pos;
-	shareVec.x += len * 0.5f * dir.x;
-	shareVec.y += len * 0.5f * dir.y;
-	CU::shared.DrawLine(CU::shared.line_2, shareVec, normalAngle, 50.f, 1.f);
+	//float normalAngle = Vector3::getAngleFromDir(normal.x, normal.y);
+	//shareVec = pointList[start].pos;
+	//shareVec.x += len * 0.5f * dir.x;
+	//shareVec.y += len * 0.5f * dir.y;
+	//CU::shared.DrawLine(CU::shared.line_2, shareVec, normalAngle, 50.f, 1.f);
 }
 
 /********************************************************************************
@@ -146,8 +146,19 @@ Note: Pass in a Vec3 array with enough mem. allocated for total points in this s
 void Shape::GetProjections(Vector3& dir, Vector3 list[])
 {
 	for (int i = 0; i < pointList.size(); ++i)
-	{
 		list[i] = CU::shared.vectorProjection(pointList[i].pos, dir);
+}
+
+/********************************************************************************
+project passed in shape onto this shape
+Note: Pass in a array of Vec3 array with enough mem. allocated for total sides for this shape and
+total points for projected shape
+********************************************************************************/
+void Shape::ProjectShapeOntoThis(Shape& projectMe, Vector3** list)
+{
+	for (int i = 0; i < faceList.size(); ++i)
+	{
+		projectMe.GetProjections(faceList[i].normal, list[i]);
 	}
 }
 
@@ -200,9 +211,6 @@ void Shape::Draw()
 	{
 		//point-----------------------------//
 		faceList[i].Draw(pointList);
-
-		//line------------------------------//
-
 	}
 }
 
