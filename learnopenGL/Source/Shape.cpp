@@ -44,7 +44,7 @@ Face::~Face(){}
 /********************************************************************************
 Face init
 ********************************************************************************/
-void Face::Set(int startPoint_index, int endPoint_index, vector<Point>& pList, Vector3 shapePos)
+void Face::Set(int startPoint_index, int endPoint_index, vector<Point>& pList, Vector3 shapePos, bool debug)
 {
 	//Indexes--------------------------------------------------------//
 	this->start = startPoint_index;
@@ -233,8 +233,11 @@ void Shape::Rotate(float angle)
 /********************************************************************************
 Draw outlines
 ********************************************************************************/
-void Shape::RecalculatePoints()
+void Shape::RecalculatePoints(bool debug)
 {
+	transform.pos.Set(1, 1, 1);
+	transform.pos = transform.TRS * transform.pos;
+
 	for (int i = 0; i < pointList.size(); ++i)
 	{
 		CU::shared.mtx[2].SetToTranslation(pointList[i].offset.x, pointList[i].offset.y, 0.f);
@@ -298,13 +301,21 @@ void Shape::CollisionCheck(Shape& obstacle)
 			if (dir1.y != 0.f)
 			{
 				if (vel.y < 0.f)
+				{
 					dir1.y = -abs(dir1.y);
-				else
-					dir1.y = abs(dir1.y);
+				}
+					else
+						dir1.y = abs(dir1.y);
 			}
 
+			//Offset direction by angle rotated---------------------------------------//
+			float angle = Vector3::getAngleFromDir(dir1.x, dir1.y);
+			angle -= transform.angle;
+			dir1.x = cos(Math::DegreeToRadian(angle));
+			dir1.y = sin(Math::DegreeToRadian(angle));
+
 			Vector3 offsetAway = dir1 * abs(bounceVal_1);
-			//cout << "Dir: " << dir1 << endl;
+
 			Translate(offsetAway);
 		}
 
@@ -322,13 +333,21 @@ void Shape::CollisionCheck(Shape& obstacle)
 			if (dir2.y != 0.f)
 			{
 				if (vel.y < 0.f)
+				{
 					dir2.y = -abs(dir2.y);
-				else
-					dir2.y = abs(dir2.y);
+				}
+					else
+						dir2.y = abs(dir2.y);
 			}
 
+			//Offset direction by angle rotated---------------------------------------//
+			float angle = Vector3::getAngleFromDir(dir2.x, dir2.y);
+			angle -= transform.angle;
+			dir2.x = cos(Math::DegreeToRadian(angle));
+			dir2.y = sin(Math::DegreeToRadian(angle));
+
 			Vector3 offsetAway = dir2 * abs(bounceVal_2);
-			//cout << "Dir: " << dir2 << endl;
+
 			Translate(offsetAway);
 		}
 	}

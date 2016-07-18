@@ -48,7 +48,7 @@ public:
 	Vector3 normal;
 
 	/******************** core functions **********************/
-	void Set(int startPoint_index, int endPoint_index, vector<Point>& pointList, Vector3 shapePos);
+	void Set(int startPoint_index, int endPoint_index, vector<Point>& pointList, Vector3 shapePos, bool debug = false);
 	void Rotate(float angle);
 	void Draw(vector<Point>& pointList);
 };
@@ -96,7 +96,7 @@ public:
 	/******************** Transformation: added on to parent's **********************/
 	void Translate(Vector3 vel);	
 	void Rotate(float angle);
-	void RecalculatePoints();
+	void RecalculatePoints(bool debug);
 
 	/******************** Init functions **********************/
 	static void InitStatic();

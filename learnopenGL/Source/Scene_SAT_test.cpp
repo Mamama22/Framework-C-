@@ -65,9 +65,9 @@ void Scene_SAT_Test::Init_Shapes()
 	testShape.Init("farkle");
 
 	//Test shape 1---------------------------------------//
-	testShape.AddPoint(Vector3(-50.f, -50.f, 0.f));
-	testShape.AddPoint(Vector3(50.f, -50.f, 0.f));
-	testShape.AddPoint(Vector3(50.f, 50.f, 0.f));
+	testShape.AddPoint(Vector3(-100.f, -25.f, 0.f));
+	testShape.AddPoint(Vector3(100.f, -25.f, 0.f));
+	testShape.AddPoint(Vector3(100.f, 25.f, 0.f));
 
 	testShape.AddPoint(Vector3(-100.f, 25.f, 0.f));
 
@@ -77,8 +77,8 @@ void Scene_SAT_Test::Init_Shapes()
 	//Test shape 2---------------------------------------//
 	testShape_2.Init("farkle2");
 
-	testShape_2.AddPoint(Vector3(-50.f, -50.f, 0.f));
-	testShape_2.AddPoint(Vector3(60.f, -50.f, 0.f));
+	testShape_2.AddPoint(Vector3(-120.f, -50.f, 0.f));
+	testShape_2.AddPoint(Vector3(120.f, -50.f, 0.f));
 	testShape_2.AddPoint(Vector3(0.f, 100.f, 0.f));
 
 	//calculate faces for this shape--------------------------//
@@ -97,8 +97,8 @@ void Scene_SAT_Test::Run()
 	Update_Shapes();
 
 	//Stage 2: TRS calculations for Entity and Comp ===========================================================//
-	testShape.RecalculatePoints();	//called by calculate TRS with parents but for now stand-alone since no entity adds this
-	testShape_2.RecalculatePoints();
+	testShape.RecalculatePoints(true);	//called by calculate TRS with parents but for now stand-alone since no entity adds this
+	testShape_2.RecalculatePoints(false);
 
 	//stage 3: Update with changes ===========================================================//
 	Calculate_ShapeProjections();
@@ -107,8 +107,8 @@ void Scene_SAT_Test::Run()
 	testShape.CollisionCheck(testShape_2);
 
 	//Stage 4: 2nd TRS calculations for Entity and Comp (For those with changes) ===========================================================//
-	testShape.RecalculatePoints();	//called by calculate TRS with parents but for now stand-alone since no entity adds this
-	testShape_2.RecalculatePoints();
+	testShape.RecalculatePoints(false);	//called by calculate TRS with parents but for now stand-alone since no entity adds this
+	testShape_2.RecalculatePoints(false);
 }
 
 /********************************************************************************
@@ -134,9 +134,9 @@ void Scene_SAT_Test::Update_Shapes()
 
 	//rotation----------------------------------------//
 	if (CU::input.IsKeyPressed(Input::K))
-		testShape.Rotate(2.f);
+		testShape.Rotate(1.f);
 	if (CU::input.IsKeyPressed(Input::L))
-		testShape.Rotate(-2.f);
+		testShape.Rotate(-1.f);
 }
 
 /********************************************************************************
@@ -168,11 +168,11 @@ Draw on screen
 ********************************************************************************/
 void Scene_SAT_Test::DrawOnScreen()
 {
-	////projected axis-----------------------------------------//
-	//if (switchShapes)	//shape 1's axes
-	//	DrawShapeAxes(line_axis, testShape, dist);
-	//else    //shape 2's axes
-	//	DrawShapeAxes(line_axis, testShape_2, dist);
+	//projected axis-----------------------------------------//
+	if (switchShapes)	//shape 1's axes
+		DrawShapeAxes(line_axis, testShape, dist);
+	else    //shape 2's axes
+		DrawShapeAxes(line_axis, testShape_2, dist);
 
 	//Draw shapes------------------------------------------------//
 	Draw_Shapes();
