@@ -65,20 +65,14 @@ Date: 16/7/2016
 /*************************************************************/
 class Shape : public Renderer
 {
-	//this proj. onto obstacle----------------------------//
-	static float** shapeProjPoints;	//to store shape projected points
-	static float** shapeProjPoints_2ndCheck;	//to store shape projected points for checking another shape
+	/************************************* Projection functions ***************************************/
+	void GetProjections(Vector3& dir, float list[]); //get list of projection of points of this shape on a axis
 
-	//obstacle proj. to this----------------------------//
-	static float** shapeProjPoints_2;	//to store shape projected points
-	static float** shapeProjPoints_2_2ndCheck; //to store shape projected points for checking another shape
-
-	//store min max-------------------------//
-	static float** minMax_this;
-	static float** minMax_this_2ndCheck;
-
-	static float** minMax_projected;
-	static float** minMax_projected_2ndCheck;
+	/************************************* Collision check ***************************************/
+	//Project shape 'checkMe' onto this and check
+	bool SAT_CollisionCheck(Shape& checkMe, Vector3& normal, float& bounce);
+	static void ProjectOntoNormal(Shape& projected, const Vector3& normal, float store[]);
+	static bool IntersectionTest_2(float proj_1[], float proj_2[], float& intersectedLen);
 
 public:
 
@@ -94,26 +88,25 @@ public:
 	~Shape();
 
 	/******************** Transformation: added on to parent's **********************/
+	//transformation
 	void Translate(Vector3 vel);	
 	void Rotate(float angle);
+
+	//call when recalculating TRS
 	void RecalculatePoints(bool debug);
 
 	/******************** Init functions **********************/
-	static void InitStatic();
 	void Init(const char* name, Vector3 pos);
 	void AddPoint(Vector3 pos);
 	void CalculateFaces();	//CALL AFTER ALL POINTS ADDED
 
 	/******************** collision functions **********************/
-	void CollisionCheck(Shape& obstacle);
-	void GetMinMax(Shape& projected, float** projectedPoints, float** storeHere);	//returns smallest intersection
-	bool IntersectionTest(float** minMax_This, float** minMaxProjected, Vector3& axisDir, float& bounceVal);
+	void CollisionCheck_2(Shape& obstacle);
 
-	/******************** Projection functions **********************/
+	/************************************* Projection functions ***************************************/
 	void ProjectShapeOntoThis(Shape& projectMe, float** list);	//project passed in shape onto this shape
-	void GetProjections(Vector3& dir, float list[]); //get list of projection on a axis
 	
-	/******************** Draw functions **********************/
+	/******************** Core functions **********************/
 	void Update();
 	void Draw();
 

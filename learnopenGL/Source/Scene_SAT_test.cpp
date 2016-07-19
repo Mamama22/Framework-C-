@@ -40,8 +40,6 @@ Init shapes
 ********************************************************************************/
 void Scene_SAT_Test::Init_Shapes()
 {
-	Shape::InitStatic();
-
 	//Offseting-------------------------------------------------//
 	dist = 260.f;
 
@@ -109,7 +107,7 @@ void Scene_SAT_Test::Run()
 	Calculate_ShapeProjections();
 
 	//collision check----------------------------------------//
-	testShape.CollisionCheck(testShape_2);
+	testShape.CollisionCheck_2(testShape_2);
 
 	//Stage 4: 2nd TRS calculations for Entity and Comp (For those with changes) ===========================================================//
 	testShape.RecalculatePoints(false);	//called by calculate TRS with parents but for now stand-alone since no entity adds this
