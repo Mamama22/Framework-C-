@@ -100,7 +100,7 @@ public:
 
 	/******************** Init functions **********************/
 	static void InitStatic();
-	void Init(const char* name);
+	void Init(const char* name, Vector3 pos);
 	void AddPoint(Vector3 pos);
 	void CalculateFaces();	//CALL AFTER ALL POINTS ADDED
 

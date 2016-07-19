@@ -90,11 +90,11 @@ void Face::Draw(vector<Point>& pointList)
 	CU::shared.DrawLine(CU::shared.line_1, pointList[start].pos, this->angle, this->len, 3.f);
 
 	//Draw the normal---------------------------------//
-	//float normalAngle = Vector3::getAngleFromDir(normal.x, normal.y);
-	//shareVec = pointList[start].pos;
-	//shareVec.x += len * 0.5f * dir.x;
-	//shareVec.y += len * 0.5f * dir.y;
-	//CU::shared.DrawLine(CU::shared.line_2, shareVec, normalAngle, 50.f, 1.f);
+	float normalAngle = Vector3::getAngleFromDir(normal.x, normal.y);
+	shareVec = pointList[start].pos;
+	shareVec.x += len * 0.5f * dir.x;
+	shareVec.y += len * 0.5f * dir.y;
+	CU::shared.DrawLine(CU::shared.line_2, shareVec, normalAngle, 50.f, 1.f);
 }
 
 /********************************************************************************
@@ -152,10 +152,10 @@ void Shape::InitStatic()
 /********************************************************************************
 Add point
 ********************************************************************************/
-void Shape::Init(const char* name)
+void Shape::Init(const char* name, Vector3 pos)
 {
 	Component::Init(name);
-	transform.Set(Vector3(0, 0, 0), Vector3(1,1,1));
+	transform.Set(pos, Vector3(1, 1, 1));
 	prevPos.SetZero();
 }
 
@@ -281,40 +281,18 @@ void Shape::CollisionCheck(Shape& obstacle)
 	collided_1 = obstacle.IntersectionTest(minMax_projected, minMax_this, dir1, bounceVal_1);
 	collided_2 = IntersectionTest(minMax_this_2ndCheck, minMax_projected_2ndCheck, dir2, bounceVal_2);
 
-	//Get vector-------------------------------------//
-	vel = transform.pos - obstacle.transform.pos;
-
 	//check collision-------------------------------------//
 	if (collided_1 && collided_2)
 	{
 		//Use obstacle normal------------------------//
 		if (bounceVal_1 < bounceVal_2)
 		{
-			if (dir1.x != 0.f)
-			{
-				if (vel.x < 0.f)
-					dir1.x = -abs(dir1.x);
-				else
-					dir1.x = abs(dir1.x);
-			}
-
-			if (dir1.y != 0.f)
-			{
-				if (vel.y < 0.f)
-				{
-					dir1.y = -abs(dir1.y);
-				}
-					else
-						dir1.y = abs(dir1.y);
-			}
-
 			//Offset direction by angle rotated---------------------------------------//
 			float angle = Vector3::getAngleFromDir(dir1.x, dir1.y);
 			angle -= transform.angle;
 			dir1.x = cos(Math::DegreeToRadian(angle));
 			dir1.y = sin(Math::DegreeToRadian(angle));
-
-			Vector3 offsetAway = dir1 * abs(bounceVal_1);
+			Vector3 offsetAway = dir1 * bounceVal_1;
 
 			Translate(offsetAway);
 		}
@@ -322,23 +300,8 @@ void Shape::CollisionCheck(Shape& obstacle)
 		//Use own normal------------------------//
 		else
 		{
-			if (dir2.x != 0.f)
-			{
-				if (vel.x < 0.f)
-					dir2.x = -abs(dir2.x);
-				else
-					dir2.x = abs(dir2.x);
-			}
-
-			if (dir2.y != 0.f)
-			{
-				if (vel.y < 0.f)
-				{
-					dir2.y = -abs(dir2.y);
-				}
-					else
-						dir2.y = abs(dir2.y);
-			}
+			dir2.x *= -1.f;
+			dir2.y *= -1.f;
 
 			//Offset direction by angle rotated---------------------------------------//
 			float angle = Vector3::getAngleFromDir(dir2.x, dir2.y);
@@ -346,7 +309,7 @@ void Shape::CollisionCheck(Shape& obstacle)
 			dir2.x = cos(Math::DegreeToRadian(angle));
 			dir2.y = sin(Math::DegreeToRadian(angle));
 
-			Vector3 offsetAway = dir2 * abs(bounceVal_2);
+			Vector3 offsetAway = dir2 * bounceVal_2;
 
 			Translate(offsetAway);
 		}
@@ -363,6 +326,8 @@ bool overlaps(float min1, float max1, float min2, float max2)
 
 /********************************************************************************
 Get min max points of shape onto THIS SHAPE'S AXIS
+minMax_This: this shapes's min/max
+minMaxProjected: projected shape's min/max
 ********************************************************************************/
 bool Shape::IntersectionTest(float** minMax_This, float** minMaxProjected, Vector3& axisDir, float& bounceVal)
 {
@@ -388,14 +353,16 @@ bool Shape::IntersectionTest(float** minMax_This, float** minMaxProjected, Vecto
 			float max = (minMax_This[i][1] > minMaxProjected[i][1]) ? minMax_This[i][1] : minMaxProjected[i][1];
 			float intersectedLen = totalLength - (max - min);
 
+			//if is shortest---------------------//
 			if (shortestLength > intersectedLen)
 			{
 				shortestLength = intersectedLen;
-				axisDir = faceList[i].normal;
+				axisDir = faceList[i].normal;	//this shape's normal
 				bounceVal = intersectedLen;
 			}
 		}
 	}
+
 	return true;
 }
 

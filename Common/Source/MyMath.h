@@ -65,6 +65,34 @@ namespace Math
 	{
 		return value * 180.0f / PI;
 	}
+	/******************************************************************************/
+	/*!
+	\brief
+	Check if 2 float values are equal
+
+	\param c1 - float 1
+	\param c2 - float 2
+
+	\exception None
+	\return true if equal
+	*/
+	/******************************************************************************/
+	inline bool IsEqual(float c1, float c2)
+	{
+		float larger, smaller = 0.f;
+		if (c1 > c2)
+		{
+			larger = c1;
+			smaller = c2;
+		}
+		else
+		{
+			larger = c2;
+			smaller = c1;
+		}
+
+		return larger - smaller > Math::EPSILON;
+	}
 /******************************************************************************/
 	/*!
 	\brief
