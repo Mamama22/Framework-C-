@@ -77,11 +77,11 @@ void Scene_SAT_Test::Init_Shapes()
 	//Test shape 2---------------------------------------//
 	testShape_2.Init("farkle2", Vector3(0, -70, 0));
 
-	testShape_2.AddPoint(Vector3(-120.f, -50.f, 0.f));
-	testShape_2.AddPoint(Vector3(120.f, -50.f, 0.f));
-	testShape_2.AddPoint(Vector3(120.f, -10.f, 0.f));
-	testShape_2.AddPoint(Vector3(20.f, 60.f, 0.f));
-	testShape_2.AddPoint(Vector3(-100.f, 10.f, 0.f));
+	testShape_2.AddPoint(Vector3(-120.5f, -50.f, 0.f));
+	testShape_2.AddPoint(Vector3(120.5f, -50.5f, 0.f));
+	testShape_2.AddPoint(Vector3(120.f, 50.5f, 0.f));
+	testShape_2.AddPoint(Vector3(-120.f, 50.f, 0.f));
+	//testShape_2.AddPoint(Vector3(-100.f, 10.f, 0.f));
 
 	//calculate faces for this shape--------------------------//
 	testShape_2.CalculateFaces();
