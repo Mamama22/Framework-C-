@@ -167,7 +167,7 @@ void Scene_ECS::Run()
 	testEnt_1.CalculateTRS();
 	testEnt_2.CalculateTRS();
 
-	//Stage 3: Entity and Comp update ===========================================================//
+	//stage 3: Update with changes ===========================================================//
 
 	//Entity update------------------------------------------------------//
 	testEnt.Update();
@@ -180,7 +180,7 @@ void Scene_ECS::Run()
 	for (int i = 0; i < TOTAL_AABB; ++i)	//collider
 		BoxCollision_List[i].Update();
 
-	//Repeat Stage 2: post-update TRS calculations for Entity and Comp ===========================================================//
+	//Stage 4: 2nd TRS calculations for Entity and Comp (For those with changes) ===========================================================//
 	testEnt.CalculateTRS();
 	testEnt_1.CalculateTRS();
 	testEnt_2.CalculateTRS();

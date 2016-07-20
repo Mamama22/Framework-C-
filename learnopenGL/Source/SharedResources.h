@@ -15,10 +15,12 @@ public:
 
 	/******************** shared resources **********************/
 	Mesh* boundingBox_Mesh;
+	Mesh* quad;
 	Mesh* sphere;
 	Mesh* sphere_1;
 	Mesh* line_1;
 	Mesh* line_2;
+	Mesh* axes;
 	Mtx44 mtx[10];
 
 	/******************** core **********************/

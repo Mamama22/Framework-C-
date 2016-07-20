@@ -242,7 +242,8 @@ void Shape::CollisionCheck_2(Shape& obstacle)
 		normal1.y = sin(Math::DegreeToRadian(angle));
 		Vector3 offsetAway = normal1 * bounce1;
 
-		Translate(offsetAway);
+		//Translate(offsetAway);
+		CU::entityMan.GetTopParent_Entity(parentHandle)->Translate(offsetAway);
 	}
 
 	//Collides on Obstacle's axis-------------------------------------//
@@ -256,7 +257,8 @@ void Shape::CollisionCheck_2(Shape& obstacle)
 
 		Vector3 offsetAway = normal2 * bounce2;
 
-		Translate(offsetAway);
+		//Translate(offsetAway);
+		CU::entityMan.GetTopParent_Entity(parentHandle)->Translate(offsetAway);
 	}
 }
 
@@ -356,6 +358,15 @@ void Shape::ProjectOntoNormal(Shape& projected, const Vector3& normal, float sto
 	store[1] = max;
 }
 
+/********************************************************************************
+Cal TRS with parent
+********************************************************************************/
+void Shape::CalculateTRS_WithParent(const Mtx44& parentRotMat)
+{
+	Component::CalculateTRS_WithParent(parentRotMat);
+	RecalculatePoints(false);
+}
+
 void Shape::Update()
 {
 	
@@ -366,6 +377,9 @@ Draw outlines
 ********************************************************************************/
 void Shape::Draw()
 {
+	if (!active)
+		return;
+
 	for (int i = 0; i < faceList.size(); ++i)
 	{
 		//point-----------------------------//

@@ -7,11 +7,13 @@ Init
 ********************************************************************************/
 void SharedResources::Init()
 {
+	quad = MeshBuilder::GenerateQuad(Color(0, 255, 0), 1.f, 1.f, false);
 	boundingBox_Mesh = MeshBuilder::GenerateDebugQuad(Color(42, 212, 175));
 	sphere = MeshBuilder::GenerateSphere(Color(255, 255, 0), 36, 36, 0.5f);
 	sphere_1 = MeshBuilder::GenerateSphere(Color(26, 125, 44), 36, 36, 0.5f);
 	line_1 = MeshBuilder::GenerateLine(Color(51.f, 211.f, 219.f));
 	line_2 = MeshBuilder::GenerateLine(Color(248, 194, 252));
+	axes = MeshBuilder::GenerateAxes();
 }
 
 /********************************************************************************
@@ -24,6 +26,8 @@ void SharedResources::Exit()
 	delete sphere_1;
 	delete line_1;
 	delete line_2;
+	delete axes;
+	delete quad;
 }
 
 /********************************************************************************

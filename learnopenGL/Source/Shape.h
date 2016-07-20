@@ -105,6 +105,8 @@ public:
 
 	/************************************* Projection functions ***************************************/
 	void ProjectShapeOntoThis(Shape& projectMe, float** list);	//project passed in shape onto this shape
+
+	void CalculateTRS_WithParent(const Mtx44& parentRotMat);
 	
 	/******************** Core functions **********************/
 	void Update();
