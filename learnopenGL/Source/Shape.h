@@ -70,9 +70,10 @@ class Shape : public Renderer
 
 	/************************************* Collision check ***************************************/
 	//Project shape 'checkMe' onto this and check
-	bool SAT_CollisionCheck(Shape& checkMe, Vector3& normal, float& bounce);
+	bool SAT_CollisionCheck(Shape& checkMe, Vector3& normal, float& bounce, bool thisShape, float& offsetDistSq);
 	static void ProjectOntoNormal(Shape& projected, const Vector3& normal, float store[]);
 	static bool IntersectionTest_2(float proj_1[], float proj_2[], float& intersectedLen);
+	void TranslatePosWithAngle(Vector3& pos, Vector3 dir, float speed);
 
 public:
 

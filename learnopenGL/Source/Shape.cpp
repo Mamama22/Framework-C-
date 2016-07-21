@@ -109,6 +109,7 @@ Add point
 ********************************************************************************/
 void Shape::Init(const char* name, Vector3 pos)
 {
+	active = true;
 	Component::Init(name);
 	transform.Set(pos, Vector3(1, 1, 1));
 	prevPos.SetZero();
@@ -200,6 +201,14 @@ void Shape::RecalculatePoints(bool debug)
 		pointList[i].pos.Set(1, 1, 1);
 		pointList[i].pos = CU::shared.mtx[3] * pointList[i].pos;
 	}
+
+	/*for (int i = 0; i < pointList.size(); ++i)
+	{
+		if (i < pointList.size() - 1)
+			faceList[i].Set(i, i + 1, pointList, transform.pos);
+		else
+			faceList[i].Set(i, 0, pointList, transform.pos);
+	}*/
 }
 
 bool isBetweenOrdered(float val, float lowerBound, float upperBound) {
@@ -219,17 +228,31 @@ Vector3 normal1, normal2;
 float bounce1 = 0.f, bounce2 = 0.f;
 void Shape::CollisionCheck_2(Shape& obstacle)
 {
+
 	bounce1 = bounce2 = 100000000000000000000.f;
+	float offsetDistSq_1 = 0.f;
+	float offsetDistSq_2 = 0.f;
 
 	//Collision check-------------------------------------//
-	collided1 = SAT_CollisionCheck(obstacle, normal1, bounce1);	//obstacle onto THIS
-	collided2 = obstacle.SAT_CollisionCheck(*this, normal2, bounce2);	//this onto OBSTACLE
+	collided1 = SAT_CollisionCheck(obstacle, normal1, bounce1, true, offsetDistSq_1);	//obstacle onto THIS
+	collided2 = obstacle.SAT_CollisionCheck(*this, normal2, bounce2, false, offsetDistSq_2);	//this onto OBSTACLE
 
 	if (!collided1 || !collided2)
 		return;
 
-	//Collides on This's axis-------------------------------------//
+	bool go1 = false;	//use THIS
+
 	if (bounce1 < bounce2)
+		go1 = true;
+	else if (bounce1 == bounce2)
+	{
+		if (offsetDistSq_1 > offsetDistSq_2)
+			go1 = true;
+	}
+	
+
+	//Collides on This's axis-------------------------------------//
+	if (go1)
 	{
 		//Invert collided face's normal to face inwards which pushes itself away--------------------//
 		normal1.x *= -1.f;
@@ -240,10 +263,9 @@ void Shape::CollisionCheck_2(Shape& obstacle)
 		angle -= transform.angle;
 		normal1.x = cos(Math::DegreeToRadian(angle));
 		normal1.y = sin(Math::DegreeToRadian(angle));
-		Vector3 offsetAway = normal1 * bounce1;
-
-		//Translate(offsetAway);
-		CU::entityMan.GetTopParent_Entity(parentHandle)->Translate(offsetAway);
+		Vector3 offsetAway = normal1 * abs(bounce1);
+		//cout << "Normal 1: " << normal1 << endl;
+		Translate(offsetAway);
 	}
 
 	//Collides on Obstacle's axis-------------------------------------//
@@ -255,11 +277,20 @@ void Shape::CollisionCheck_2(Shape& obstacle)
 		normal2.x = cos(Math::DegreeToRadian(angle));
 		normal2.y = sin(Math::DegreeToRadian(angle));
 
-		Vector3 offsetAway = normal2 * bounce2;
-
-		//Translate(offsetAway);
-		CU::entityMan.GetTopParent_Entity(parentHandle)->Translate(offsetAway);
+		Vector3 offsetAway = normal2 * abs(bounce2);
+		//cout << "Normal 2: " << normal2 << endl;
+		Translate(offsetAway);
 	}
+}
+
+void Shape::TranslatePosWithAngle(Vector3& pos, Vector3 dir, float speed)
+{
+	float angle = Vector3::getAngleFromDir(dir.x, dir.y);
+	angle -= transform.angle;
+	dir.x = cos(Math::DegreeToRadian(angle));
+	dir.y = sin(Math::DegreeToRadian(angle));
+
+	pos += dir * speed;
 }
 
 /********************************************************************************
@@ -273,12 +304,17 @@ float min_Other = 0.f;
 float min_This = 0.f;
 float max_Other = 0.f;
 float max_This = 0.f;
-bool Shape::SAT_CollisionCheck(Shape& checkMe, Vector3& normal, float& bounce)
+vector<float> p_bounceList;
+
+float shortestLen = 0.f;
+bool Shape::SAT_CollisionCheck(Shape& checkMe, Vector3& normal, float& bounce, bool thisShape, float& offsetDistSq)
 {
+	p_bounceList.clear();
+
 	//loop through all faces----------------------------------------------------//
 	for (int i = 0; i < faceList.size(); ++i)
 	{
-		float intersectedLen = 10000000000000.f;
+		float intersectedLen = 1000000.f;
 
 		//project all points of CHECK onto normals of this face and get min/max------------------------------------------//
 		ProjectOntoNormal(checkMe, faceList[i].normal, projectedPoints_other);
@@ -291,13 +327,68 @@ bool Shape::SAT_CollisionCheck(Shape& checkMe, Vector3& normal, float& bounce)
 		{
 			if (bounce > intersectedLen)
 			{
-				normal = faceList[i].normal;
 				bounce = intersectedLen;
+				//normal = faceList[i].normal;
 			}
+			p_bounceList.push_back(intersectedLen);
 		}
 		else
 			return false;
 	}
+
+
+	Vector3 projNormal;
+	Vector3 projPos;
+	Shape* THIS_SHAPE = this;
+	Shape* OTHER_SHAPE = &checkMe;
+	float shortestProjLen = 0.f;
+
+	//if not THIS shape, swap------------------------------//
+	if (!thisShape)
+	{
+		swap(THIS_SHAPE, OTHER_SHAPE);
+	}
+
+	//loop through shortest length/s, find the one that propells this shape furthest away----------------------------//
+	int count = 0;
+	for (int i = 0; i < faceList.size(); ++i)
+	{
+		//if is shortest length---------------------------------//
+		if (bounce == p_bounceList[i])
+		{
+			count++;
+			projPos = THIS_SHAPE->transform.pos;
+			projNormal = faceList[i].normal;
+
+			//if is THIS shape, offset away from own normal------------------------------//
+			if (thisShape)
+			{
+				projNormal.x *= -1.f;
+				projNormal.y *= -1.f;
+			}
+			
+			//translate the projected pos------------------------------//
+			THIS_SHAPE->TranslatePosWithAngle(projPos, projNormal, p_bounceList[i]);
+			
+			//projPos += projNormal * p_bounceList[i];
+
+			//the furthest away from pos is the correct projection------------------------------//
+			if (shortestProjLen < abs((projPos - OTHER_SHAPE->transform.pos).LengthSquared()))
+			{
+				offsetDistSq = shortestProjLen = abs((projPos - OTHER_SHAPE->transform.pos).LengthSquared());
+				normal = faceList[i].normal;
+			}
+		}
+	}
+
+	/*if (thisShape)
+		cout << "Count: " << count << endl;
+	else
+		cout << "OTHER count: " << count << endl;*/
+
+	//if (count > 1)
+	//	cout << "FUCK" << endl;
+
 	return true;
 }
 
@@ -307,6 +398,9 @@ param intersectedLen: how much is intersected previously, if this check has a sh
 						intersection, than intersectedLen will be updated
 
 return: True if new intersected length is assigned
+
+proj_1: THIS shape
+proj_2: CHECK shape
 
 Note: Does not check if intersectedLen_assign smaller than new intersect
 ********************************************************************************/
@@ -322,6 +416,7 @@ bool Shape::IntersectionTest_2(float proj_1[], float proj_2[], float& intersecte
 		float min = (proj_1[0] > proj_2[0]) ? proj_2[0] : proj_1[0];
 		float max = (proj_1[1] > proj_2[1]) ? proj_1[1] : proj_2[1];
 		float intersectedLen = totalLength - (max - min);
+
 
 		//if is shortest---------------------//
 		intersectedLen_assign = intersectedLen;		
@@ -343,7 +438,7 @@ make sure projected shapes has at least 2 points
 void Shape::ProjectOntoNormal(Shape& projected, const Vector3& normal, float store[])
 {
 	float min = projected.pointList[0].pos.Dot(normal);
-	float max = projected.pointList[0].pos.Dot(normal);
+	float max = min;
 	for (int j = 1; j < projected.pointList.size(); ++j)
 	{
 		float val = projected.pointList[j].pos.Dot(normal);	//project onto
