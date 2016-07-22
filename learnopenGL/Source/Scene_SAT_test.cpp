@@ -63,20 +63,20 @@ void Scene_SAT_Test::Init_Shapes()
 	testShape.Init("farkle", Vector3(0, 0, 0));
 
 	//Test shape 1---------------------------------------//
-	testShape.AddPoint(Vector3(-60.f, -60.f, 0.f));
-	testShape.AddPoint(Vector3(60.f, -20.f, 0.f));
-	testShape.AddPoint(Vector3(60.f, 60.f, 0.f));
-	testShape.AddPoint(Vector3(-60.f, 20.f, 0.f));
+	testShape.AddPoint(Vector3(-160.05f, -60.f, 0.f));
+	testShape.AddPoint(Vector3(160.f, -60.f, 0.f));
+	testShape.AddPoint(Vector3(160.f, 60.f, 0.f));
+	testShape.AddPoint(Vector3(-160.f, 60.05f, 0.f));
 
 	//calculate faces for this shape--------------------------//
 	testShape.CalculateFaces();
 	
 	//Test shape 2---------------------------------------//
 	testShape_2.Init("farkle2", Vector3(0, -70, 0));
-	testShape_2.AddPoint(Vector3(-60.f, -60.f, 0.f));
-	testShape_2.AddPoint(Vector3(60.f, -20.f, 0.f));
-	testShape_2.AddPoint(Vector3(60.f, 60.f, 0.f));
-	testShape_2.AddPoint(Vector3(-60.f, 20.f, 0.f));
+	testShape_2.AddPoint(Vector3(-160.05f, -60.f, 0.f));
+	testShape_2.AddPoint(Vector3(160.f, -60.f, 0.f));
+	testShape_2.AddPoint(Vector3(160.f, 60.f, 0.f));
+	testShape_2.AddPoint(Vector3(-160.f, 60.05f, 0.f));
 
 	//calculate faces for this shape--------------------------//
 	testShape_2.CalculateFaces();
@@ -98,7 +98,6 @@ void Scene_SAT_Test::Run()
 	testShape_2.RecalculatePoints(false);
 
 	//stage 3: Update with changes ===========================================================//
-	Calculate_ShapeProjections();
 
 	//collision check----------------------------------------//
 	testShape.CollisionCheck_2(testShape_2);
@@ -106,6 +105,9 @@ void Scene_SAT_Test::Run()
 	//Stage 4: 2nd TRS calculations for Entity and Comp (For those with changes) ===========================================================//
 	testShape.RecalculatePoints(false);	//called by calculate TRS with parents but for now stand-alone since no entity adds this
 	testShape_2.RecalculatePoints(false);
+
+	//get updated shape projections---------------//
+	Calculate_ShapeProjections();
 }
 
 /********************************************************************************
@@ -131,9 +133,9 @@ void Scene_SAT_Test::Update_Shapes()
 
 	//rotation----------------------------------------//
 	if (CU::input.IsKeyPressed(Input::K))
-		testShape.Rotate(1.f);
+		testShape.Rotate(2);
 	if (CU::input.IsKeyPressed(Input::L))
-		testShape.Rotate(-1.f);
+		testShape.Rotate(-2);
 }
 
 /********************************************************************************
@@ -166,16 +168,16 @@ Draw on screen
 void Scene_SAT_Test::DrawOnScreen()
 {
 	//projected axis-----------------------------------------//
-	if (switchShapes)	//shape 1's axes
-		DrawShapeAxes(line_axis, testShape, dist);
-	else    //shape 2's axes
-		DrawShapeAxes(line_axis, testShape_2, dist);
+	//if (switchShapes)	//shape 1's axes
+	//	DrawShapeAxes(line_axis, testShape, dist);
+	//else    //shape 2's axes
+	//	DrawShapeAxes(line_axis, testShape_2, dist);
 
 	//Draw shapes------------------------------------------------//
 	Draw_Shapes();
 
 	//Draw shapes projection------------------------------------------------//
-	Draw_ShapeProjection();
+	//Draw_ShapeProjection();
 
 	CU::view.UseShader(View::TEXT_SHADER);	//use light shader
 
@@ -271,6 +273,7 @@ void Scene_SAT_Test::Draw_ProjectedShape(Mesh* lineMesh_min, Mesh* lineMesh_max,
 		Vector3 minProj = Vector3(min_ProjPt * axis.x, min_ProjPt * axis.y, 0) + offset;
 		Vector3 maxProj = Vector3(max_ProjPt * axis.x, max_ProjPt * axis.y, 0) + offset;
 
+
 		Draw_ProjectedPoints(lineMesh_min, projectedPoint_Mesh, min_pos, minProj, projectee.faceList[i].normal);
 		Draw_ProjectedPoints(lineMesh_max, projectedPoint_Mesh, max_pos, maxProj, projectee.faceList[i].normal);
 	}
@@ -283,7 +286,14 @@ void Scene_SAT_Test::Draw_ProjectedPoints(Mesh* lineMesh, Mesh* projectedPoint_M
 {
 	//Draw the line-----------------------------------//
 	Vector3 line = projPos - pointPos;
-	Vector3 ptDir = line.Normalized();
+	Vector3 ptDir = line.Normalized();	//direction of line: pos to projected pos
+
+	//Test projection with normal: must be 90 deg all times-----------------------------------//
+	float dot = axisDir.Dot(ptDir);
+
+	if (abs(dot) > 0.05f)
+		cout << "NOT 90 deg: " << dot << endl;
+
 	float angle = Vector3::getAngleFromDir(ptDir.x, ptDir.y);
 	CU::shared.DrawLine(lineMesh, pointPos, angle, line.Length(), 1.5f);
 }

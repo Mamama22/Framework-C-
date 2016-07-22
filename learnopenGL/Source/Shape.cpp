@@ -81,12 +81,12 @@ void Face::Draw(vector<Point>& pointList)
 	//Draw the dir---------------------------------//
 	CU::shared.DrawLine(CU::shared.line_1, pointList[start].pos, this->angle, this->len, 3.f);
 
-	//Draw the normal---------------------------------//
-	float normalAngle = Vector3::getAngleFromDir(normal.x, normal.y);
-	shareVec = pointList[start].pos;
-	shareVec.x += len * 0.5f * dir.x;
-	shareVec.y += len * 0.5f * dir.y;
-	CU::shared.DrawLine(CU::shared.line_2, shareVec, normalAngle, 50.f, 1.f);
+	////Draw the normal---------------------------------//
+	//float normalAngle = Vector3::getAngleFromDir(normal.x, normal.y);
+	//shareVec = pointList[start].pos;
+	//shareVec.x += len * 0.5f * dir.x;
+	//shareVec.y += len * 0.5f * dir.y;
+	//CU::shared.DrawLine(CU::shared.line_2, shareVec, normalAngle, 50.f, 1.f);
 }
 
 /********************************************************************************
@@ -148,7 +148,9 @@ Note: Pass in a Vec3 array with enough mem. allocated for total points in this s
 void Shape::GetProjections(Vector3& dir, float list[])
 {
 	for (int i = 0; i < pointList.size(); ++i)
+	{
 		list[i] = pointList[i].pos.Dot(dir);
+	}
 }
 
 /********************************************************************************
@@ -202,6 +204,9 @@ void Shape::RecalculatePoints(bool debug)
 		pointList[i].pos = CU::shared.mtx[3] * pointList[i].pos;
 	}
 
+	transform.pos.Set(1, 1, 0);
+	transform.pos = transform.TRS * transform.pos;
+
 	/*for (int i = 0; i < pointList.size(); ++i)
 	{
 		if (i < pointList.size() - 1)
@@ -228,7 +233,6 @@ Vector3 normal1, normal2;
 float bounce1 = 0.f, bounce2 = 0.f;
 void Shape::CollisionCheck_2(Shape& obstacle)
 {
-
 	bounce1 = bounce2 = 100000000000000000000.f;
 	float offsetDistSq_1 = 0.f;
 	float offsetDistSq_2 = 0.f;
@@ -250,7 +254,7 @@ void Shape::CollisionCheck_2(Shape& obstacle)
 			go1 = true;
 	}
 	
-
+	
 	//Collides on This's axis-------------------------------------//
 	if (go1)
 	{
@@ -263,7 +267,7 @@ void Shape::CollisionCheck_2(Shape& obstacle)
 		angle -= transform.angle;
 		normal1.x = cos(Math::DegreeToRadian(angle));
 		normal1.y = sin(Math::DegreeToRadian(angle));
-		Vector3 offsetAway = normal1 * abs(bounce1);
+		Vector3 offsetAway = normal1 * bounce1;
 		//cout << "Normal 1: " << normal1 << endl;
 		Translate(offsetAway);
 	}
@@ -277,7 +281,7 @@ void Shape::CollisionCheck_2(Shape& obstacle)
 		normal2.x = cos(Math::DegreeToRadian(angle));
 		normal2.y = sin(Math::DegreeToRadian(angle));
 
-		Vector3 offsetAway = normal2 * abs(bounce2);
+		Vector3 offsetAway = normal2 * bounce2;
 		//cout << "Normal 2: " << normal2 << endl;
 		Translate(offsetAway);
 	}
@@ -300,11 +304,14 @@ returns: the projection in vec3 to 'push' shape out of collision
 ********************************************************************************/
 float projectedPoints[2];	//this shape
 float projectedPoints_other[2];	//check shape
-float min_Other = 0.f;
-float min_This = 0.f;
-float max_Other = 0.f;
-float max_This = 0.f;
 vector<float> p_bounceList;
+
+//check face with optimal projection----------------------------------------------------//
+Vector3 projNormal;
+Vector3 projPos;
+Shape* THIS_SHAPE = NULL;
+Shape* OTHER_SHAPE = NULL;
+float shortestProjLen = 0.f;
 
 float shortestLen = 0.f;
 bool Shape::SAT_CollisionCheck(Shape& checkMe, Vector3& normal, float& bounce, bool thisShape, float& offsetDistSq)
@@ -336,18 +343,15 @@ bool Shape::SAT_CollisionCheck(Shape& checkMe, Vector3& normal, float& bounce, b
 			return false;
 	}
 
-
-	Vector3 projNormal;
-	Vector3 projPos;
-	Shape* THIS_SHAPE = this;
-	Shape* OTHER_SHAPE = &checkMe;
-	float shortestProjLen = 0.f;
+	//check face with optimal projection----------------------------------------------------//
+	THIS_SHAPE = this;
+	OTHER_SHAPE = &checkMe;
+	shortestProjLen = 0.f;
 
 	//if not THIS shape, swap------------------------------//
 	if (!thisShape)
-	{
 		swap(THIS_SHAPE, OTHER_SHAPE);
-	}
+	
 
 	//loop through shortest length/s, find the one that propells this shape furthest away----------------------------//
 	int count = 0;
@@ -367,10 +371,7 @@ bool Shape::SAT_CollisionCheck(Shape& checkMe, Vector3& normal, float& bounce, b
 				projNormal.y *= -1.f;
 			}
 			
-			//translate the projected pos------------------------------//
-			THIS_SHAPE->TranslatePosWithAngle(projPos, projNormal, p_bounceList[i]);
-			
-			//projPos += projNormal * p_bounceList[i];
+			projPos += projNormal * p_bounceList[i];
 
 			//the furthest away from pos is the correct projection------------------------------//
 			if (shortestProjLen < abs((projPos - OTHER_SHAPE->transform.pos).LengthSquared()))
@@ -381,13 +382,8 @@ bool Shape::SAT_CollisionCheck(Shape& checkMe, Vector3& normal, float& bounce, b
 		}
 	}
 
-	/*if (thisShape)
-		cout << "Count: " << count << endl;
-	else
-		cout << "OTHER count: " << count << endl;*/
-
-	//if (count > 1)
-	//	cout << "FUCK" << endl;
+	if (thisShape)
+		cout << "Count: " << count << "offset: " << bounce << endl;
 
 	return true;
 }

@@ -3,3 +3,5 @@
 -CAMERA crashes
 -use quaternions
 -collision: if top parent collides, it will offset the children
+
+-SAT collision: parallel sides + rotate = GLITCH
