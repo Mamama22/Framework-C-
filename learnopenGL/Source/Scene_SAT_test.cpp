@@ -65,17 +65,17 @@ void Scene_SAT_Test::Init_Shapes()
 	//Test shape 1---------------------------------------//
 	testShape.AddPoint(Vector3(-160.05f, -60.f, 0.f));
 	testShape.AddPoint(Vector3(160.f, -60.f, 0.f));
-	testShape.AddPoint(Vector3(160.f, 60.f, 0.f));
+	testShape.AddPoint(Vector3(110.f, 20.f, 0.f));
 	testShape.AddPoint(Vector3(-160.f, 60.05f, 0.f));
 
 	//calculate faces for this shape--------------------------//
 	testShape.CalculateFaces();
 	
 	//Test shape 2---------------------------------------//
-	testShape_2.Init("farkle2", Vector3(0, -70, 0));
+	testShape_2.Init("farkle2", Vector3(70, -70, 0));
 	testShape_2.AddPoint(Vector3(-160.05f, -60.f, 0.f));
 	testShape_2.AddPoint(Vector3(160.f, -60.f, 0.f));
-	testShape_2.AddPoint(Vector3(160.f, 60.f, 0.f));
+	testShape_2.AddPoint(Vector3(110.f, 20.f, 0.f));
 	testShape_2.AddPoint(Vector3(-160.f, 60.05f, 0.f));
 
 	//calculate faces for this shape--------------------------//
@@ -168,16 +168,16 @@ Draw on screen
 void Scene_SAT_Test::DrawOnScreen()
 {
 	//projected axis-----------------------------------------//
-	//if (switchShapes)	//shape 1's axes
-	//	DrawShapeAxes(line_axis, testShape, dist);
-	//else    //shape 2's axes
-	//	DrawShapeAxes(line_axis, testShape_2, dist);
+	if (switchShapes)	//shape 1's axes
+		DrawShapeAxes(line_axis, testShape, dist);
+	else    //shape 2's axes
+		DrawShapeAxes(line_axis, testShape_2, dist);
 
 	//Draw shapes------------------------------------------------//
 	Draw_Shapes();
 
 	//Draw shapes projection------------------------------------------------//
-	//Draw_ShapeProjection();
+	Draw_ShapeProjection();
 
 	CU::view.UseShader(View::TEXT_SHADER);	//use light shader
 
