@@ -63,20 +63,20 @@ void Scene_SAT_Test::Init_Shapes()
 	testShape.Init("farkle", Vector3(0, 0, 0));
 
 	//Test shape 1---------------------------------------//
-	testShape.AddPoint(Vector3(-160.05f, -60.f, 0.f));
+	testShape.AddPoint(Vector3(-160.10f, -60.f, 0.f));
 	testShape.AddPoint(Vector3(160.f, -60.f, 0.f));
-	testShape.AddPoint(Vector3(110.f, 20.f, 0.f));
-	testShape.AddPoint(Vector3(-160.f, 60.05f, 0.f));
+	testShape.AddPoint(Vector3(160.f, 20.f, 0.f));
+	testShape.AddPoint(Vector3(-160.f, 60.10f, 0.f));
 
 	//calculate faces for this shape--------------------------//
 	testShape.CalculateFaces();
 	
 	//Test shape 2---------------------------------------//
 	testShape_2.Init("farkle2", Vector3(70, -70, 0));
-	testShape_2.AddPoint(Vector3(-160.05f, -60.f, 0.f));
+	testShape_2.AddPoint(Vector3(-160.0f, -60.f, 0.f));
 	testShape_2.AddPoint(Vector3(160.f, -60.f, 0.f));
-	testShape_2.AddPoint(Vector3(110.f, 20.f, 0.f));
-	testShape_2.AddPoint(Vector3(-160.f, 60.05f, 0.f));
+	testShape_2.AddPoint(Vector3(160.f, 60.f, 0.f));
+	testShape_2.AddPoint(Vector3(-160.f, 60.0f, 0.f));
 
 	//calculate faces for this shape--------------------------//
 	testShape_2.CalculateFaces();

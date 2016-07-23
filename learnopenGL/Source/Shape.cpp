@@ -184,7 +184,7 @@ void Shape::Rotate(float angle)
 	for (int i = 0; i < faceList.size(); ++i)
 	{
 		//rotate--------------------------------------------//
-		//faceList[i].Rotate(angle);
+		faceList[i].Rotate(angle);
 	}
 }
 
@@ -207,13 +207,13 @@ void Shape::RecalculatePoints(bool debug)
 	transform.pos.Set(1, 1, 0);
 	transform.pos = transform.TRS * transform.pos;
 
-	for (int i = 0; i < pointList.size(); ++i)
+	/*for (int i = 0; i < pointList.size(); ++i)
 	{
 		if (i < pointList.size() - 1)
 			faceList[i].Set(i, i + 1, pointList, transform.pos);
 		else
 			faceList[i].Set(i, 0, pointList, transform.pos);
-	}
+	}*/
 }
 
 bool isBetweenOrdered(float val, float lowerBound, float upperBound) {
@@ -239,10 +239,7 @@ void Shape::CollisionCheck_2(Shape& obstacle)
 
 	//Collision check-------------------------------------//
 	collided1 = SAT_CollisionCheck(obstacle, normal1, bounce1, true, offsetDistSq_1);	//obstacle onto THIS
-
-	cout << "." << endl;
 	collided2 = obstacle.SAT_CollisionCheck(*this, normal2, bounce2, false, offsetDistSq_2);	//this onto OBSTACLE
-	cout << "." << endl;
 
 	if (!collided1 || !collided2)
 		return;
@@ -254,20 +251,11 @@ void Shape::CollisionCheck_2(Shape& obstacle)
 		if (offsetDistSq_1 > offsetDistSq_2)
 		{
 			go1 = true;
-		//	cout << "OD 1: " << offsetDistSq_1 << "  OD 2: " << offsetDistSq_2 << endl;
 		}
-		/*else
-			cout << "off1 < off2" << endl;*/
 	}
 	else if (bounce1 < bounce2)
 		go1 = true;
-	/*else
-		cout << "GO 2" << endl;*/
 
-	cout << "bounce 1: " << bounce1 << " bounce 2: " << bounce2 << endl;
-	//cout << "offset 1: " << offsetDistSq_1 << " offset 2: " << offsetDistSq_2 << endl;
-	//cout << "Pos: " << transform.pos << endl;
-	
 	//Collides on This's axis-------------------------------------//
 	if (go1)
 	{
@@ -282,7 +270,6 @@ void Shape::CollisionCheck_2(Shape& obstacle)
 		normal1.x = cos(Math::DegreeToRadian(angle));
 		normal1.y = sin(Math::DegreeToRadian(angle));
 		Vector3 offsetAway = normal1 * bounce1;
-		//cout << "Normal 1: " << normal1 << " bounce: " << bounce1 << endl;
 		Translate(offsetAway);
 	}
 
@@ -291,14 +278,12 @@ void Shape::CollisionCheck_2(Shape& obstacle)
 	{
 		//Offset direction by angle rotated---------------------------------------//
 		float angle = Vector3::getAngleFromDir(normal2.x, normal2.y);
-		//cout << "Angle 2: " << angle << endl;
 
 		angle -= transform.angle;
 		normal2.x = cos(Math::DegreeToRadian(angle));
 		normal2.y = sin(Math::DegreeToRadian(angle));
 		
 		Vector3 offsetAway = normal2 * bounce2;
-		cout << "Normal 2: " << normal2 << " bounce: " << bounce2 << endl;
 		Translate(offsetAway);
 	}
 }
@@ -351,9 +336,6 @@ bool Shape::SAT_CollisionCheck(Shape& checkMe, Vector3& normal, float& bounce, b
 			if (bounce > intersectedLen)
 			{
 				bounce = intersectedLen;
-
-				if (!thisShape)
-					cout << "N: " << faceList[i].normal << "  Bounce: " << bounce << endl;
 			}
 			p_bounceList.push_back(intersectedLen);
 		}
@@ -376,7 +358,7 @@ bool Shape::SAT_CollisionCheck(Shape& checkMe, Vector3& normal, float& bounce, b
 	for (int i = 0; i < faceList.size(); ++i)
 	{
 		//if is shortest length---------------------------------//
-		if (bounce == p_bounceList[i])
+		if (p_bounceList[i] < bounce + 0.1f)
 		{
 			count++;
 			projPos = THIS_SHAPE->transform.pos;
@@ -399,9 +381,6 @@ bool Shape::SAT_CollisionCheck(Shape& checkMe, Vector3& normal, float& bounce, b
 			}
 		}
 	}
-
-	//if (!thisShape)
-	//	cout << "Count: " << count << "offset: " << bounce << endl;
 
 	return true;
 }
