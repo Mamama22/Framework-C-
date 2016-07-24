@@ -77,13 +77,19 @@ public:
 	//Will be called everytime BEFORE comp updates-------------------//
 	void Update();
 
+	//Call in stage 2 and 4--------------------------------------//
+	virtual void CalculateTRS();
+
 	/******************** Transformation function **********************/
 	void Translate(Vector3 vel);
 	void Rotate(float angle, Vector3 axis);
 
-	/******************** Entity Transformation function: ENTITY USE ONLY **********************/
-	virtual void CalculateTRS();
+	/******************** CALLED BY PARENT ONLY **********************/
+	//TRS---------------------------------------------//
 	virtual void CalculateTRS_WithParent(const Mtx44& parentRotMat);
+
+	//transformation---------------------------------------------//
+	virtual void ByParent_Rotate(float angle, Vector3 axis);
 
 	/******************** Get set **********************/
 	Entity* GetParent();

@@ -48,7 +48,7 @@ public:
 	Vector3 normal;
 
 	/******************** core functions **********************/
-	void Set(int startPoint_index, int endPoint_index, vector<Point>& pointList, Vector3 shapePos, bool debug = false);
+	void Set(int startPoint_index, int endPoint_index, vector<Point>& pointList, bool debug = false);
 	void Rotate(float angle);
 	void Draw(vector<Point>& pointList);
 };
@@ -103,6 +103,10 @@ public:
 
 	/******************** collision functions **********************/
 	void CollisionCheck_2(Shape& obstacle);
+
+	/******************** CALLED BY PARENT ONLY **********************/
+	//transformation---------------------------------------------//
+	virtual void ByParent_Rotate(float angle, Vector3 axis);
 
 	/************************************* Projection functions ***************************************/
 	void ProjectShapeOntoThis(Shape& projectMe, float** list);	//project passed in shape onto this shape

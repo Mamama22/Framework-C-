@@ -32,6 +32,12 @@ Add child (Entity)
 ********************************************************************************/
 void Entity::AddChildren(Entity* child)
 {
+	for (int i = 0; i < children.size(); ++i)
+	{
+		if (child == children[i])
+			return;
+	}
+
 	children.push_back(child);
 	child->Added(this);
 }
@@ -106,6 +112,7 @@ void Entity::Init(Vector3 pos, Vector3 scale)
 
 /********************************************************************************
 Translate entity and children + components
+No need to roate children by parent, their pos will be derived from TRS
 ********************************************************************************/
 void Entity::Translate(Vector3 vel)
 {
@@ -118,6 +125,23 @@ Rotates entity
 void Entity::Rotate(float angle, Vector3 axis)
 {
 	transform.Rotate(angle, axis);
+
+	//rotate all children by parent (angle, does not affect their TRS)-------------//
+	for (int i = 0; i < children.size(); ++i)
+		children[i]->ByParent_Rotate(angle, axis);
+	for (int i = 0; i < componentList.size(); ++i)
+		componentList[i]->ByParent_Rotate(angle, axis);
+}
+
+/********************************************************************************
+Rotate by parent: does not affect TRS
+********************************************************************************/
+void Entity::ByParent_Rotate(float angle, Vector3 axis)
+{
+	transform.axis = axis;
+	transform.angle += angle;
+	if (transform.angle < 0.f)transform.angle += 360.f;
+	else if (transform.angle > 360.f)transform.angle -= 360.f;
 }
 
 /********************************************************************************

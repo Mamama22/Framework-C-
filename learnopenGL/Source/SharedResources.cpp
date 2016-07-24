@@ -8,6 +8,8 @@ Init
 void SharedResources::Init()
 {
 	quad = MeshBuilder::GenerateQuad(Color(0, 255, 0), 1.f, 1.f, false);
+	quad_1 = MeshBuilder::GenerateQuad(Color(255, 255, 0), 1.f, 1.f, false);
+	quad_2 = MeshBuilder::GenerateQuad(Color(0, 255, 255), 1.f, 1.f, false);
 	boundingBox_Mesh = MeshBuilder::GenerateDebugQuad(Color(42, 212, 175));
 	sphere = MeshBuilder::GenerateSphere(Color(255, 255, 0), 36, 36, 0.5f);
 	sphere_1 = MeshBuilder::GenerateSphere(Color(26, 125, 44), 36, 36, 0.5f);
@@ -27,7 +29,7 @@ void SharedResources::Exit()
 	delete line_1;
 	delete line_2;
 	delete axes;
-	delete quad;
+	delete quad, quad_1, quad_2;
 }
 
 /********************************************************************************

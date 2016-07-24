@@ -79,6 +79,7 @@ void Transformation::Calculate_transformList()
 	sharedMtx[1].SetToRotation(angle, axis.x, axis.y, axis.z);
 
 	TRS = TRS * sharedMtx[0] * sharedMtx[1];
+	finalTRS = TRS;
 }
 
 /********************************************************************************

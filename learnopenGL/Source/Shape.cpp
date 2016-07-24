@@ -16,7 +16,8 @@ Point::~Point(){}
 void Point::Set(Vector3 pos, Vector3 shapePos)
 {
 	this->pos = pos;
-	this->offset = this->pos - shapePos;
+	this->offset = this->pos;
+	this->pos += shapePos;
 }
 
 /********************************************************************************
@@ -36,7 +37,7 @@ Face::~Face(){}
 /********************************************************************************
 Face init
 ********************************************************************************/
-void Face::Set(int startPoint_index, int endPoint_index, vector<Point>& pList, Vector3 shapePos, bool debug)
+void Face::Set(int startPoint_index, int endPoint_index, vector<Point>& pList, bool debug)
 {
 	//Indexes--------------------------------------------------------//
 	this->start = startPoint_index;
@@ -134,9 +135,9 @@ void Shape::CalculateFaces()
 	for (int i = 0; i < pointList.size(); ++i)
 	{
 		if (i < pointList.size() - 1)
-			face.Set(i, i + 1, pointList, transform.pos);
+			face.Set(i, i + 1, pointList);
 		else
-			face.Set(i, 0, pointList, transform.pos);
+			face.Set(i, 0, pointList);
 		faceList.push_back(face);
 	}
 }
@@ -189,23 +190,39 @@ void Shape::Rotate(float angle)
 }
 
 /********************************************************************************
+Rotate by parent: does not affect TRS
+********************************************************************************/
+void Shape::ByParent_Rotate(float angle, Vector3 axis)
+{
+	Component::ByParent_Rotate(angle, axis);
+
+	//rotate and change pos------------------------//
+	for (int i = 0; i < faceList.size(); ++i)
+	{
+		//rotate--------------------------------------------//
+		faceList[i].Rotate(angle);
+	}
+}
+
+/********************************************************************************
 Draw outlines
 ********************************************************************************/
 void Shape::RecalculatePoints(bool debug)
 {
+	//All points pos calculated with updated TRS------------------------------------------//
 	for (int i = 0; i < pointList.size(); ++i)
 	{
 		CU::shared.mtx[2].SetToTranslation(pointList[i].offset.x, pointList[i].offset.y, 0.f);
 
 		//final transformation matrix-----------------------------//
-		CU::shared.mtx[3] = transform.TRS * CU::shared.mtx[2];
+		CU::shared.mtx[3] = transform.finalTRS * CU::shared.mtx[2];
 
 		pointList[i].pos.Set(1, 1, 0);
 		pointList[i].pos = CU::shared.mtx[3] * pointList[i].pos;
 	}
 
 	transform.pos.Set(1, 1, 0);
-	transform.pos = transform.TRS * transform.pos;
+	transform.pos = transform.finalTRS * transform.pos;
 
 	/*for (int i = 0; i < pointList.size(); ++i)
 	{
@@ -286,6 +303,9 @@ void Shape::CollisionCheck_2(Shape& obstacle)
 		Vector3 offsetAway = normal2 * bounce2;
 		Translate(offsetAway);
 	}
+
+	//recalculate points--------------------------------//
+	RecalculatePoints(false);
 }
 
 void Shape::TranslatePosWithAngle(Vector3& pos, Vector3 dir, float speed)

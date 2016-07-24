@@ -16,6 +16,8 @@ public:
 	/******************** shared resources **********************/
 	Mesh* boundingBox_Mesh;
 	Mesh* quad;
+	Mesh* quad_1;
+	Mesh* quad_2;
 	Mesh* sphere;
 	Mesh* sphere_1;
 	Mesh* line_1;

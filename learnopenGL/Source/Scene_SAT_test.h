@@ -27,6 +27,8 @@ class Scene_SAT_Test : public Scene
 	//Shape--------------------------------------------//
 	Shape testShape;
 	Shape testShape_2;
+	Shape testShape_3;
+	Shape testShape_4;
 	bool switchShapes;	//switch to display another shape projection
 
 	//Offset------------------------------------------//

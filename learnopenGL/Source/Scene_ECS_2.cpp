@@ -28,47 +28,19 @@ void Scene_ECS_2::Init()
 	testEnt[entityCounter++].Init(Vector3(100.f, 100.f, 0.f), Vector3(1.f, 1.f, 1.f));
 
 	//Add renderer------------------------------------------------------//
-	AddRendererToTest(testEnt[0], CU::shared.sphere, Vector3(-100.f, -1.f, 0.f), Vector3(70.f, 70.f, 70.f));
-	AddRendererToTest(testEnt[1], CU::shared.sphere_1, Vector3(-100.f, 80.f, 0.f), Vector3(70.f, 70.f, 70.f));
-	AddRendererToTest(testEnt[2], CU::shared.quad, Vector3(100.f, 100.f, 0.f), Vector3(70.f, 70.f, 70.f));
+	AddRendererToTest(testEnt[0], CU::shared.quad, Vector3(-100.f, -1.f, 0.f), Vector3(70.f, 70.f, 70.f));
+	AddRendererToTest(testEnt[1], CU::shared.quad_1, Vector3(-100.f, 80.f, 0.f), Vector3(70.f, 70.f, 70.f));
+	AddRendererToTest(testEnt[2], CU::shared.quad_2, Vector3(100.f, 100.f, 0.f), Vector3(70.f, 70.f, 70.f));
 
-	//Add collider to entity 0------------------------------------------------------//
-	Shape_List[0].Init("farkle", Vector3(-50.f, -1.f, 0.f));
-	Shape_List[0].AddPoint(Vector3(-80.5f, -15.f, 0.f));
-	Shape_List[0].AddPoint(Vector3(80.5f, -45.f, 0.f));
-	Shape_List[0].AddPoint(Vector3(80.f, 45.f, 0.f));
-	Shape_List[0].AddPoint(Vector3(-80.f, 25.f, 0.f));
+	colliderCounter = 0;
 
-	Shape_List[1].Init("farkle", Vector3(-100.f, -1.f, 0.f));
-	Shape_List[1].AddPoint(Vector3(-80.5f, -15.f, 0.f));
-	Shape_List[1].AddPoint(Vector3(80.5f, -45.f, 0.f));
-	Shape_List[1].AddPoint(Vector3(80.f, 45.f, 0.f));
-	Shape_List[1].AddPoint(Vector3(-80.f, 25.f, 0.f));
-
-	Shape_List[2].Init("farkle", Vector3(-100.f, -1.f, 0.f));
-	Shape_List[2].AddPoint(Vector3(-80.5f, -15.f, 0.f));
-	Shape_List[2].AddPoint(Vector3(80.5f, -45.f, 0.f));
-	Shape_List[2].AddPoint(Vector3(80.f, 45.f, 0.f));
-	Shape_List[2].AddPoint(Vector3(-80.f, 25.f, 0.f));
-
-	//calculate faces for this shape--------------------------//
-	Shape_List[0].CalculateFaces();
-	Shape_List[0].SetActive(true);
-	testEnt[0].AddComponent(&Shape_List[0]);
-
-	Shape_List[1].CalculateFaces();
-	Shape_List[1].SetActive(true);
-	testEnt[1].AddComponent(&Shape_List[1]);
-
-	Shape_List[2].CalculateFaces();
-	Shape_List[2].SetActive(true);
-	testEnt[2].AddComponent(&Shape_List[2]);
-
-	colliderCounter = 3;
+	//Add shape---------------------------------------------------------//
+	AddShape(testEnt[0]);
+	AddShape(testEnt[2]);
 }
 
 /********************************************************************************
-Run
+Utilities
 ********************************************************************************/
 void Scene_ECS_2::AddRendererToTest(Entity& addToMe, Mesh* mesh, Vector3 pos, Vector3 scale)
 {
@@ -76,6 +48,29 @@ void Scene_ECS_2::AddRendererToTest(Entity& addToMe, Mesh* mesh, Vector3 pos, Ve
 	Render_InWorld_List[rendererCounter].SetActive(true);
 	addToMe.AddComponent(&Render_InWorld_List[rendererCounter]);
 	rendererCounter++;
+}
+
+void Scene_ECS_2::AddAsChild(Entity& parent, Entity& child)
+{
+	parent.AddChildren(&child);
+}
+
+void Scene_ECS_2::AddShape(Entity& addToMe)
+{
+	//Test shape 2---------------------------------------//
+	Shape_List[colliderCounter].Init("farkle2", addToMe.transform.pos);
+	Shape_List[colliderCounter].AddPoint(Vector3(-40.0f, -40.f, 0.f));
+	Shape_List[colliderCounter].AddPoint(Vector3(40.f, -40.f, 0.f));
+	Shape_List[colliderCounter].AddPoint(Vector3(40.f, 40.f, 0.f));
+	Shape_List[colliderCounter].AddPoint(Vector3(-40.f, 40.0f, 0.f));
+
+	//calculate faces for this shape--------------------------//
+	Shape_List[colliderCounter].CalculateFaces();
+
+	//Add--------------------------//
+	Shape_List[colliderCounter].SetActive(true);
+	addToMe.AddComponent(&Shape_List[colliderCounter]);
+	colliderCounter++;
 }
 
 /********************************************************************************
@@ -87,8 +82,8 @@ void Scene_ECS_2::Run()
 	Scene::Run();
 
 	//Stage 1: States, flags and values update ===========================================================//
+
 	//Control---------------------------------------------------------------------//
-	//testEnt.GetComp<Render_OnScreen>("renderer")->Translate(Vector3(0, 1, 0));
 	if (CU::input.IsKeyPressed(Input::ARROW_UP))
 		testEnt[0].Translate(Vector3(0, 2.f, 0));
 	if (CU::input.IsKeyPressed(Input::ARROW_DOWN))
@@ -100,17 +95,14 @@ void Scene_ECS_2::Run()
 
 	if (CU::input.IsKeyPressed(Input::C))
 	{
-		//custom rotate---------------------------//
-		//testEnt.Rotate(10.f, Vector3(0, 1, 0));
-		testEnt[0].transform.Start_CustomTrans(true);
-		//testEnt.transform.Custom_Translate(Vector3(-47.5f, 0.f, 0.f));
-		testEnt[0].transform.Custom_Rotate(2.f, Vector3(0, 0, 1));
-		//testEnt.transform.Custom_Translate(Vector3(47.5f, 0.f, 0.f));
-		testEnt[0].transform.End_CustomTrans();
+		testEnt[0].Rotate(-2.f, Vector3(0, 0, 1));
 	}
 	if (CU::input.IsKeyPressed(Input::B))
-		testEnt[0].Rotate(2.f, Vector3(0, 0, 1));
+		testEnt[1].Rotate(2.f, Vector3(0, 0, 1));
 
+	//Add entities to main test entity-------------------------------//
+	if (CU::input.IsKeyReleased(Input::N))
+		AddAsChild(testEnt[0], testEnt[1]);																							
 
 	//Stage 2: TRS calculations for Entity and Comp ===========================================================//
 	for (int i = 0; i < entityCounter; ++i)
@@ -118,13 +110,19 @@ void Scene_ECS_2::Run()
 
 	//stage 3: Update with changes ===========================================================//
 
+	//collision check-------------------------------//
+	if (Shape_List[0].isActive() && Shape_List[1].isActive())
+		Shape_List[0].CollisionCheck_2(Shape_List[1]);
+
 	//Entity update------------------------------------------------------//
 	for (int i = 0; i < entityCounter; ++i)
 		testEnt[i].Update();
 
 	//Comp update-----------------------------------------------------//
 	for (int i = 0; i < TOTAL_RENDERER; ++i)
+	{
 		Render_InWorld_List[i].Update();
+	}
 	for (int i = 0; i < TOTAL_SHAPE; ++i)
 		Shape_List[i].Update();
 
@@ -152,14 +150,16 @@ void Scene_ECS_2::DrawOnScreen()
 	CU::view.RenderMesh(*CU::shared.axes);
 
 	//Special: Renderer components has a draw function====================================================================//
-	//Renderer update (Draw)---------------------------------------------//
+	//Renderer Draw---------------------------------------------//
 	for (int i = 0; i < TOTAL_RENDERER; ++i)
 		Render_InWorld_List[i].Draw();
 
+	//shape Draw---------------------------------------------//
 	for (int i = 0; i < TOTAL_SHAPE; ++i)
 		Shape_List[i].Draw();
 
 
+	//Text----------------------------------------------------//
 	CU::view.UseShader(View::TEXT_SHADER);	//use light shader
 
 	//test quad-----------------------------------------//

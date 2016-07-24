@@ -56,6 +56,17 @@ void Component::Rotate(float angle, Vector3 axis)
 }
 
 /********************************************************************************
+Rotate by parent: does not affect TRS
+********************************************************************************/
+void Component::ByParent_Rotate(float angle, Vector3 axis)
+{
+	transform.axis = axis;
+	transform.angle += angle;
+	if (transform.angle < 0.f)transform.angle += 360.f;
+	else if (transform.angle > 360.f)transform.angle -= 360.f;
+}
+
+/********************************************************************************
 Added
 ********************************************************************************/
 void Component::Added(Transformation& parentTrans, int parentHandle)
@@ -85,7 +96,7 @@ void Component::CalculateTRS_WithParent(const Mtx44& parentRotMat)
 Getter/setter
 ********************************************************************************/
 const char* Component::GetName(){ return name; }
-bool Component::GetActive(){ return active; }
+bool Component::isActive(){ return active; }
 
 /********************************************************************************
 State

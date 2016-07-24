@@ -63,10 +63,10 @@ void Scene_SAT_Test::Init_Shapes()
 	testShape.Init("farkle", Vector3(0, 0, 0));
 
 	//Test shape 1---------------------------------------//
-	testShape.AddPoint(Vector3(-160.10f, -60.f, 0.f));
-	testShape.AddPoint(Vector3(160.f, -60.f, 0.f));
-	testShape.AddPoint(Vector3(160.f, 20.f, 0.f));
-	testShape.AddPoint(Vector3(-160.f, 60.10f, 0.f));
+	testShape.AddPoint(Vector3(-160.0f, -60.f, 0.f));
+	testShape.AddPoint(Vector3(160.f, -20.f, 0.f));
+	testShape.AddPoint(Vector3(160.f, 60.f, 0.f));
+	testShape.AddPoint(Vector3(-160.f, 20.0f, 0.f));
 
 	//calculate faces for this shape--------------------------//
 	testShape.CalculateFaces();
@@ -74,12 +74,29 @@ void Scene_SAT_Test::Init_Shapes()
 	//Test shape 2---------------------------------------//
 	testShape_2.Init("farkle2", Vector3(70, -70, 0));
 	testShape_2.AddPoint(Vector3(-160.0f, -60.f, 0.f));
-	testShape_2.AddPoint(Vector3(160.f, -60.f, 0.f));
+	testShape_2.AddPoint(Vector3(160.f, -160.f, 0.f));
 	testShape_2.AddPoint(Vector3(160.f, 60.f, 0.f));
 	testShape_2.AddPoint(Vector3(-160.f, 60.0f, 0.f));
 
-	//calculate faces for this shape--------------------------//
 	testShape_2.CalculateFaces();
+
+	//Test shape 3---------------------------------------//
+	testShape_3.Init("farkle2", Vector3(-170, -170, 0));
+	testShape_3.AddPoint(Vector3(-160.0f, -60.f, 0.f));
+	testShape_3.AddPoint(Vector3(160.f, -160.f, 0.f));
+	testShape_3.AddPoint(Vector3(160.f, -25.f, 0.f));
+	testShape_3.AddPoint(Vector3(-160.f, 60.0f, 0.f));
+
+	testShape_3.CalculateFaces();
+
+	//Test shape 4---------------------------------------//
+	testShape_4.Init("farkle2", Vector3(-70, 70, 0));
+	testShape_4.AddPoint(Vector3(-160.0f, -60.f, 0.f));
+	testShape_4.AddPoint(Vector3(160.f, -160.f, 0.f));
+	testShape_4.AddPoint(Vector3(160.f, 160.f, 0.f));
+	testShape_4.AddPoint(Vector3(-160.f, 60.0f, 0.f));
+
+	testShape_4.CalculateFaces();
 }
 
 /********************************************************************************
@@ -96,15 +113,21 @@ void Scene_SAT_Test::Run()
 	//Stage 2: TRS calculations for Entity and Comp ===========================================================//
 	testShape.RecalculatePoints(true);	//called by calculate TRS with parents but for now stand-alone since no entity adds this
 	testShape_2.RecalculatePoints(false);
+	testShape_3.RecalculatePoints(false);
+	testShape_4.RecalculatePoints(false);
 
 	//stage 3: Update with changes ===========================================================//
 
 	//collision check----------------------------------------//
 	testShape.CollisionCheck_2(testShape_2);
+	testShape.CollisionCheck_2(testShape_3);
+	testShape.CollisionCheck_2(testShape_4);
 
 	//Stage 4: 2nd TRS calculations for Entity and Comp (For those with changes) ===========================================================//
 	testShape.RecalculatePoints(false);	//called by calculate TRS with parents but for now stand-alone since no entity adds this
 	testShape_2.RecalculatePoints(false);
+	testShape_3.RecalculatePoints(false);
+	testShape_4.RecalculatePoints(false);
 
 	//get updated shape projections---------------//
 	Calculate_ShapeProjections();
@@ -168,16 +191,16 @@ Draw on screen
 void Scene_SAT_Test::DrawOnScreen()
 {
 	//projected axis-----------------------------------------//
-	if (switchShapes)	//shape 1's axes
-		DrawShapeAxes(line_axis, testShape, dist);
-	else    //shape 2's axes
-		DrawShapeAxes(line_axis, testShape_2, dist);
+	//if (switchShapes)	//shape 1's axes
+	//	DrawShapeAxes(line_axis, testShape, dist);
+	//else    //shape 2's axes
+	//	DrawShapeAxes(line_axis, testShape_2, dist);
 
 	//Draw shapes------------------------------------------------//
 	Draw_Shapes();
 
 	//Draw shapes projection------------------------------------------------//
-	Draw_ShapeProjection();
+	//Draw_ShapeProjection();
 
 	CU::view.UseShader(View::TEXT_SHADER);	//use light shader
 
@@ -211,6 +234,8 @@ void Scene_SAT_Test::Draw_Shapes()
 {
 	testShape.Draw();
 	testShape_2.Draw();
+	testShape_3.Draw();
+	testShape_4.Draw();
 }
 
 void Scene_SAT_Test::Draw_ShapeProjection()

@@ -14,21 +14,23 @@ class Scene_ECS_2 : public Scene
 	const static int TOTAL_SHAPE = 20;
 	const static int TOTAL_ENTITY = 20;
 
+	int rendererCounter;
+	int colliderCounter;
+	int entityCounter;
+
 	//Renderer comp assign----------------------//
 	Render_InWorld Render_InWorld_List[TOTAL_RENDERER];
 
 	//shape comp assign----------------------//
 	Shape Shape_List[TOTAL_SHAPE];
-	
-	int rendererCounter;
-	int colliderCounter;
-	int entityCounter;
 
 	//Entity----------------------//
 	Entity testEnt[TOTAL_ENTITY];
 
 	/******************** Utilities **********************/
 	void AddRendererToTest(Entity& addToMe, Mesh* mesh, Vector3 pos, Vector3 scale);
+	void AddAsChild(Entity& parent, Entity& child);
+	void AddShape(Entity& addToMe);
 
 public:
 
