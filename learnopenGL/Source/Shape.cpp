@@ -287,7 +287,9 @@ void Shape::CollisionCheck_2(Shape& obstacle)
 		normal1.x = cos(Math::DegreeToRadian(angle));
 		normal1.y = sin(Math::DegreeToRadian(angle));
 		Vector3 offsetAway = normal1 * bounce1;
-		Translate(offsetAway);
+		
+		//Translate(offsetAway);
+		CU::entityMan.GetTopParent_Entity(parentHandle)->Translate(offsetAway);
 	}
 
 	//Collides on Obstacle's axis-------------------------------------//
@@ -301,7 +303,9 @@ void Shape::CollisionCheck_2(Shape& obstacle)
 		normal2.y = sin(Math::DegreeToRadian(angle));
 		
 		Vector3 offsetAway = normal2 * bounce2;
-		Translate(offsetAway);
+		
+		//Translate(offsetAway);
+		CU::entityMan.GetTopParent_Entity(parentHandle)->Translate(offsetAway);
 	}
 
 	//recalculate points--------------------------------//
