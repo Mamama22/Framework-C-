@@ -1,4 +1,5 @@
 #include "Component.h"
+#include "CoreUtilities.h"
 
 Component::Component()
 {
@@ -73,6 +74,15 @@ void Component::Added(Transformation& parentTrans, int parentHandle)
 {
 	transform.AddedToParent(parentTrans);
 	this->parentHandle = parentHandle;
+
+	//offset angle-------------------------------//
+	Entity* bottomParent = CU::entityMan.GetEntity(parentHandle);
+
+	while (bottomParent)
+	{
+		ByParent_Rotate(-bottomParent->transform.angle, Vector3(0, 0, 1));
+		bottomParent = bottomParent->GetParent();
+	}
 }
 
 /********************************************************************************

@@ -15,6 +15,7 @@ void SharedResources::Init()
 	sphere_1 = MeshBuilder::GenerateSphere(Color(26, 125, 44), 36, 36, 0.5f);
 	line_1 = MeshBuilder::GenerateLine(Color(51.f, 211.f, 219.f));
 	line_2 = MeshBuilder::GenerateLine(Color(248, 194, 252));
+	line_start0 = MeshBuilder::GenerateLine(Color(248, 194, 252), true);
 	axes = MeshBuilder::GenerateAxes();
 }
 
@@ -29,7 +30,7 @@ void SharedResources::Exit()
 	delete line_1;
 	delete line_2;
 	delete axes;
-	delete quad, quad_1, quad_2;
+	delete quad, quad_1, quad_2, line_start0;
 }
 
 /********************************************************************************

@@ -22,6 +22,7 @@ public:
 	Mesh* sphere_1;
 	Mesh* line_1;
 	Mesh* line_2;
+	Mesh* line_start0;
 	Mesh* axes;
 	Mtx44 mtx[10];
 

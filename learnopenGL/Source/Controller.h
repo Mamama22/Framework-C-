@@ -7,6 +7,7 @@
 #include "Scene_Collision.h"
 #include "Scene_SAT_Test.h"
 #include "Scene_ECS_2.h"
+#include "Scene_Intersection.h"
 
 /*************************************************************
 New and improved controller
@@ -23,6 +24,7 @@ class Controller
 	Scene_Collision sceneCollision;
 	Scene_SAT_Test scene_SAT_Test;
 	Scene_ECS_2	scene_ECS_2;
+	Scene_Intersection scene_inter;
 
 	/********************** FPS **********************/
 	const static unsigned char Controller::FPS; // FPS of this game (ONLY RELEASE MODE CAN RUN SMOOTHLY AT 170FPS MAX)

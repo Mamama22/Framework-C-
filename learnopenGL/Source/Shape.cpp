@@ -170,6 +170,7 @@ Translate: translate in direction of shape
 ********************************************************************************/
 void Shape::Translate(Vector3 vel)
 {
+	cout << "FUCK" << endl;
 	Component::Translate(vel);
 	this->vel = vel;	//if never translate, last vel before stationary is stored
 }

@@ -142,6 +142,12 @@ void Entity::ByParent_Rotate(float angle, Vector3 axis)
 	transform.angle += angle;
 	if (transform.angle < 0.f)transform.angle += 360.f;
 	else if (transform.angle > 360.f)transform.angle -= 360.f;
+
+	//rotate all children by parent (angle, does not affect their TRS)-------------//
+	for (int i = 0; i < children.size(); ++i)
+		children[i]->ByParent_Rotate(angle, axis);
+	for (int i = 0; i < componentList.size(); ++i)
+		componentList[i]->ByParent_Rotate(angle, axis);
 }
 
 /********************************************************************************

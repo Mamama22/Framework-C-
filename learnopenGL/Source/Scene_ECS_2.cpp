@@ -36,6 +36,7 @@ void Scene_ECS_2::Init()
 
 	//Add shape---------------------------------------------------------//
 	AddShape(testEnt[0]);
+	AddShape(testEnt[1]);
 	AddShape(testEnt[2]);
 }
 
@@ -94,11 +95,11 @@ void Scene_ECS_2::Run()
 		testEnt[0].Translate(Vector3(2.f, 0, 0));
 
 	if (CU::input.IsKeyPressed(Input::C))
-	{
 		testEnt[0].Rotate(-2.f, Vector3(0, 0, 1));
-	}
+	if (CU::input.IsKeyPressed(Input::V))
+		testEnt[1].Rotate(-2.f, Vector3(0, 0, 1));
 	if (CU::input.IsKeyPressed(Input::B))
-		testEnt[1].Rotate(2.f, Vector3(0, 0, 1));
+		testEnt[2].Rotate(2.f, Vector3(0, 0, 1));
 
 	//Add entities to main test entity-------------------------------//
 	if (CU::input.IsKeyReleased(Input::N))
@@ -111,8 +112,12 @@ void Scene_ECS_2::Run()
 	//stage 3: Update with changes ===========================================================//
 
 	//collision check-------------------------------//
-	if (Shape_List[0].isActive() && Shape_List[1].isActive())
+	if (Shape_List[0].isActive() && Shape_List[1].isActive() && Shape_List[2].isActive())
+	{
 		Shape_List[0].CollisionCheck_2(Shape_List[1]);
+		Shape_List[0].CollisionCheck_2(Shape_List[2]);
+		Shape_List[1].CollisionCheck_2(Shape_List[2]);
+	}
 
 	//Entity update------------------------------------------------------//
 	for (int i = 0; i < entityCounter; ++i)
