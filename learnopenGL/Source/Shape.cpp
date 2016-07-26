@@ -205,6 +205,11 @@ void Shape::ByParent_Rotate(float angle, Vector3 axis)
 	}
 }
 
+void Shape::ByParent_Translate(Vector3 vel)
+{
+	Component::ByParent_Translate(vel);
+}
+
 /********************************************************************************
 Draw outlines
 ********************************************************************************/
@@ -275,6 +280,11 @@ void Shape::CollisionCheck_2(Shape& obstacle)
 		go1 = true;
 
 	//Collides on This's axis-------------------------------------//
+	Vector3 offsetAway;
+	float transformAngle = transform.angle;	//use local/parent entity angle
+	if (transformByGrandParent)	//if transformed by grandparent, use grandparent's angle, if not dir will be wrong
+		transformAngle = CU::entityMan.GetTopParent_Entity(parentHandle)->transform.angle;
+
 	if (go1)
 	{
 		//Invert collided face's normal to face inwards which pushes itself away--------------------//
@@ -284,13 +294,10 @@ void Shape::CollisionCheck_2(Shape& obstacle)
 		//Offset direction by angle rotated---------------------------------------//
 		float angle = Vector3::getAngleFromDir(normal1.x, normal1.y);
 		//cout << "Angle: " << angle << endl;
-		angle -= transform.angle;
+		angle -= transformAngle;
 		normal1.x = cos(Math::DegreeToRadian(angle));
 		normal1.y = sin(Math::DegreeToRadian(angle));
-		Vector3 offsetAway = normal1 * bounce1;
-		
-		//Translate(offsetAway);
-		CU::entityMan.GetTopParent_Entity(parentHandle)->Translate(offsetAway);
+		offsetAway = normal1 * bounce1;
 	}
 
 	//Collides on Obstacle's axis-------------------------------------//
@@ -299,15 +306,18 @@ void Shape::CollisionCheck_2(Shape& obstacle)
 		//Offset direction by angle rotated---------------------------------------//
 		float angle = Vector3::getAngleFromDir(normal2.x, normal2.y);
 
-		angle -= transform.angle;
+		angle -= transformAngle;
 		normal2.x = cos(Math::DegreeToRadian(angle));
 		normal2.y = sin(Math::DegreeToRadian(angle));
 		
-		Vector3 offsetAway = normal2 * bounce2;
-		
-		//Translate(offsetAway);
-		CU::entityMan.GetTopParent_Entity(parentHandle)->Translate(offsetAway);
+		offsetAway = normal2 * bounce2;
 	}
+
+	//Translate(offsetAway);
+	if (transformByGrandParent)
+		CU::entityMan.GetTopParent_Entity(parentHandle)->Translate(offsetAway * 1.05f);
+	else
+		CU::entityMan.GetEntity(parentHandle)->Translate(offsetAway * 1.05f);
 
 	//recalculate points--------------------------------//
 	RecalculatePoints(false);
@@ -474,15 +484,20 @@ void Shape::ProjectOntoNormal(Shape& projected, const Vector3& normal, float sto
 /********************************************************************************
 Cal TRS with parent
 ********************************************************************************/
-void Shape::CalculateTRS_WithParent(const Mtx44& parentRotMat)
+void Shape::CalculateTRS_WithParent(const Mtx44& parentRotMat, bool GrandParentTransform)
 {
-	Component::CalculateTRS_WithParent(parentRotMat);
+	Component::CalculateTRS_WithParent(parentRotMat, GrandParentTransform);
 	RecalculatePoints(false);
+}
+
+void Shape::PreUpdate()
+{
+
 }
 
 void Shape::Update()
 {
-	
+	transformByGrandParent = false;
 }
 
 /********************************************************************************

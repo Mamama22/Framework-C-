@@ -24,6 +24,7 @@ class Component
 {
 protected:
 
+	bool transformByGrandParent;	//is it transforming by the grand-parent? Since component's parent is entity
 	int parentHandle;
 	const char* name;
 	bool active;	//only updates when active
@@ -54,17 +55,22 @@ public:
 	/******************** CALLED BY PARENT ONLY **********************/
 	//Add/removal---------------------------------------------//
 	void Added(Transformation& parentTrans, int parentHandle);
+
+	//added/removed action----------------------------------//
+	void Added_ToEntity(int handle);	//call for every entity in chain, immediate to bottom
 	void Removed();
 
 	//transformation---------------------------------------------//
+	virtual void ByParent_Translate(Vector3 vel);
 	virtual void ByParent_Rotate(float angle, Vector3 axis);
 
 	/******************** Entity Transformation function: ENTITY USE ONLY **********************/
-	virtual void CalculateTRS_WithParent(const Mtx44& parentRotMat);
+	virtual void CalculateTRS_WithParent(const Mtx44& parentRotMat, bool GrandParentTransform);
 
 	/******************** Get functions **********************/
 	const char* GetName();
 	bool isActive();
+	bool GetTransByGrandParent();
 
 	/******************** State functions **********************/
 	void SetActive(bool b);

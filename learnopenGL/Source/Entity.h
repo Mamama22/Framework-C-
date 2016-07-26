@@ -53,12 +53,16 @@ protected:
 	void Added(Entity* parent);	//if this entity added, do something
 	void Removed();	//if this entity removed, do something
 
+	//added/removed action----------------------------------//
+	void Added_ToEntity(Entity* addedTo);	//call for every entity in chain, immediate to bottom
+
 	/******************** Derive urself functions **********************/
 	virtual void UpdateEntity();
 
 public:
 	
 	/******************** public var **********************/
+	bool parentTransforming;
 	Transformation transform;
 
 	/******************** Constructor/destructor **********************/
@@ -75,6 +79,7 @@ public:
 	void Init(Vector3 pos, Vector3 scale);
 
 	//Will be called everytime BEFORE comp updates-------------------//
+	void PreUpdate();
 	void Update();
 
 	//Call in stage 2 and 4--------------------------------------//
@@ -89,6 +94,7 @@ public:
 	virtual void CalculateTRS_WithParent(const Mtx44& parentRotMat);
 
 	//transformation---------------------------------------------//
+	virtual void ByParent_Translate(Vector3 vel);
 	virtual void ByParent_Rotate(float angle, Vector3 axis);
 
 	/******************** Get set **********************/

@@ -106,14 +106,16 @@ public:
 
 	/******************** CALLED BY PARENT ONLY **********************/
 	//transformation---------------------------------------------//
-	virtual void ByParent_Rotate(float angle, Vector3 axis);
+	void ByParent_Translate(Vector3 vel);
+	void ByParent_Rotate(float angle, Vector3 axis);
 
 	/************************************* Projection functions ***************************************/
 	void ProjectShapeOntoThis(Shape& projectMe, float** list);	//project passed in shape onto this shape
 
-	void CalculateTRS_WithParent(const Mtx44& parentRotMat);
+	void CalculateTRS_WithParent(const Mtx44& parentRotMat, bool GrandParentTransform);
 	
 	/******************** Core functions **********************/
+	void PreUpdate();
 	void Update();
 	void Draw();
 

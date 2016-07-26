@@ -67,6 +67,11 @@ void Component::ByParent_Rotate(float angle, Vector3 axis)
 	else if (transform.angle > 360.f)transform.angle -= 360.f;
 }
 
+void Component::ByParent_Translate(Vector3 vel)
+{
+
+}
+
 /********************************************************************************
 Added
 ********************************************************************************/
@@ -75,13 +80,20 @@ void Component::Added(Transformation& parentTrans, int parentHandle)
 	transform.AddedToParent(parentTrans);
 	this->parentHandle = parentHandle;
 
-	//offset angle-------------------------------//
-	Entity* bottomParent = CU::entityMan.GetEntity(parentHandle);
+	//action--------------------------//
+	Added_ToEntity(parentHandle);
+}
 
-	while (bottomParent)
+/********************************************************************************
+Added to entity action
+********************************************************************************/
+void Component::Added_ToEntity(int handle)
+{
+	Entity* ent = CU::entityMan.GetEntity(handle);
+	while (ent)
 	{
-		ByParent_Rotate(-bottomParent->transform.angle, Vector3(0, 0, 1));
-		bottomParent = bottomParent->GetParent();
+		//Rotate(-ent->transform.angle, Vector3(0, 0, 1));
+		ent = ent->GetParent();
 	}
 }
 
@@ -97,9 +109,13 @@ void Component::Removed()
 Rotate with entity (parent): when entity rotates, pos of this component
 changes along the axis entity rotates
 ********************************************************************************/
-void Component::CalculateTRS_WithParent(const Mtx44& parentRotMat)
+void Component::CalculateTRS_WithParent(const Mtx44& parentRotMat, bool GrandParentTransform)
 {
 	transform.Calculate_TRS_withParent(parentRotMat);
+
+	//if entity's parent has transformation this frame------------------------//
+	if (GrandParentTransform)
+		transformByGrandParent = true;
 }
 
 /********************************************************************************
@@ -107,6 +123,7 @@ Getter/setter
 ********************************************************************************/
 const char* Component::GetName(){ return name; }
 bool Component::isActive(){ return active; }
+bool Component::GetTransByGrandParent(){ return transformByGrandParent; }
 
 /********************************************************************************
 State

@@ -28,9 +28,9 @@ void Scene_ECS_2::Init()
 	testEnt[entityCounter++].Init(Vector3(100.f, 100.f, 0.f), Vector3(1.f, 1.f, 1.f));
 
 	//Add renderer------------------------------------------------------//
-	AddRendererToTest(testEnt[0], CU::shared.quad, Vector3(-100.f, -1.f, 0.f), Vector3(70.f, 70.f, 70.f));
-	AddRendererToTest(testEnt[1], CU::shared.quad_1, Vector3(-100.f, 80.f, 0.f), Vector3(70.f, 70.f, 70.f));
-	AddRendererToTest(testEnt[2], CU::shared.quad_2, Vector3(100.f, 100.f, 0.f), Vector3(70.f, 70.f, 70.f));
+	AddRendererToTest(testEnt[0], CU::shared.quad, Vector3(-100.f + 17.5f, -1.f, 0.f), Vector3(35, 35, 35));
+	AddRendererToTest(testEnt[1], CU::shared.quad_1, Vector3(-100.f + 17.5f, 80.f, 0.f), Vector3(35, 35, 35));
+	AddRendererToTest(testEnt[2], CU::shared.quad_2, Vector3(100.f + 17.5f, 100.f, 0.f), Vector3(35, 35, 35));
 
 	colliderCounter = 0;
 
@@ -83,6 +83,14 @@ void Scene_ECS_2::Run()
 	Scene::Run();
 
 	//Stage 1: States, flags and values update ===========================================================//
+	for (int i = 0; i < entityCounter; ++i)
+	{
+		testEnt[i].PreUpdate();
+	}
+
+	//reset by parent rotate------------------------------------------------------//
+	for (int i = 0; i < colliderCounter; ++i)
+		Shape_List[colliderCounter].PreUpdate();
 
 	//Control---------------------------------------------------------------------//
 	if (CU::input.IsKeyPressed(Input::ARROW_UP))
@@ -93,6 +101,15 @@ void Scene_ECS_2::Run()
 		testEnt[0].Translate(Vector3(-2.f, 0, 0));
 	if (CU::input.IsKeyPressed(Input::ARROW_RIGHT))
 		testEnt[0].Translate(Vector3(2.f, 0, 0));
+
+	if (CU::input.IsKeyPressed(Input::W))
+		testEnt[1].Translate(Vector3(0, 2.f, 0));
+	if (CU::input.IsKeyPressed(Input::S))
+		testEnt[1].Translate(Vector3(0, -2.f, 0));
+	if (CU::input.IsKeyPressed(Input::A))
+		testEnt[1].Translate(Vector3(-2.f, 0, 0));
+	if (CU::input.IsKeyPressed(Input::D))
+		testEnt[1].Translate(Vector3(2.f, 0, 0));
 
 	if (CU::input.IsKeyPressed(Input::C))
 		testEnt[0].Rotate(-2.f, Vector3(0, 0, 1));
@@ -108,6 +125,8 @@ void Scene_ECS_2::Run()
 	//Stage 2: TRS calculations for Entity and Comp ===========================================================//
 	for (int i = 0; i < entityCounter; ++i)
 		testEnt[i].CalculateTRS();
+
+	cout << "Shape 1 pos: " << Shape_List[1].transform.angle << endl;
 
 	//stage 3: Update with changes ===========================================================//
 
