@@ -13,10 +13,17 @@ void SharedResources::Init()
 	boundingBox_Mesh = MeshBuilder::GenerateDebugQuad(Color(42, 212, 175));
 	sphere = MeshBuilder::GenerateSphere(Color(255, 255, 0), 36, 36, 0.5f);
 	sphere_1 = MeshBuilder::GenerateSphere(Color(26, 125, 44), 36, 36, 0.5f);
-	line_1 = MeshBuilder::GenerateLine(Color(51.f, 211.f, 219.f));
+	line_1 = MeshBuilder::GenerateLine(Color(51.f, 211.f, 219.f), true);
 	line_2 = MeshBuilder::GenerateLine(Color(248, 194, 252));
+	line_3 = MeshBuilder::GenerateLine(Color(73.f, 196.f, 188.f));
 	line_start0 = MeshBuilder::GenerateLine(Color(248, 194, 252), true);
+	line_start0_1 = MeshBuilder::GenerateLine(Color(201, 124, 68), true);
 	axes = MeshBuilder::GenerateAxes();
+
+	//floor
+	floorQuad = MeshBuilder::GenerateQuad(Color(104, 115, 88), 1.f, 1.f, false);
+	playerQuad = MeshBuilder::GenerateQuad(Color(157, 212, 76), 1.f, 1.f, false);
+	turretQuad = MeshBuilder::GenerateQuad(Color(28, 128, 65), 1.f, 1.f, false);
 }
 
 /********************************************************************************
@@ -28,9 +35,9 @@ void SharedResources::Exit()
 	delete sphere;
 	delete sphere_1;
 	delete line_1;
-	delete line_2;
+	delete line_2, line_3;
 	delete axes;
-	delete quad, quad_1, quad_2, line_start0;
+	delete quad, quad_1, quad_2, line_start0, line_start0_1, floorQuad, playerQuad, turretQuad;
 }
 
 /********************************************************************************

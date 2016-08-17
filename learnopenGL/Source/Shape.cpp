@@ -71,6 +71,66 @@ void Face::Rotate(float angle)
 	this->normal = this->dir.Cross(Vector3(0, 0, 1));
 }
 
+
+/********************************************************************************
+plane intersection
+********************************************************************************/
+bool Face::intersectPlane(const Vector3 &n, const Vector3 &p0, const Vector3 &l0, const Vector3 &l, float &t)
+{
+	// assuming vectors are all normalized, so dot product order does not matter
+	float denom = n.Dot(l);
+
+	//cout << "Denom: " << denom << endl;
+	
+	if (denom > 1e-6)
+	{
+		Vector3 p0l0 = p0 - l0;
+		t = p0l0.Dot(n) / denom;
+		return (t >= 0);
+	}
+
+	return false;
+}
+
+/********************************************************************************
+test line intersection
+********************************************************************************/
+bool Face::LineIntersection(const Vector3& lineOrigin, float lineAngle, vector<Point>& pList, Vector3& intersectedPos)
+{
+	//offset everything to (0,0)
+	Vector3 offset = lineOrigin;
+
+	Vector3 rayNormal;
+
+	rayNormal.x = cos(Math::DegreeToRadian(lineAngle));
+	rayNormal.y = sin(Math::DegreeToRadian(lineAngle));
+	float t = 0.f;
+
+
+	//plane pos
+	Vector3 planePos = pList[start].pos + (dir * len * 0.5f);
+
+	bool intersectedPlane = intersectPlane(-normal, planePos, lineOrigin, rayNormal, t);
+
+	if (intersectedPlane)
+	{
+		intersectedPos = lineOrigin + rayNormal * t;
+
+		//check if intersected pos is "out of range"
+		float lensq = (intersectedPos - planePos).LengthSquared();
+		float halfLenPlane = len * 0.5f;
+
+		//out of range of the plane width
+		if (lensq > halfLenPlane * halfLenPlane)
+			intersectedPlane = false;
+
+		//add with offset
+		intersectedPos -= offset;
+	}
+
+	return intersectedPlane;
+}
+
 /********************************************************************************
 Face draw
 ********************************************************************************/
@@ -170,7 +230,6 @@ Translate: translate in direction of shape
 ********************************************************************************/
 void Shape::Translate(Vector3 vel)
 {
-	cout << "FUCK" << endl;
 	Component::Translate(vel);
 	this->vel = vel;	//if never translate, last vel before stationary is stored
 }
@@ -519,3 +578,17 @@ void Shape::Draw()
 get/set
 ********************************************************************************/
 int Shape::Get_TotalPoints(){ return pointList.size(); }
+
+bool Shape::CheckLineIntersection(const Vector3& lineOrigin, float lineAngle, Vector3& intersectedPos)
+{
+	bool intersected = false;
+	for (int i = 0; i < faceList.size(); ++i)
+	{
+		intersected = faceList[i].LineIntersection(lineOrigin, lineAngle, pointList, intersectedPos);
+
+		//no concave shape, can do this
+		if (intersected)
+			return true;
+	}
+	return false;
+}

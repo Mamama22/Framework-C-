@@ -51,6 +51,9 @@ public:
 	void Set(int startPoint_index, int endPoint_index, vector<Point>& pointList, bool debug = false);
 	void Rotate(float angle);
 	void Draw(vector<Point>& pointList);
+
+	static bool intersectPlane(const Vector3 &n, const Vector3 &p0, const Vector3 &l0, const Vector3 &l, float &t);
+	bool LineIntersection(const Vector3& lineOrigin, float lineAngle, vector<Point>& pList, Vector3& intersectedPos);
 };
 
 /*************************************************************
@@ -121,6 +124,8 @@ public:
 
 	/******************** Get set functions **********************/
 	int Get_TotalPoints();
+
+	bool CheckLineIntersection(const Vector3& lineOrigin, float lineAngle, Vector3& intersectedPos);
 };
 
 #endif

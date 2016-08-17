@@ -26,11 +26,17 @@ void Scene_ECS_2::Init()
 	testEnt[entityCounter++].Init(Vector3(-100.f, -1.f, 0.f), Vector3(1.f, 1.f, 1.f));
 	testEnt[entityCounter++].Init(Vector3(-100.f, 80.f, 0.f), Vector3(1.f, 1.f, 1.f));
 	testEnt[entityCounter++].Init(Vector3(100.f, 100.f, 0.f), Vector3(1.f, 1.f, 1.f));
+	testEnt[entityCounter++].Init(Vector3(100.f, -100.f, 0.f), Vector3(1.f, 1.f, 1.f));
+	testEnt[entityCounter++].Init(Vector3(250.f, -200.f, 0.f), Vector3(1.f, 1.f, 1.f));
+	testEnt[entityCounter++].Init(Vector3(-50.f, -200.f, 0.f), Vector3(1.f, 1.f, 1.f));
 
 	//Add renderer------------------------------------------------------//
 	AddRendererToTest(testEnt[0], CU::shared.quad, Vector3(-100.f + 17.5f, -1.f, 0.f), Vector3(35, 35, 35));
 	AddRendererToTest(testEnt[1], CU::shared.quad_1, Vector3(-100.f + 17.5f, 80.f, 0.f), Vector3(35, 35, 35));
 	AddRendererToTest(testEnt[2], CU::shared.quad_2, Vector3(100.f + 17.5f, 100.f, 0.f), Vector3(35, 35, 35));
+	AddRendererToTest(testEnt[3], CU::shared.quad_2, Vector3(100.f + 17.5f, -100.f, 0.f), Vector3(35, 35, 35));
+	AddRendererToTest(testEnt[4], CU::shared.quad_2, Vector3(250.f + 17.5f, -200.f, 0.f), Vector3(35, 35, 35));
+	AddRendererToTest(testEnt[5], CU::shared.quad_2, Vector3(-50.f + 17.5f, -200.f, 0.f), Vector3(35, 35, 35));
 
 	colliderCounter = 0;
 
@@ -38,6 +44,9 @@ void Scene_ECS_2::Init()
 	AddShape(testEnt[0]);
 	AddShape(testEnt[1]);
 	AddShape(testEnt[2]);
+	AddShape(testEnt[3]);
+	AddShape(testEnt[4]);
+	AddShape(testEnt[5]);
 }
 
 /********************************************************************************
@@ -63,7 +72,11 @@ void Scene_ECS_2::AddShape(Entity& addToMe)
 	Shape_List[colliderCounter].AddPoint(Vector3(-40.0f, -40.f, 0.f));
 	Shape_List[colliderCounter].AddPoint(Vector3(40.f, -40.f, 0.f));
 	Shape_List[colliderCounter].AddPoint(Vector3(40.f, 40.f, 0.f));
-	Shape_List[colliderCounter].AddPoint(Vector3(-40.f, 40.0f, 0.f));
+
+	if (colliderCounter >= 2)
+		Shape_List[colliderCounter].AddPoint(Vector3(-80.f, 80.0f, 0.f));
+	else
+		Shape_List[colliderCounter].AddPoint(Vector3(-40.f, 40.0f, 0.f));
 
 	//calculate faces for this shape--------------------------//
 	Shape_List[colliderCounter].CalculateFaces();
@@ -126,16 +139,25 @@ void Scene_ECS_2::Run()
 	for (int i = 0; i < entityCounter; ++i)
 		testEnt[i].CalculateTRS();
 
-	cout << "Shape 1 pos: " << Shape_List[1].transform.angle << endl;
 
 	//stage 3: Update with changes ===========================================================//
 
 	//collision check-------------------------------//
-	if (Shape_List[0].isActive() && Shape_List[1].isActive() && Shape_List[2].isActive())
+	if (Shape_List[0].isActive() && Shape_List[1].isActive() && Shape_List[2].isActive() &&
+		Shape_List[3].isActive() && Shape_List[4].isActive() && Shape_List[5].isActive())
 	{
-		Shape_List[0].CollisionCheck_2(Shape_List[1]);
+		//0 and 1 against the rest
 		Shape_List[0].CollisionCheck_2(Shape_List[2]);
 		Shape_List[1].CollisionCheck_2(Shape_List[2]);
+
+		Shape_List[0].CollisionCheck_2(Shape_List[3]);
+		Shape_List[1].CollisionCheck_2(Shape_List[3]);
+
+		Shape_List[0].CollisionCheck_2(Shape_List[4]);
+		Shape_List[1].CollisionCheck_2(Shape_List[4]);
+
+		Shape_List[0].CollisionCheck_2(Shape_List[5]);
+		Shape_List[1].CollisionCheck_2(Shape_List[5]);
 	}
 
 	//Entity update------------------------------------------------------//

@@ -1,16 +1,16 @@
-#include "Scene_Intersection.h"
+#include "Scene_PlaneInter.h"
 
-Scene_Intersection::Scene_Intersection()
+Scene_PlaneInter::Scene_PlaneInter()
 {
 }
 
 
-Scene_Intersection::~Scene_Intersection(){}
+Scene_PlaneInter::~Scene_PlaneInter(){}
 
 /********************************************************************************
 Init
 ********************************************************************************/
-void Scene_Intersection::Init()
+void Scene_PlaneInter::Init()
 {
 	//Call parent--------------------------------------//
 	Scene::Init();
@@ -18,17 +18,22 @@ void Scene_Intersection::Init()
 	//ray-------------------------------------//
 	rayAngle = 0.f;
 	rayLength = 1000.f;
+	rayPos.Set(0, 0, 0);
 
-	//sphere--------------------------------//
-	spherePos.Set(100, 100, 0);
-	sphereRadius = 50.f;
-	intersectedSphere = 0;
+	//plane--------------------------------//
+	planePos.Set(100, 100, 0);
+	planeAngle = 210;
+	intersectedPlane = 0;
+	planeLength = 200.f;
+
+	planeNormal.x = cos(Math::DegreeToRadian(planeAngle));
+	planeNormal.y = sin(Math::DegreeToRadian(planeAngle));
 }
 
 /********************************************************************************
 Utilities
 ********************************************************************************/
-void Scene_Intersection::RotateRay(float amt)
+void Scene_PlaneInter::RotateRay(float amt)
 {
 	rayAngle += amt;
 	if (rayAngle > 360.f)
@@ -37,58 +42,64 @@ void Scene_Intersection::RotateRay(float amt)
 		rayAngle += 360.f;
 }
 
-void Scene_Intersection::CheckIntersection()
+/********************************************************************************
+n: ray normal
+po: plane center pos
+l0: ray origin pos
+
+t: the dist from l0 to p0
+********************************************************************************/
+bool intersectPlane(const Vector3 &n, const Vector3 &p0, const Vector3 &l0, const Vector3 &l, float &t)
 {
-	//Get dir-----------------------------------------//
-	Vector3 dir;
-	dir.x = cos(Math::DegreeToRadian(rayAngle));
-	dir.y = sin(Math::DegreeToRadian(rayAngle));
+	// assuming vectors are all normalized, so dot product order does not matter
+	float denom = n.Dot(l);
 
-	//project sphere onto dir-----------------------------------------//
-	float projected = spherePos.Dot(dir);
+	//cout << "Denom: " << denom << endl;
 
-	//check if sphere is behind pos------------------------------------//
-	if (projected <= 0.f)
-		return;
-
-	//get length of projected and center---------------------------//
-	Vector3 projectedPos = dir * projected;
-	float lenSq = (spherePos - projectedPos).LengthSquared();
-
-	//intersection check---------------------------//
-	if (lenSq == sphereRadius * sphereRadius)	//just touching
+	if (denom > 1e-6) 
 	{
-		intersectedSphere = 1;
-		intersectedPos = projectedPos;
+		Vector3 p0l0 = p0 - l0;
+		t = p0l0.Dot(n) / denom;
+		return (t >= 0);
 	}
-	else if (lenSq < sphereRadius * sphereRadius)	//2 points
-	{
-		float a = sphereRadius * sphereRadius;	//hypo
-		float b = (projectedPos - spherePos).LengthSquared();	//opp
-		float c = a - b;	//A len = H len ^ 2 - O len ^ 2
-		float di1 = projected - sqrt(c);
 
-		//check if ray origin inside sphere-----------------------//
-		if (projected < sphereRadius)
-			intersectedSphere = 0;
-		else
-		{
-			intersectedSphere = 2;
+	return false;
+}
 
-			//get both intersected pos----------------------------------------------//
-			intersectedPos = dir * di1;
-		}
-	}
-	else
+
+/********************************************************************************
+check intersection with plane
+********************************************************************************/
+void Scene_PlaneInter::CheckIntersection()
+{
+	Vector3 rayNormal;
+
+	rayNormal.x = cos(Math::DegreeToRadian(rayAngle));
+	rayNormal.y = sin(Math::DegreeToRadian(rayAngle));
+	float t = 0.f;
+
+	//cout << "Ray normal: " << rayNormal << endl;
+
+	intersectedPlane = intersectPlane(-planeNormal, planePos, rayPos, rayNormal, t);
+
+	if (intersectedPlane)
 	{
-		intersectedSphere = 0;
+		intersectedPos = rayPos + rayNormal * t;
+
+		//check if intersected pos is "out of range"
+		float lensq = (intersectedPos - planePos).LengthSquared();
+		float halfLenPlane = planeLength * 0.5f;
+		
+		//out of range of the plane width
+		if (lensq > halfLenPlane * halfLenPlane)
+			intersectedPlane = false;
 	}
 }
 
 /********************************************************************************
 Run
 ********************************************************************************/
-void Scene_Intersection::Run()
+void Scene_PlaneInter::Run()
 {
 	//Call parent--------------------------------------//
 	Scene::Run();
@@ -96,29 +107,29 @@ void Scene_Intersection::Run()
 	//Stage 1: States, flags and values update ===========================================================//
 
 	//Control---------------------------------------------------------------------//
-	if (CU::input.IsKeyPressed(Input::ARROW_UP))
+	/*if (CU::input.IsKeyPressed(Input::ARROW_UP))
 		spherePos.y += 2.f;
 	if (CU::input.IsKeyPressed(Input::ARROW_DOWN))
 		spherePos.y -= 2.f;
 	if (CU::input.IsKeyPressed(Input::ARROW_LEFT))
 		spherePos.x -= 2.f;
 	if (CU::input.IsKeyPressed(Input::ARROW_RIGHT))
-		spherePos.x += 2.f;
+		spherePos.x += 2.f;*/
 
 	if (CU::input.IsKeyPressed(Input::C))	//turn left
 	{
-		RotateRay(0.5f);
+		RotateRay(1.f);
 	}
 	if (CU::input.IsKeyPressed(Input::B))	//turn right
 	{
-		RotateRay(-0.5f);
+		RotateRay(-1.f);
 	}
 
 	//check intersection---------------------------------------------------------------------//
 	CheckIntersection();
 
 	//Stage 2: TRS calculations for Entity and Comp ===========================================================//
-	
+
 	//stage 3: Update with changes ===========================================================//
 
 
@@ -128,7 +139,7 @@ void Scene_Intersection::Run()
 /********************************************************************************
 Draw in world
 ********************************************************************************/
-void Scene_Intersection::DrawInWorld()
+void Scene_PlaneInter::DrawInWorld()
 {
 	CU::view.UseShader(View::BASIC_SHADER);	//use basic shader
 }
@@ -136,28 +147,41 @@ void Scene_Intersection::DrawInWorld()
 /********************************************************************************
 Draw on screen
 ********************************************************************************/
-void Scene_Intersection::DrawOnScreen()
+void Scene_PlaneInter::DrawOnScreen()
 {
 	//Axes----------------------------------------------------//
 	CU::view.SetIdentity();
 	CU::view.Scale(2000.f, 2000.f, 2000.f);
 	CU::view.RenderMesh(*CU::shared.axes);
 
-	//Sphere----------------------------------------------------//
+	//plane----------------------------------------------------//
+	glLineWidth(3.5f);
 	CU::view.SetIdentity();
-	CU::view.Translate(spherePos.x, spherePos.y, 1.f);
-	CU::view.Scale(sphereRadius * 2.f, sphereRadius * 2.f, 1.f);
-	CU::view.RenderMesh(*CU::shared.sphere);
+	CU::view.Translate(planePos.x, planePos.y, 1.f);
+	CU::view.Rotate(planeAngle + 90.f, 0.f, 0.f, 1.f);
+	CU::view.Scale(planeLength, 1.f, 1.f);
+	CU::view.RenderMesh(*CU::shared.line_3);
+	glLineWidth(1.f);
+
+	//normal------------//
+	glLineWidth(2.5f);
+	CU::view.SetIdentity();
+	CU::view.Translate(planePos.x, planePos.y, 1.f);
+	CU::view.Rotate(planeAngle, 0.f, 0.f, 1.f);
+	CU::view.Scale(100.f, 1.f, 1.f);
+	CU::view.RenderMesh(*CU::shared.line_start0_1);
+	glLineWidth(1.f);
 
 	//ray----------------------------------------------------//
 	CU::view.SetIdentity();
+	CU::view.Translate(rayPos.x, rayPos.y, rayPos.z);
 	CU::view.Rotate(rayAngle, 0, 0, 1);
 
 	float len = rayLength;
-		
-	if (intersectedSphere)
+
+	if (intersectedPlane)
 		len = intersectedPos.Length();
-	
+
 	CU::view.Scale(len, len, 1.f);
 	CU::view.RenderMesh(*CU::shared.line_start0);
 
@@ -178,7 +202,7 @@ void Scene_Intersection::DrawOnScreen()
 	CU::view.RenderText("OWL CITY", Vector2(50.f, -290.f), 1.f, Color(242.f, 242.f, 7.f));
 
 	//if intersect----------------------------------------------------------//
-	if (intersectedSphere)
+	if (intersectedPlane)
 	{
 		CU::view.RenderText("INTERSECTED", Vector2(100.f, 250.f), 1.f, Color(193, 240, 180));
 	}
@@ -187,7 +211,7 @@ void Scene_Intersection::DrawOnScreen()
 /********************************************************************************
 Exit
 ********************************************************************************/
-void Scene_Intersection::Exit()
+void Scene_PlaneInter::Exit()
 {
 	//Call parent--------------------------------------//
 	Scene::Exit();

@@ -22,8 +22,14 @@ public:
 	Mesh* sphere_1;
 	Mesh* line_1;
 	Mesh* line_2;
+	Mesh* line_3;
 	Mesh* line_start0;
+	Mesh* line_start0_1;
 	Mesh* axes;
+
+	Mesh* floorQuad;
+	Mesh* playerQuad;
+	Mesh* turretQuad;
 	Mtx44 mtx[10];
 
 	/******************** core **********************/
