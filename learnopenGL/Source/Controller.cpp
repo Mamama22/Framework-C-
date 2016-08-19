@@ -17,7 +17,9 @@ void Controller::Init()
 	CU::input.SetMouse(false);	//no mouse used
 
 	//Init scene-----------------------------------//
-	current_scene = &scene_game;
+	//scene_boxhead
+	//scene_ECS_2
+	current_scene = &scene_boxhead;
 	current_scene->Init();
 }
 

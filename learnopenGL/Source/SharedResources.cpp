@@ -35,9 +35,17 @@ void SharedResources::Exit()
 	delete sphere;
 	delete sphere_1;
 	delete line_1;
-	delete line_2, line_3;
+	delete line_2;
+	delete line_3;
 	delete axes;
-	delete quad, quad_1, quad_2, line_start0, line_start0_1, floorQuad, playerQuad, turretQuad;
+	delete quad;
+	delete quad_1;
+	delete quad_2;
+	delete line_start0;
+	delete line_start0_1;
+	delete floorQuad;
+	delete playerQuad;
+	delete turretQuad;
 }
 
 /********************************************************************************

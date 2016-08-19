@@ -315,6 +315,9 @@ Vector3 normal1, normal2;
 float bounce1 = 0.f, bounce2 = 0.f;
 void Shape::CollisionCheck_2(Shape& obstacle)
 {
+	normal1.SetZero();
+	normal2.SetZero();
+
 	bounce1 = bounce2 = 100000000000000000000.f;
 	float offsetDistSq_1 = 0.f;
 	float offsetDistSq_2 = 0.f;
@@ -344,6 +347,8 @@ void Shape::CollisionCheck_2(Shape& obstacle)
 	if (transformByGrandParent)	//if transformed by grandparent, use grandparent's angle, if not dir will be wrong
 		transformAngle = CU::entityMan.GetTopParent_Entity(parentHandle)->transform.angle;
 
+	Vector3 oriNormal = normal1;
+
 	if (go1)
 	{
 		//Invert collided face's normal to face inwards which pushes itself away--------------------//
@@ -372,11 +377,15 @@ void Shape::CollisionCheck_2(Shape& obstacle)
 		offsetAway = normal2 * bounce2;
 	}
 
-	//Translate(offsetAway);
+
 	if (transformByGrandParent)
+	{
 		CU::entityMan.GetTopParent_Entity(parentHandle)->Translate(offsetAway * 1.05f);
+	}
 	else
+	{
 		CU::entityMan.GetEntity(parentHandle)->Translate(offsetAway * 1.05f);
+	}
 
 	//recalculate points--------------------------------//
 	RecalculatePoints(false);
@@ -409,6 +418,11 @@ Shape* OTHER_SHAPE = NULL;
 float furthestProjLen = 0.f;
 
 float shortestLen = 0.f;
+
+/////////
+//collided1 = SAT_CollisionCheck(obstacle, normal1, bounce1, true, offsetDistSq_1);	//obstacle onto THIS
+//////////
+
 bool Shape::SAT_CollisionCheck(Shape& checkMe, Vector3& normal, float& bounce, bool thisShape, float& offsetDistSq)
 {
 	p_bounceList.clear();
@@ -448,13 +462,11 @@ bool Shape::SAT_CollisionCheck(Shape& checkMe, Vector3& normal, float& bounce, b
 	
 
 	//loop through shortest length/s, find the one that propells this shape furthest away----------------------------//
-	int count = 0;
 	for (int i = 0; i < faceList.size(); ++i)
 	{
 		//if is shortest length---------------------------------//
 		if (p_bounceList[i] < bounce + 0.1f)
 		{
-			count++;
 			projPos = THIS_SHAPE->transform.pos;
 			projNormal = faceList[i].normal;
 
@@ -465,12 +477,13 @@ bool Shape::SAT_CollisionCheck(Shape& checkMe, Vector3& normal, float& bounce, b
 				projNormal.y *= -1.f;
 			}
 			
+			//et the projected pos---------------------------------------------//
 			projPos += projNormal * p_bounceList[i];
 
 			//the furthest away from pos is the correct projection------------------------------//
-			if (furthestProjLen < abs((projPos - OTHER_SHAPE->transform.pos).LengthSquared()))
+			if (furthestProjLen < abs((projPos - OTHER_SHAPE->transform.pos).Length()))
 			{
-				offsetDistSq = furthestProjLen = abs((projPos - OTHER_SHAPE->transform.pos).LengthSquared());
+				offsetDistSq = furthestProjLen = abs((projPos - OTHER_SHAPE->transform.pos).Length());
 				normal = faceList[i].normal;
 			}
 		}

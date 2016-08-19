@@ -18,6 +18,7 @@ Date: 23/6/2016
 #include <iostream>
 #include "Mtx44.h"
 #include "Vector3.h"
+#include "Vector2.h"
 #include "MatrixStack.h"
 #include <vector>
 

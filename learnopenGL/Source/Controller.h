@@ -10,6 +10,7 @@
 #include "Scene_Intersection.h"
 #include "Scene_PlaneInter.h"
 #include "Scene_Game.h"
+#include "Scene_Boxhead.h"
 
 /*************************************************************
 New and improved controller
@@ -29,6 +30,7 @@ class Controller
 	Scene_Intersection scene_inter;
 	Scene_PlaneInter scene_planeInter;
 	Scene_Game scene_game;
+	Scene_Boxhead scene_boxhead;
 
 	/********************** FPS **********************/
 	const static unsigned char Controller::FPS; // FPS of this game (ONLY RELEASE MODE CAN RUN SMOOTHLY AT 170FPS MAX)

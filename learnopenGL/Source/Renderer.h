@@ -50,6 +50,23 @@ public:
 };
 
 /*************************************************************
+Render on screen repetitive
+
+Author: Tan Yie Cher
+Date: 4/7/2016
+/*************************************************************/
+class Render_Repetitive : public Renderer
+{
+public:
+
+	int X_repeat, Y_repeat;
+	Vector2 offsetPerMesh;
+
+	/******************** abstract functions **********************/
+	void Draw();	//render
+};
+
+/*************************************************************
 Render in world
 
 Author: Tan Yie Cher

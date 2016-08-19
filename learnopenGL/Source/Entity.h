@@ -89,6 +89,7 @@ public:
 	void Translate(Vector3 vel);
 	void Rotate(float angle, Vector3 axis);
 
+
 	/******************** CALLED BY PARENT ONLY **********************/
 	//TRS---------------------------------------------//
 	virtual void CalculateTRS_WithParent(const Mtx44& parentRotMat);
