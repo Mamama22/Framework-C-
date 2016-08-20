@@ -60,6 +60,16 @@ void Transformation::Rotate(float angle, Vector3 axis)
 }
 
 /********************************************************************************
+transform the final TRS: certain functions might need real time updated pos
+********************************************************************************/
+void Transformation::TranslateFInalTRS(Vector3 vel)
+{
+	this->pos += vel;
+	sharedMtx[0].SetToTranslation(vel.x, vel.y, vel.z);
+	finalTRS = finalTRS * sharedMtx[0];
+}
+
+/********************************************************************************
 Offset TRS to parent TRS
 Assume list is TRS order
 Scale not counted

@@ -111,10 +111,10 @@ void Scene_SAT_Test::Run()
 	Update_Shapes();
 
 	//Stage 2: TRS calculations for Entity and Comp ===========================================================//
-	testShape.RecalculatePoints(true);	//called by calculate TRS with parents but for now stand-alone since no entity adds this
-	testShape_2.RecalculatePoints(false);
-	testShape_3.RecalculatePoints(false);
-	testShape_4.RecalculatePoints(false);
+	testShape.RecalculatePoints();	//called by calculate TRS with parents but for now stand-alone since no entity adds this
+	testShape_2.RecalculatePoints();
+	testShape_3.RecalculatePoints();
+	testShape_4.RecalculatePoints();
 
 	//stage 3: Update with changes ===========================================================//
 
@@ -124,10 +124,10 @@ void Scene_SAT_Test::Run()
 	testShape.CollisionCheck_2(testShape_4);
 
 	//Stage 4: 2nd TRS calculations for Entity and Comp (For those with changes) ===========================================================//
-	testShape.RecalculatePoints(false);	//called by calculate TRS with parents but for now stand-alone since no entity adds this
-	testShape_2.RecalculatePoints(false);
-	testShape_3.RecalculatePoints(false);
-	testShape_4.RecalculatePoints(false);
+	testShape.RecalculatePoints();	//called by calculate TRS with parents but for now stand-alone since no entity adds this
+	testShape_2.RecalculatePoints();
+	testShape_3.RecalculatePoints();
+	testShape_4.RecalculatePoints();
 
 	//get updated shape projections---------------//
 	Calculate_ShapeProjections();

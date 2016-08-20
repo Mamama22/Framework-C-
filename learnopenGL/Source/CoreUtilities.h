@@ -32,6 +32,7 @@ public:
 		input.Init();
 		view.Init();
 		shared.Init();
+		entityMan.Init();
 	}
 
 	static void Exit()

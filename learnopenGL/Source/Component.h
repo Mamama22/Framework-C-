@@ -29,7 +29,7 @@ protected:
 	const char* name;
 	bool active;	//only updates when active
 
-	/******************** abstract functions **********************/
+	/******************** optional abstract functions to overload **********************/
 	virtual void UpdatingComp();
 
 public:
@@ -43,6 +43,7 @@ public:
 
 	/******************** comp functions **********************/
 	void Init(const char* name);
+	virtual void PreUpdate();
 	void Update();
 
 	/******************** abstract functions **********************/
@@ -54,17 +55,19 @@ public:
 
 	/******************** CALLED BY PARENT ONLY **********************/
 	//Add/removal---------------------------------------------//
-	void Added(Transformation& parentTrans, int parentHandle);
+	void Added(Transformation& parentTrans, int parentHandle);	//Init
 
-	//added/removed action----------------------------------//
-	void Added_ToEntity(int handle);	//call for every entity in chain, immediate to bottom
+	//Added to GRAND PARENT entity
+	virtual void Added_ToEntity(int handle);	//Update, call for every entity in chain, immediate to bottom
+	
+	//removal---------------------------------------------//
 	void Removed();
 
 	//transformation---------------------------------------------//
 	virtual void ByParent_Translate(Vector3 vel);
 	virtual void ByParent_Rotate(float angle, Vector3 axis);
 
-	/******************** Entity Transformation function: ENTITY USE ONLY **********************/
+	/******************** Entity Transformation function: CALLED BY ENTITY ONLY **********************/
 	virtual void CalculateTRS_WithParent(const Mtx44& parentRotMat, bool GrandParentTransform);
 
 	/******************** Get functions **********************/

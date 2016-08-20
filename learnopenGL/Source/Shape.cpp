@@ -37,7 +37,7 @@ Face::~Face(){}
 /********************************************************************************
 Face init
 ********************************************************************************/
-void Face::Set(int startPoint_index, int endPoint_index, vector<Point>& pList, bool debug)
+void Face::Set(int startPoint_index, int endPoint_index, vector<Point>& pList)
 {
 	//Indexes--------------------------------------------------------//
 	this->start = startPoint_index;
@@ -77,11 +77,8 @@ plane intersection
 ********************************************************************************/
 bool Face::intersectPlane(const Vector3 &n, const Vector3 &p0, const Vector3 &l0, const Vector3 &l, float &t)
 {
-	// assuming vectors are all normalized, so dot product order does not matter
 	float denom = n.Dot(l);
 
-	//cout << "Denom: " << denom << endl;
-	
 	if (denom > 1e-6)
 	{
 		Vector3 p0l0 = p0 - l0;
@@ -153,12 +150,16 @@ void Face::Draw(vector<Point>& pointList)
 /********************************************************************************
 Constructor/destructor
 ********************************************************************************/
-Shape::Shape()
+Shape::Shape() : Renderer()
 {
+	collided = collide_withParent = false;
+	parent_shape = NULL;
 }
 
 Shape::Shape(const Shape& copyMe) : Renderer(copyMe)
 {
+	collided = collide_withParent = false;
+	parent_shape = NULL;
 }
 
 Shape::~Shape()
@@ -231,7 +232,6 @@ Translate: translate in direction of shape
 void Shape::Translate(Vector3 vel)
 {
 	Component::Translate(vel);
-	this->vel = vel;	//if never translate, last vel before stationary is stored
 }
 
 /********************************************************************************
@@ -239,7 +239,7 @@ Roatae: recalculate pos
 ********************************************************************************/
 void Shape::Rotate(float angle)
 {
-	Component::Rotate(angle, Vector3(0,0,1));
+	Component::Rotate(angle, Vector3(0, 0, 1));
 
 	//rotate and change pos------------------------//
 	for (int i = 0; i < faceList.size(); ++i)
@@ -250,7 +250,7 @@ void Shape::Rotate(float angle)
 }
 
 /********************************************************************************
-Rotate by parent: does not affect TRS
+Transform by parent (Does not affect TRS)
 ********************************************************************************/
 void Shape::ByParent_Rotate(float angle, Vector3 axis)
 {
@@ -264,15 +264,30 @@ void Shape::ByParent_Rotate(float angle, Vector3 axis)
 	}
 }
 
-void Shape::ByParent_Translate(Vector3 vel)
+/********************************************************************************
+If shae added to entity
+********************************************************************************/
+void Shape::Added_ToEntity(int handle)
 {
-	Component::ByParent_Translate(vel);
+	//Get list of children comp of grand parent
+	CU::entityMan.GetEntityComp(handle);
+
+	//Get their shape collider
+	for (int j = 0; j < CU::entityMan.compList.size(); ++j)
+	{
+		if (CU::entityMan.CheckCompType<Shape>(CU::entityMan.compList[j]))	//if matchs shape
+		{
+			static_cast<Shape*>(CU::entityMan.compList[j])->childrenShapes.push_back(this);
+			parent_shape = static_cast<Shape*>(CU::entityMan.compList[j]);
+			break;
+		}
+	}
 }
 
 /********************************************************************************
 Draw outlines
 ********************************************************************************/
-void Shape::RecalculatePoints(bool debug)
+void Shape::RecalculatePoints()
 {
 	//All points pos calculated with updated TRS------------------------------------------//
 	for (int i = 0; i < pointList.size(); ++i)
@@ -288,24 +303,14 @@ void Shape::RecalculatePoints(bool debug)
 
 	transform.pos.Set(1, 1, 0);
 	transform.pos = transform.finalTRS * transform.pos;
-
-	/*for (int i = 0; i < pointList.size(); ++i)
-	{
-		if (i < pointList.size() - 1)
-			faceList[i].Set(i, i + 1, pointList, transform.pos);
-		else
-			faceList[i].Set(i, 0, pointList, transform.pos);
-	}*/
 }
 
-bool isBetweenOrdered(float val, float lowerBound, float upperBound) {
-	return lowerBound <= val && val <= upperBound;
-}
-bool overlaps(float min1, float max1, float min2, float max2)
-{
-	return isBetweenOrdered(min2, min1, max1) || isBetweenOrdered(min1, min2, max2);
-}
-
+/********************************************************************************
+Utilities
+********************************************************************************/
+bool isBetweenOrdered(float val, float lowerBound, float upperBound) {return lowerBound <= val && val <= upperBound;}
+bool overlaps(float min1, float max1, float min2, float max2){
+	return isBetweenOrdered(min2, min1, max1) || isBetweenOrdered(min1, min2, max2);}
 
 /********************************************************************************
 Collision check
@@ -315,22 +320,34 @@ Vector3 normal1, normal2;
 float bounce1 = 0.f, bounce2 = 0.f;
 void Shape::CollisionCheck_2(Shape& obstacle)
 {
-	normal1.SetZero();
-	normal2.SetZero();
+	//If transformed by parent and collides, check if parent's shape is colliding,
+	//if yes, child shape will collide by itself
+	collide_withParent = transformByGrandParent;
 
+	if (parent_shape && transformByGrandParent)
+	{
+		collide_withParent = !parent_shape->collided;	//cal. collision with Parent if Parent is not collided
+	}
+	
+	//resetting---------------------------------------------------//
 	bounce1 = bounce2 = 100000000000000000000.f;
 	float offsetDistSq_1 = 0.f;
 	float offsetDistSq_2 = 0.f;
 
-	//Collision check-------------------------------------//
+	//Collision check--------------------------------------------------------------------------------------//
 	collided1 = SAT_CollisionCheck(obstacle, normal1, bounce1, true, offsetDistSq_1);	//obstacle onto THIS
 	collided2 = obstacle.SAT_CollisionCheck(*this, normal2, bounce2, false, offsetDistSq_2);	//this onto OBSTACLE
 
+	//Absolute no collision--------------------------------------------------------------------------------//
 	if (!collided1 || !collided2)
 		return;
-	
-	bool go1 = false;	//use THIS
 
+	collided = true;	//set the flag
+
+	//Collision positive--------------------------------------------------------------------------------//
+	bool go1 = false;	//use THIS SHAPE
+
+	//same offset factor check------------------------//
 	if (bounce1 == bounce2)
 	{
 		if (offsetDistSq_1 > offsetDistSq_2)
@@ -341,54 +358,35 @@ void Shape::CollisionCheck_2(Shape& obstacle)
 	else if (bounce1 < bounce2)
 		go1 = true;
 
-	//Collides on This's axis-------------------------------------//
+	//Collides on This's axis--------------------------------------------------------------------------------//
 	Vector3 offsetAway;
-	float transformAngle = transform.angle;	//use local/parent entity angle
-	if (transformByGrandParent)	//if transformed by grandparent, use grandparent's angle, if not dir will be wrong
+	float transformAngle = transform.angle;	//use local angle
+
+	//if transformed by grandparent, use grandparent's angle, if not dir will be wrong------//
+	if (collide_withParent)
 		transformAngle = CU::entityMan.GetTopParent_Entity(parentHandle)->transform.angle;
 
-	Vector3 oriNormal = normal1;
 
-	if (go1)
+	//Collide offset--------------------------------------------------------------------------------------------//
+	Vector3 theNormal = (go1) ? normal1 * -1.f : normal2;	//get the normal from collided side (if THIS shape normal, invert to face out)
+	float theBounce = (go1) ? bounce1 : bounce2;
+
+	//offset away------------------------------------------//
+	float angle = Vector3::getAngleFromDir(theNormal.x, theNormal.y);
+	angle -= transformAngle;
+	theNormal.x = cos(Math::DegreeToRadian(angle));
+	theNormal.y = sin(Math::DegreeToRadian(angle));
+	offsetAway = theNormal * theBounce;
+
+	//Set collision offset vel-------------------------------------------------------------------------------------//
+	vel = offsetAway * 1.05f;
+
+	//translate children shapes by the offset------------------------------------------------------//
+	for (int i = 0; i < childrenShapes.size(); ++i)
 	{
-		//Invert collided face's normal to face inwards which pushes itself away--------------------//
-		normal1.x *= -1.f;
-		normal1.y *= -1.f;
-
-		//Offset direction by angle rotated---------------------------------------//
-		float angle = Vector3::getAngleFromDir(normal1.x, normal1.y);
-		//cout << "Angle: " << angle << endl;
-		angle -= transformAngle;
-		normal1.x = cos(Math::DegreeToRadian(angle));
-		normal1.y = sin(Math::DegreeToRadian(angle));
-		offsetAway = normal1 * bounce1;
+		childrenShapes[i]->transform.TranslateFInalTRS(vel);
+		childrenShapes[i]->RecalculatePoints();	//accurate real-time pos
 	}
-
-	//Collides on Obstacle's axis-------------------------------------//
-	else
-	{
-		//Offset direction by angle rotated---------------------------------------//
-		float angle = Vector3::getAngleFromDir(normal2.x, normal2.y);
-
-		angle -= transformAngle;
-		normal2.x = cos(Math::DegreeToRadian(angle));
-		normal2.y = sin(Math::DegreeToRadian(angle));
-		
-		offsetAway = normal2 * bounce2;
-	}
-
-
-	if (transformByGrandParent)
-	{
-		CU::entityMan.GetTopParent_Entity(parentHandle)->Translate(offsetAway * 1.05f);
-	}
-	else
-	{
-		CU::entityMan.GetEntity(parentHandle)->Translate(offsetAway * 1.05f);
-	}
-
-	//recalculate points--------------------------------//
-	RecalculatePoints(false);
 }
 
 void Shape::TranslatePosWithAngle(Vector3& pos, Vector3 dir, float speed)
@@ -415,13 +413,9 @@ Vector3 projNormal;
 Vector3 projPos;
 Shape* THIS_SHAPE = NULL;
 Shape* OTHER_SHAPE = NULL;
+
 float furthestProjLen = 0.f;
-
 float shortestLen = 0.f;
-
-/////////
-//collided1 = SAT_CollisionCheck(obstacle, normal1, bounce1, true, offsetDistSq_1);	//obstacle onto THIS
-//////////
 
 bool Shape::SAT_CollisionCheck(Shape& checkMe, Vector3& normal, float& bounce, bool thisShape, float& offsetDistSq)
 {
@@ -439,7 +433,7 @@ bool Shape::SAT_CollisionCheck(Shape& checkMe, Vector3& normal, float& bounce, b
 		ProjectOntoNormal(*this, faceList[i].normal, projectedPoints);
 
 		//intersection test: if a axis is not intersected, no collision------------------------------------------------------------//
-		if (IntersectionTest_2(projectedPoints, projectedPoints_other, intersectedLen))
+		if (IntersectionTest(projectedPoints, projectedPoints_other, intersectedLen))
 		{
 			if (bounce > intersectedLen)
 			{
@@ -459,7 +453,7 @@ bool Shape::SAT_CollisionCheck(Shape& checkMe, Vector3& normal, float& bounce, b
 	//if not THIS shape, swap------------------------------//
 	if (!thisShape)
 		swap(THIS_SHAPE, OTHER_SHAPE);
-	
+
 
 	//loop through shortest length/s, find the one that propells this shape furthest away----------------------------//
 	for (int i = 0; i < faceList.size(); ++i)
@@ -476,7 +470,7 @@ bool Shape::SAT_CollisionCheck(Shape& checkMe, Vector3& normal, float& bounce, b
 				projNormal.x *= -1.f;
 				projNormal.y *= -1.f;
 			}
-			
+
 			//et the projected pos---------------------------------------------//
 			projPos += projNormal * p_bounceList[i];
 
@@ -495,7 +489,7 @@ bool Shape::SAT_CollisionCheck(Shape& checkMe, Vector3& normal, float& bounce, b
 /********************************************************************************
 Test intersection of projected pair 1 and 2
 param intersectedLen: how much is intersected previously, if this check has a shorter
-						intersection, than intersectedLen will be updated
+intersection, than intersectedLen will be updated
 
 return: True if new intersected length is assigned
 
@@ -504,7 +498,7 @@ proj_2: CHECK shape
 
 Note: Does not check if intersectedLen_assign smaller than new intersect
 ********************************************************************************/
-bool Shape::IntersectionTest_2(float proj_1[], float proj_2[], float& intersectedLen_assign)
+bool Shape::IntersectionTest(float proj_1[], float proj_2[], float& intersectedLen_assign)
 {
 	//Total length if both min/max were lined together-------------------------------------//
 	float totalLength = (proj_1[1] - proj_1[0]) + (proj_2[1] - proj_2[0]);
@@ -519,7 +513,7 @@ bool Shape::IntersectionTest_2(float proj_1[], float proj_2[], float& intersecte
 
 
 		//if is shortest---------------------//
-		intersectedLen_assign = intersectedLen;		
+		intersectedLen_assign = intersectedLen;
 
 		return true;
 	}
@@ -559,17 +553,31 @@ Cal TRS with parent
 void Shape::CalculateTRS_WithParent(const Mtx44& parentRotMat, bool GrandParentTransform)
 {
 	Component::CalculateTRS_WithParent(parentRotMat, GrandParentTransform);
-	RecalculatePoints(false);
+
+	//If first pass-----------------------------------------------------------//
+	RecalculatePoints();
 }
 
 void Shape::PreUpdate()
 {
-
+	Component::PreUpdate();
+	collided = collide_withParent = false;
+	vel.SetZero();
 }
 
 void Shape::Update()
 {
+	//reset flags--------------------------------------------------------//
 	transformByGrandParent = false;
+
+	if (collide_withParent)	//ancestor transform with this shape
+	{
+		CU::entityMan.GetTopParent_Entity(parentHandle)->Translate(vel);
+	}
+	else
+	{
+		CU::entityMan.GetEntity(parentHandle)->Translate(vel);
+	}
 }
 
 /********************************************************************************

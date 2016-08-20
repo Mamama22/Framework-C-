@@ -21,12 +21,33 @@ protected:
 
 public:
 
+	//to get list of child/comp from a entity (RESIZED TO 10)
+	vector<Entity*> childrenList;
+	vector<Component*> compList;
+
+	void Init();
+
 	/******************** comp functions **********************/
 	int RegisterEntity(Entity* regMe);
 
 	/******************** get functions **********************/
 	Entity* GetEntity(int handle);
 	Entity* GetTopParent_Entity(int handle);
+
+	void GetEntityChildren(int handle);
+	void GetEntityComp(int handle);
+
+	/********************************************************************************
+	Check if given component is of this class type
+	********************************************************************************/
+	template<class T>
+	bool CheckCompType(Component* checkMe)
+	{
+		if (dynamic_cast<T*>(checkMe))
+				return true;
+
+		return false;
+	}
 };
 
 

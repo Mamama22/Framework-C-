@@ -95,6 +95,9 @@ public:
 	void Scale(Vector3 scale);
 	void Rotate(float angle, Vector3 axis);
 
+	/******************** Transform final TRS: modify final TRS if other functions need it **********************/
+	void TranslateFInalTRS(Vector3 vel);
+
 	/******************** Custom Transformation **********************/
 	void Start_CustomTrans(bool applyToChildren);
 	void Custom_Translate(Vector3 vel);

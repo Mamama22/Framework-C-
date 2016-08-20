@@ -109,6 +109,10 @@ void Entity::Added(Entity* parent)
 		Added_ToEntity(theParent);
 		theParent = theParent->GetParent();
 	}
+
+	//Comp added------------------------------------------------//
+	for (int i = 0; i < componentList.size(); ++i)
+		componentList[i]->Added_ToEntity(parent->handle);
 }
 
 /********************************************************************************
@@ -269,6 +273,18 @@ Entity* Entity::GetTopParent()
 	while (parent_ptr->parent)
 		parent_ptr = parent_ptr->parent;
 	return parent_ptr;
+}
+
+void Entity::GetChildrenList(vector<Entity*>& list)
+{
+	for (int i = 0; i < children.size(); ++i)
+		list[i] = children[i];
+}
+
+void Entity::GetCompList(vector<Component*>& list)
+{
+	for (int i = 0; i < componentList.size(); ++i)
+		list[i] = componentList[i];
 }
 
 int Entity::Gethandle(){ return handle; }

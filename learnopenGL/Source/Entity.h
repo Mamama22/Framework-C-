@@ -54,7 +54,7 @@ protected:
 	void Removed();	//if this entity removed, do something
 
 	//added/removed action----------------------------------//
-	void Added_ToEntity(Entity* addedTo);	//call for every entity in chain, immediate to bottom
+	virtual void Added_ToEntity(Entity* addedTo);	//call for every entity in chain, immediate to bottom
 
 	/******************** Derive urself functions **********************/
 	virtual void UpdateEntity();
@@ -101,13 +101,13 @@ public:
 	/******************** Get set **********************/
 	Entity* GetParent();
 	Entity* GetTopParent();	//get the very top parent
+	void GetChildrenList(vector<Entity*>& list);
+	void GetCompList(vector<Component*>& list);
 	int Gethandle();
 	void Sethandle(int handle);
 
 	/******************** abstract functions **********************/
 	virtual void Exit(){}
-
-
 
 
 	/********************************************************************************

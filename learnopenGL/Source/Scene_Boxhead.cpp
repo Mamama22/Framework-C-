@@ -19,6 +19,7 @@ void Scene_Boxhead::Init()
 	colliderCounter = entityCounter = 0;
 
 	//Player-----------------------------------------------------------//
+	//MAKE SURE PLAYER INIT FIRST< SINCE IT'S SHAPE WILL BE PARENT
 	playerStart_index = entityCounter;
 	InitCharacter(&player, Vector3(0,0,0));
 	InitCharacter(&pickUp, Vector3(100, -100, 0));
@@ -145,14 +146,16 @@ void Scene_Boxhead::Run()
 	//Call parent--------------------------------------//
 	Scene::Run();
 
-
-	//Stage 1: States, flags and values update ===========================================================//
+	//PRE-UPDATE ===========================================================//
 	for (int i = 0; i < entityCounter; ++i)
 		testEnt[i].PreUpdate();
 
 	//component pre-update (If have)----------------------------------------------//
 	for (int i = 0; i < colliderCounter; ++i)
-		Shape_List[colliderCounter].PreUpdate();
+		Shape_List[i].PreUpdate();
+
+
+	//Stage 1: States, flags and values update ===========================================================//
 
 	//Control---------------------------------------------------------------------//
 	//Input (Pre-update)
@@ -169,7 +172,6 @@ void Scene_Boxhead::Run()
 
 
 	//stage 3: Update with changes ===========================================================//
-
 	
 	//collision check-------------------------------//
 	for (int i = obStart_index; i < obEnd_index; ++i)
@@ -178,16 +180,17 @@ void Scene_Boxhead::Run()
 			Shape_List[j].CollisionCheck_2(Shape_List[i]);
 	}
 
+
 	//Entity update------------------------------------------------------//
 	for (int i = 0; i < entityCounter; ++i)
 		testEnt[i].Update();
 
 	//Comp update-----------------------------------------------------//
-	for (int i = 0; i < TOTAL_RENDERER; ++i)
+	for (int i = 0; i < rendererCounter; ++i)
 	{
 		Render_InWorld_List[i].Update();
 	}
-	for (int i = 0; i < TOTAL_SHAPE; ++i)
+	for (int i = 0; i < colliderCounter; ++i)
 	{
 		Shape_List[i].Update();
 	}
@@ -212,14 +215,14 @@ void Scene_Boxhead::UpdatePlayerInput()
 	if (CU::input.IsKeyPressed(Input::D))
 		player->Translate(Vector3(2.f, 0, 0));
 
-	//if (CU::input.IsKeyPressed(Input::ARROW_UP))
-	//	pickUp->Translate(Vector3(0, 2.f, 0));
-	//if (CU::input.IsKeyPressed(Input::ARROW_DOWN))
-	//	pickUp->Translate(Vector3(0, -2.f, 0));
-	//if (CU::input.IsKeyPressed(Input::ARROW_LEFT))
-	//	pickUp->Translate(Vector3(-2.f, 0, 0));
-	//if (CU::input.IsKeyPressed(Input::ARROW_RIGHT))
-	//	pickUp->Translate(Vector3(2.f, 0, 0));
+	/*if (CU::input.IsKeyPressed(Input::ARROW_UP))
+		pickUp->Translate(Vector3(0, 2.f, 0));
+	if (CU::input.IsKeyPressed(Input::ARROW_DOWN))
+		pickUp->Translate(Vector3(0, -2.f, 0));
+	if (CU::input.IsKeyPressed(Input::ARROW_LEFT))
+		pickUp->Translate(Vector3(-2.f, 0, 0));
+	if (CU::input.IsKeyPressed(Input::ARROW_RIGHT))
+		pickUp->Translate(Vector3(2.f, 0, 0));*/
 
 	//player's rotation--------------------------------------//
 	if (CU::input.IsKeyPressed(Input::ARROW_LEFT))
@@ -255,11 +258,11 @@ void Scene_Boxhead::DrawOnScreen()
 
 	//Special: Renderer components has a draw function====================================================================//
 	//Renderer Draw---------------------------------------------//
-	for (int i = 0; i < TOTAL_RENDERER; ++i)
+	for (int i = 0; i < rendererCounter; ++i)
 		Render_InWorld_List[i].Draw();
 
 	//shape Draw---------------------------------------------//
-	for (int i = 0; i < TOTAL_SHAPE; ++i)
+	for (int i = 0; i < colliderCounter; ++i)
 		Shape_List[i].Draw();
 
 

@@ -14,7 +14,7 @@ class Point
 {
 public:
 
-	Vector3 pos;
+	Vector3 pos;	
 	Vector3 offset;	//offset from shape
 
 	Point();
@@ -32,7 +32,6 @@ Date: 16/7/2016
 /*************************************************************/
 class Face
 {
-	/******************** static var **********************/
 	static Vector3 shareVec;
 
 public:
@@ -42,16 +41,17 @@ public:
 	~Face();
 
 	unsigned start, end;	//index to start and end point handle
-	float len;
-	float angle;
-	Vector3 dir;
-	Vector3 normal;
+	float len;	//length from start to end
+	float angle;	//angle of dir.
+	Vector3 dir;	//dir
+	Vector3 normal;	//normal, points outwards
 
-	/******************** core functions **********************/
-	void Set(int startPoint_index, int endPoint_index, vector<Point>& pointList, bool debug = false);
+	/**************************************** core functions ******************************************/
+	void Set(int startPoint_index, int endPoint_index, vector<Point>& pointList);
 	void Rotate(float angle);
 	void Draw(vector<Point>& pointList);
 
+	/**************************************** Line intersection ******************************************/
 	static bool intersectPlane(const Vector3 &n, const Vector3 &p0, const Vector3 &l0, const Vector3 &l, float &t);
 	bool LineIntersection(const Vector3& lineOrigin, float lineAngle, vector<Point>& pList, Vector3& intersectedPos);
 };
@@ -63,28 +63,39 @@ Instructions:
 -NO CONCAVE SHAPES, ONLY CONVEX
 -points will be linked in order of list
 
+Issues:
+-Shape* parent, move to private and make int (handle)
+
 Author: Tan Yie Cher
 Date: 16/7/2016
 /*************************************************************/
 class Shape : public Renderer
 {
-	/************************************* Projection functions ***************************************/
-	void GetProjections(Vector3& dir, float list[]); //get list of projection of points of this shape on a axis
-
-	/************************************* Collision check ***************************************/
-	//Project shape 'checkMe' onto this and check
+	/************************************* Projection/Collision functions ***************************************/
+	void GetProjections(Vector3& dir, float list[]);
 	bool SAT_CollisionCheck(Shape& checkMe, Vector3& normal, float& bounce, bool thisShape, float& offsetDistSq);
 	static void ProjectOntoNormal(Shape& projected, const Vector3& normal, float store[]);
-	static bool IntersectionTest_2(float proj_1[], float proj_2[], float& intersectedLen);
+	static bool IntersectionTest(float proj_1[], float proj_2[], float& intersectedLen);
 	void TranslatePosWithAngle(Vector3& pos, Vector3 dir, float speed);
+
+
+	/************************************* optional abstract functions to overload  ***************************************/
+	void Added_ToEntity(int handle);
 
 public:
 
-	/******************************************** var ***************************************************/
+	vector<Shape*> childrenShapes;
+	Shape* parent_shape;		//move to private, change to int
+
+	/******************************************** Collision related ***************************************************/
 	vector<Point> pointList;
 	vector<Face> faceList;	//list of points
 	Vector3 prevPos;
 	Vector3 vel;
+
+	//flags------------------//
+	bool collided;
+	bool collide_withParent;
 
 	/******************** constructor/destructor **********************/
 	Shape();
@@ -97,7 +108,7 @@ public:
 	void Rotate(float angle);
 
 	//call when recalculating TRS
-	void RecalculatePoints(bool debug);
+	void RecalculatePoints();
 
 	/******************** Init functions **********************/
 	void Init(const char* name, Vector3 pos);
@@ -107,15 +118,14 @@ public:
 	/******************** collision functions **********************/
 	void CollisionCheck_2(Shape& obstacle);
 
-	/******************** CALLED BY PARENT ONLY **********************/
+	/******************** CALLED BY PARENT ENTITY ONLY **********************/
 	//transformation---------------------------------------------//
-	void ByParent_Translate(Vector3 vel);
 	void ByParent_Rotate(float angle, Vector3 axis);
+
+	void CalculateTRS_WithParent(const Mtx44& parentRotMat, bool GrandParentTransform);
 
 	/************************************* Projection functions ***************************************/
 	void ProjectShapeOntoThis(Shape& projectMe, float** list);	//project passed in shape onto this shape
-
-	void CalculateTRS_WithParent(const Mtx44& parentRotMat, bool GrandParentTransform);
 	
 	/******************** Core functions **********************/
 	void PreUpdate();
@@ -125,6 +135,7 @@ public:
 	/******************** Get set functions **********************/
 	int Get_TotalPoints();
 
+	/************************************* Line intersection ***************************************/
 	bool CheckLineIntersection(const Vector3& lineOrigin, float lineAngle, Vector3& intersectedPos);
 };
 

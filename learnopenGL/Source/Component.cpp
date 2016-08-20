@@ -4,6 +4,7 @@
 Component::Component()
 {
 	active = false;
+	parentHandle = -1;
 }
 
 Component::Component(const Component& copyMe)
@@ -21,6 +22,11 @@ Init:
 void Component::Init(const char* name)
 {
 	this->name = name;
+}
+
+void Component::PreUpdate()
+{
+	transformByGrandParent = false;
 }
 
 /********************************************************************************
@@ -79,9 +85,6 @@ void Component::Added(Transformation& parentTrans, int parentHandle)
 {
 	transform.AddedToParent(parentTrans);
 	this->parentHandle = parentHandle;
-
-	//action--------------------------//
-	Added_ToEntity(parentHandle);
 }
 
 /********************************************************************************
@@ -89,12 +92,6 @@ Added to entity action
 ********************************************************************************/
 void Component::Added_ToEntity(int handle)
 {
-	Entity* ent = CU::entityMan.GetEntity(handle);
-	while (ent)
-	{
-		//Rotate(-ent->transform.angle, Vector3(0, 0, 1));
-		ent = ent->GetParent();
-	}
 }
 
 /********************************************************************************
@@ -108,6 +105,9 @@ void Component::Removed()
 /********************************************************************************
 Rotate with entity (parent): when entity rotates, pos of this component
 changes along the axis entity rotates
+
+parentRotMat: parent's TRS
+GrandParentTransform: transformed by parent, (Component's grandparent/ancestor)
 ********************************************************************************/
 void Component::CalculateTRS_WithParent(const Mtx44& parentRotMat, bool GrandParentTransform)
 {
