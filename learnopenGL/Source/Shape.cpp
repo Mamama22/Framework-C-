@@ -324,9 +324,10 @@ void Shape::CollisionCheck_2(Shape& obstacle)
 	//if yes, child shape will collide by itself
 	collide_withParent = transformByGrandParent;
 
+
 	if (parent_shape && transformByGrandParent)
 	{
-		collide_withParent = !parent_shape->collided;	//cal. collision with Parent if Parent is not collided
+		//	collide_withParent = !parent_shape->collided;	//cal. collision with Parent if Parent is not collided
 	}
 	
 	//resetting---------------------------------------------------//
@@ -382,11 +383,11 @@ void Shape::CollisionCheck_2(Shape& obstacle)
 	vel = offsetAway * 1.05f;
 
 	//translate children shapes by the offset------------------------------------------------------//
-	for (int i = 0; i < childrenShapes.size(); ++i)
-	{
-		childrenShapes[i]->transform.TranslateFInalTRS(vel);
-		childrenShapes[i]->RecalculatePoints();	//accurate real-time pos
-	}
+	//for (int i = 0; i < childrenShapes.size(); ++i)
+	//{
+	////	childrenShapes[i]->transform.TranslateFInalTRS(vel);
+	////	childrenShapes[i]->RecalculatePoints();	//accurate real-time pos
+	//}
 }
 
 void Shape::TranslatePosWithAngle(Vector3& pos, Vector3 dir, float speed)
