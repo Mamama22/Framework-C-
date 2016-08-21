@@ -4,9 +4,11 @@
 layout(location = 0) in vec3 position;
 layout(location = 1) in vec3 color;
 layout(location = 2) in vec3 normal;
+layout(location = 3) in vec2 texcoord;
 
 //Pass to fragment----------------------------------------//
 out vec3 vertexColor; // Specify a color output to the fragment shader
+out vec2 vertexTexcoord;
 
 //Uniforms-----------------------------------------------//
 uniform mat4 uMV_Matrix;
@@ -16,4 +18,5 @@ void main()
 {
 	gl_Position = uP_Matrix * uMV_Matrix * vec4(position, 1.0);
 	vertexColor = color;
+	vertexTexcoord = texcoord;
 }

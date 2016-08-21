@@ -4,6 +4,7 @@
 in vec3 vertexColor; // The input variable from the vertex shader (same name and same type)
 in vec3 vertexPos;
 in vec3 vertexNormal;
+in vec2 vertexTexcoord;
 
 //To geometry----------------------------------------------//
 out vec4 color;
@@ -26,6 +27,10 @@ uniform int u_TotalPointLight;
 uniform int u_TotalSpotLight;
 
 uniform vec3 u_EyePos;
+
+//Texture----------------------------//
+uniform bool u_TextureEnabled;
+uniform sampler2D u_Texture;
 
 /********************************************************************************************************************************
 Get the basic 3 factors of light
@@ -116,5 +121,8 @@ void main()
 	for(int i = 0; i < u_TotalSpotLight; ++i)	
 		totalColor += CalSpotLight(u_SpotLight_Pos[i], u_SpotLight_Dir[i], normalize(u_SpotLight_Pos[i] - vertexPos), u_SpotLight_Cutoff[i], NobjNormal, VertToEye);
 		
-	color = vec4(vertexColor * totalColor, 1.0f);
+	if(u_TextureEnabled == true)
+		color = texture2D( u_Texture, vertexTexcoord ) * vec4(totalColor, 1.0);
+	else
+		color = vec4(vertexColor * totalColor, 1.0f);
 }
