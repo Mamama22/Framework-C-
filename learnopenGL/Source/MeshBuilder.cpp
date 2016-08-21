@@ -16,12 +16,14 @@ void MeshBuilder::BindBuffers(Mesh& mesh, std::vector<Vertex>& vertex_buffer_dat
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
 	glEnableVertexAttribArray(2);
+	glEnableVertexAttribArray(3);
 
 	//Attributes------------------------------------------------------------------------------------//
 	//All mesh can share the same VAO
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);	//Position
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)sizeof(Position));	//Color
 	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(Position)+sizeof(Color)));	//normal
+	glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(Position)+sizeof(Color)+sizeof(Vector3)));	//texcoord
 
 
 	mesh.indexSize = index_buffer_data.size();
@@ -35,6 +37,7 @@ void MeshBuilder::BindBuffers(Mesh& mesh, std::vector<Vertex>& vertex_buffer_dat
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
 	glDisableVertexAttribArray(2);
+	glDisableVertexAttribArray(3);
 }
 
 /******************************************************************************
@@ -111,68 +114,6 @@ Mesh* MeshBuilder::GenerateLine(Color color, bool start0)
 	index_buffer_data.push_back(1);
 
 	BindBuffers(*mesh, vertex_buffer_data, index_buffer_data, GL_LINES);
-
-	return mesh;
-}
-
-/******************************************************************************
-Generate a quad
-******************************************************************************/
-Mesh* MeshBuilder::GenerateQuad(Color color, float length, float texCoord, bool start0)
-{
-	Mesh *mesh = new Mesh();
-	Vertex v;
-
-	std::vector<Vertex> vertex_buffer_data;
-	std::vector<GLuint> index_buffer_data;
-
-	if (start0)
-	{
-		v.pos.Set(0, 0, 0);
-		v.color = color;
-		v.normal.Set(0, 0, 1);
-		vertex_buffer_data.push_back(v);
-		v.pos.Set(length, 0, 0);
-		v.color = color;
-		v.normal.Set(0, 0, 1);
-		vertex_buffer_data.push_back(v);
-		v.pos.Set(length, length, 0);
-		v.color = color;
-		v.normal.Set(0, 0, 1);
-		vertex_buffer_data.push_back(v);
-		v.pos.Set(0, length, 0);
-		v.color = color;
-		v.normal.Set(0, 0, 1);
-		vertex_buffer_data.push_back(v);
-	}
-	else
-	{
-		v.pos.Set(-0.5f * length, -0.5f * length, 0);
-		v.color = color;
-		v.normal.Set(0, 0, 1);
-		vertex_buffer_data.push_back(v);
-		v.pos.Set(0.5f * length, -0.5f * length, 0);
-		v.color = color;
-		v.normal.Set(0, 0, 1);
-		vertex_buffer_data.push_back(v);
-		v.pos.Set(0.5f * length, 0.5f * length, 0);
-		v.color = color;
-		v.normal.Set(0, 0, 1);
-		vertex_buffer_data.push_back(v);
-		v.pos.Set(-0.5f * length, 0.5f * length, 0);
-		v.color = color;
-		v.normal.Set(0, 0, 1);
-		vertex_buffer_data.push_back(v);
-	}
-
-	index_buffer_data.push_back(3);
-	index_buffer_data.push_back(0);
-	index_buffer_data.push_back(2);
-	index_buffer_data.push_back(1);
-	index_buffer_data.push_back(2);
-	index_buffer_data.push_back(0);
-
-	BindBuffers(*mesh, vertex_buffer_data, index_buffer_data, GL_TRIANGLES);
 
 	return mesh;
 }
@@ -305,6 +246,128 @@ Mesh* MeshBuilder::GenerateSphere(Color color, unsigned numStack, unsigned numSl
 	}
 
 	BindBuffers(*mesh, vertex_buffer_data, index_buffer_data, GL_TRIANGLE_STRIP);
+
+	return mesh;
+}
+
+/******************************************************************************
+Generate a quad
+******************************************************************************/
+Mesh* MeshBuilder::GenerateQuad(Color color, float length, float texCoord, bool start0)
+{
+	Mesh *mesh = new Mesh();
+	Vertex v;
+
+	std::vector<Vertex> vertex_buffer_data;
+	std::vector<GLuint> index_buffer_data;
+
+	if (start0)
+	{
+		v.pos.Set(0, 0, 0);
+		v.color = color;
+		v.normal.Set(0, 0, 1);
+		v.texcoord.Set(0, 0);
+		vertex_buffer_data.push_back(v);
+		v.pos.Set(length, 0, 0);
+		v.color = color;
+		v.normal.Set(0, 0, 1);
+		v.texcoord.Set(1, 0);
+		vertex_buffer_data.push_back(v);
+		v.pos.Set(length, length, 0);
+		v.color = color;
+		v.normal.Set(0, 0, 1);
+		v.texcoord.Set(1, 1);
+		vertex_buffer_data.push_back(v);
+		v.pos.Set(0, length, 0);
+		v.color = color;
+		v.normal.Set(0, 0, 1);
+		v.texcoord.Set(0, 1);
+		vertex_buffer_data.push_back(v);
+	}
+	else
+	{
+		v.pos.Set(-0.5f * length, -0.5f * length, 0);
+		v.color = color;
+		v.normal.Set(0, 0, 1);
+		v.texcoord.Set(0, 0);
+		vertex_buffer_data.push_back(v);
+		v.pos.Set(0.5f * length, -0.5f * length, 0);
+		v.color = color;
+		v.normal.Set(0, 0, 1);
+		v.texcoord.Set(1, 0);
+		vertex_buffer_data.push_back(v);
+		v.pos.Set(0.5f * length, 0.5f * length, 0);
+		v.color = color;
+		v.normal.Set(0, 0, 1);
+		v.texcoord.Set(1, 1);
+		vertex_buffer_data.push_back(v);
+		v.pos.Set(-0.5f * length, 0.5f * length, 0);
+		v.color = color;
+		v.normal.Set(0, 0, 1);
+		v.texcoord.Set(0, 1);
+		vertex_buffer_data.push_back(v);
+	}
+
+	index_buffer_data.push_back(3);
+	index_buffer_data.push_back(0);
+	index_buffer_data.push_back(2);
+	index_buffer_data.push_back(1);
+	index_buffer_data.push_back(2);
+	index_buffer_data.push_back(0);
+
+	BindBuffers(*mesh, vertex_buffer_data, index_buffer_data, GL_TRIANGLES);
+
+	return mesh;
+}
+
+/******************************************************************************
+Generate a sprite animation
+******************************************************************************/
+Mesh* MeshBuilder::GenerateSpriteAnimation(const std::string&, unsigned numRow, unsigned numCol)
+{
+	SpriteAnimation *mesh = new SpriteAnimation(numRow, numCol);
+	std::vector<Vertex> vertex_buffer_data;
+	std::vector<GLuint> index_buffer_data;
+
+	Vertex v;
+
+	float width = 1.f / numCol;
+	float height = 1.f / numRow;
+	int offset = 0;
+	for (unsigned i = 0; i < numRow; ++i)
+	{
+		for (unsigned j = 0; j < numCol; ++j)
+		{
+			float u1 = j * width;
+			float v1 = 1.f - height - i * height;
+			v.pos.Set(-0.5f, -0.5f, 0);
+			v.texcoord.Set(u1, v1);
+			vertex_buffer_data.push_back(v);
+
+			v.pos.Set(0.5f, -0.5f, 0);
+			v.texcoord.Set(u1 + width, v1);
+			vertex_buffer_data.push_back(v);
+
+			v.pos.Set(0.5f, 0.5f, 0);
+			v.texcoord.Set(u1 + width, v1 + height);
+			vertex_buffer_data.push_back(v);
+
+			v.pos.Set(-0.5f, 0.5f, 0);
+			v.texcoord.Set(u1, v1 + height);
+			vertex_buffer_data.push_back(v);
+
+			index_buffer_data.push_back(offset + 0);
+			index_buffer_data.push_back(offset + 1);
+			index_buffer_data.push_back(offset + 2);
+			index_buffer_data.push_back(offset + 0);
+			index_buffer_data.push_back(offset + 2);
+			index_buffer_data.push_back(offset + 3);
+			offset += 4;
+		}
+	}
+
+
+	BindBuffers(*mesh, vertex_buffer_data, index_buffer_data, GL_TRIANGLES);
 
 	return mesh;
 }

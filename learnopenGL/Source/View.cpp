@@ -1,4 +1,5 @@
 #include "View.h"
+#include "CoreUtilities.h"
 
 //screen dimensions----------------------------------//
 //very small: 600, 450
@@ -171,10 +172,6 @@ void View::InitUniforms()
 	uniformMap[LIGHT_SHADER]["uP_Matrix"] = glGetUniformLocation(m_programID, "uP_Matrix");
 	uniformMap[LIGHT_SHADER]["u_EyePos"] = glGetUniformLocation(m_programID, "u_EyePos");
 
-	//basic shader------------------------------------------------------------------------//
-	uniformMap[BASIC_SHADER]["uMV_Matrix"] = glGetUniformLocation(m_basicProgramID, "uMV_Matrix");
-	uniformMap[BASIC_SHADER]["uP_Matrix"] = glGetUniformLocation(m_basicProgramID, "uP_Matrix");
-
 	//Dir Light uniforms------------------------------------------------//
 	uniformMap[LIGHT_SHADER]["u_DirLight_Dir"] = glGetUniformLocation(m_programID, "u_DirLight_Dir");
 	uniformMap[LIGHT_SHADER]["u_DirLight_Color"] = glGetUniformLocation(m_programID, "u_DirLight_Color");
@@ -189,6 +186,18 @@ void View::InitUniforms()
 	uniformMap[LIGHT_SHADER]["u_SpotLight_Dir"] = glGetUniformLocation(m_programID, "u_SpotLight_Dir");
 	uniformMap[LIGHT_SHADER]["u_SpotLight_Cutoff"] = glGetUniformLocation(m_programID, "u_SpotLight_Cutoff");
 	uniformMap[LIGHT_SHADER]["u_TotalSpotLight"] = glGetUniformLocation(m_programID, "u_TotalSpotLight");
+
+	//textures------------------------------------------------------------//
+	uniformMap[LIGHT_SHADER]["u_TextureEnabled"] = glGetUniformLocation(m_programID, "u_TextureEnabled");
+	uniformMap[LIGHT_SHADER]["u_Texture"] = glGetUniformLocation(m_programID, "u_Texture");
+
+	//basic shader------------------------------------------------------------------------//
+	uniformMap[BASIC_SHADER]["uMV_Matrix"] = glGetUniformLocation(m_basicProgramID, "uMV_Matrix");
+	uniformMap[BASIC_SHADER]["uP_Matrix"] = glGetUniformLocation(m_basicProgramID, "uP_Matrix");
+
+	//textures------------------------------------------------------------//
+	uniformMap[BASIC_SHADER]["u_TextureEnabled"] = glGetUniformLocation(m_basicProgramID, "u_TextureEnabled");
+	uniformMap[BASIC_SHADER]["u_Texture"] = glGetUniformLocation(m_basicProgramID, "u_Texture");
 
 	//text shader--------------------------------------------------------//
 	uniformMap[TEXT_SHADER]["uP_Matrix"] = glGetUniformLocation(m_textProgramID, "uP_Matrix");
@@ -435,6 +444,7 @@ void View::RenderMesh(Mesh& renderMe)
 {
 	//Get MV matrix---------------------------------------------------------//
 	mvMatrix = viewStack.Top() * modelStack.Top();
+	SHADER_TYPE shaderType = LIGHT_SHADER;
 	
 	//Pass in uniforms------------------------------------------------------//
 	if (currentShader == LIGHT_SHADER)
@@ -461,8 +471,22 @@ void View::RenderMesh(Mesh& renderMe)
 	}
 	else
 	{
+		shaderType = BASIC_SHADER;
 		glUniformMatrix4fv(uniformMap[BASIC_SHADER]["uMV_Matrix"], 1, GL_FALSE, &mvMatrix.a[0]);
 		glUniformMatrix4fv(uniformMap[BASIC_SHADER]["uP_Matrix"], 1, GL_FALSE, &projectionStack.Top().a[0]);
+	}
+
+	//textures: shaders use the same uniform name-------------------------------------------------------------------------------//
+	if (renderMe.GetTextureID() != -1)
+	{
+		glUniform1i(uniformMap[shaderType]["u_TextureEnabled"], 1);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, CU::shared.textureList[renderMe.GetTextureID()]);
+		glUniform1i(uniformMap[shaderType]["u_Texture"], 0);
+	}
+	else
+	{
+		glUniform1i(uniformMap[shaderType]["u_TextureEnabled"], 0);
 	}
 
 	//Render the mesh-------------------------------------------------------//

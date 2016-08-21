@@ -1,6 +1,7 @@
 #include "SharedResources.h"
 #include "MeshBuilder.h"
 #include "CoreUtilities.h"
+#include "Load_TGA.h"
 
 /********************************************************************************
 Init
@@ -24,6 +25,18 @@ void SharedResources::Init()
 	floorQuad = MeshBuilder::GenerateQuad(Color(104, 115, 88), 1.f, 1.f, false);
 	playerQuad = MeshBuilder::GenerateQuad(Color(157, 212, 76), 1.f, 1.f, false);
 	turretQuad = MeshBuilder::GenerateQuad(Color(28, 128, 65), 1.f, 1.f, false);
+
+	//sprites: Col, Row
+	explosion = MeshBuilder::GenerateSpriteAnimation("FU?", 6, 8);
+	explosion->SetTexture(TEX_SPRITE_EXPLOSION);
+	static_cast<SpriteAnimation*>(explosion)->init(0.02, 0, 0, 7, 5);
+
+	//testures------------------------------------------------------------------//
+	textureList[TEX_MUSIC] = LoadTGA("Image//CatPurple.tga");
+	textureList[TEX_SPRITE_EXPLOSION] = LoadTGA("Image//explosion_hd.tga");
+
+	//preload some textures into meshes---------------------------------//
+	playerQuad->SetTexture(TEX_MUSIC);
 }
 
 /********************************************************************************
@@ -46,6 +59,7 @@ void SharedResources::Exit()
 	delete floorQuad;
 	delete playerQuad;
 	delete turretQuad;
+	delete explosion;
 }
 
 /********************************************************************************

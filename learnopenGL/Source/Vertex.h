@@ -54,6 +54,7 @@ struct Vertex
 	Position pos;
 	Color color;
 	Vector3 normal;
+	TexCoord texcoord;
 
 	Vertex(){}
 };

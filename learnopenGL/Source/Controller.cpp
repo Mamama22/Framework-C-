@@ -58,6 +58,9 @@ void Controller::Run()
 			//call before all-----------------------------------------//
 			CU::input.CheckForKeyPresses();
 
+			//core utilities update-----------------------------------//
+			CU::Update();
+
 			//Scene update-------------------------------------------//
 			current_scene->Run();
 			

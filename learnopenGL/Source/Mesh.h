@@ -15,9 +15,11 @@ Note:
 /*************************************************************/
 class Mesh
 {
+protected:
 	static int currentMesh;	//Keeps track of last rendered mesh ID
 	static int totalMeshes;
-	int meshID;	
+	int meshID;
+	TEXTURE_ENUM textureID;
 
 public:
 
@@ -26,7 +28,6 @@ public:
 	unsigned m_vertexArrayID;
 	unsigned indexBuffer;
 	unsigned indexSize;
-	unsigned textureID;
 	unsigned mode;
 
 	//CD--------------------------------//
@@ -34,9 +35,13 @@ public:
 	~Mesh();
 
 	//Core------------------------------//
-	void Render();
+	virtual void Render();
+	virtual void Render(unsigned offset, unsigned count);
 
 	static void ResetCurrentMesh();	//call
+
+	void SetTexture(TEXTURE_ENUM id);
+	int GetTextureID();
 };
 
 #endif

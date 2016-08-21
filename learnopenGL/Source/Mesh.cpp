@@ -16,7 +16,8 @@ Mesh::Mesh()
 	//generate buffers------------------------//
 	glGenBuffers(1, &vertexBuffer);
 	glGenBuffers(1, &indexBuffer);
-	textureID = indexSize = 0;
+	indexSize = 0;
+	textureID = (TEXTURE_ENUM)-1;
 
 	//Vertex Attrib obj : shader normal and basic--------------------------------------------------------//
 	glGenVertexArrays(1, &m_vertexArrayID);	//normal
@@ -30,6 +31,13 @@ Mesh::~Mesh()
 	glDeleteBuffers(1, &vertexBuffer);
 	glDeleteBuffers(1, &indexBuffer);
 }
+
+void Mesh::SetTexture(TEXTURE_ENUM id)
+{
+	this->textureID = id;
+}
+
+int Mesh::GetTextureID(){ return this->textureID; }
 
 /********************************************************************************
 Render
@@ -46,4 +54,21 @@ void Mesh::Render()
 
 	//Bind VAO---------------------------------------------//
 	glDrawElements(mode, indexSize, GL_UNSIGNED_INT, 0);
+}
+
+/********************************************************************************
+Render
+********************************************************************************/
+void Mesh::Render(unsigned offset, unsigned count)
+{
+	//If rendering this mesh for first time this frame, bind it's VAO
+	if (currentMesh != meshID)
+	{
+		glBindVertexArray(m_vertexArrayID);
+	}
+
+	currentMesh = meshID;
+
+	//Bind VAO---------------------------------------------//
+	glDrawElements(mode, count, GL_UNSIGNED_INT, (void*)(offset * sizeof(GLuint)));
 }

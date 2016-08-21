@@ -62,4 +62,15 @@ public:
 	static unsigned short CAMERA_HEIGHT;	//camera view size Y
 };
 
+/*************************************************************
+Texture enum
+/*************************************************************/
+enum TEXTURE_ENUM
+{
+	TEX_MUSIC,
+	TEX_SPRITE_EXPLOSION,
+
+	TOTAL_TEXTURES
+};
+
 #endif

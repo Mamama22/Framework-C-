@@ -4,6 +4,7 @@
 #include "Input.h"
 #include "SharedResources.h"
 #include "EntityManager.h"
+#include "SpriteAnimManager.h"
 #define TEST_COLLISION_X 250.f
 
 /*************************************************************
@@ -23,6 +24,7 @@ public:
 	static Input input;
 	static SharedResources shared;
 	static EntityManager entityMan;
+	static SpriteEAnimMan spriteMan;
 	static double dt;
 	static float fps;
 
@@ -33,6 +35,12 @@ public:
 		view.Init();
 		shared.Init();
 		entityMan.Init();
+	}
+
+	/******************** Update function: called before scene (after input) **********************/
+	static void Update()
+	{
+		spriteMan.Update();
 	}
 
 	static void Exit()

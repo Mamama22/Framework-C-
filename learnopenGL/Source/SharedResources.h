@@ -30,7 +30,13 @@ public:
 	Mesh* floorQuad;
 	Mesh* playerQuad;
 	Mesh* turretQuad;
+
+	Mesh* explosion;
+
 	Mtx44 mtx[10];
+
+	/******************** texture list **********************/
+	GLuint textureList[TOTAL_TEXTURES];
 
 	/******************** core **********************/
 	void Init();
