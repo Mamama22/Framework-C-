@@ -153,9 +153,14 @@ void Scene_Boxhead::Run()
 		testEnt[i].CalculateTRS();
 
 	//stage 3: Update with changes ===========================================================//
+	cout << "Vel: " << AABB_List[0].transform.vel << endl;
 	
 	//collision check-------------------------------//
-	
+	for (int i = 2; i < colliderCounter; ++i)
+		AABB_List[0].CollisionCheck(AABB_List[i]);
+
+	for (int i = 2; i < colliderCounter; ++i)
+		AABB_List[1].CollisionCheck(AABB_List[i]);
 
 
 	//Entity update------------------------------------------------------//

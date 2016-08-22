@@ -69,13 +69,20 @@ void Transformation::Rotate(float angle, Vector3 axis)
 }
 
 /********************************************************************************
-transform the final TRS: certain functions might need real time updated pos
+transform by parent
 ********************************************************************************/
-void Transformation::TranslateFInalTRS(Vector3 vel)
+void Transformation::Translate_byParent(Vector3 vel)
 {
 	this->pos += vel;
-	sharedMtx[0].SetToTranslation(vel.x, vel.y, vel.z);
-	finalTRS = finalTRS * sharedMtx[0];
+	this->vel += vel;
+}
+
+void Transformation::Rotate_byParent(float angle, Vector3 axis)
+{
+	this->axis = axis;
+	this->angle += angle;
+	if (this->angle < 0.f)this->angle += 360.f;
+	else if (this->angle > 360.f)this->angle -= 360.f;
 }
 
 /********************************************************************************
@@ -161,6 +168,11 @@ Mtx44 Transformation::Calculate_TRS()
 	//Final TRS + scale--------------------------------------------------//
 	sharedMtx[2].SetToScale(scale.x, scale.y, scale.z);
 	finalTRS = TRS * sharedMtx[2];
+
+	//get updateed pos aand vel-------------------------//
+	this->pos = GetPos();
+	this->vel = GetVel();
+
 	return TRS;
 }
 
@@ -169,6 +181,7 @@ Calculate final TRS + applied with parent transformations
 parentRotMat: the transformation intended for children
 ********************************************************************************/
 Mtx44 returnRot;
+int counter = 0;
 Mtx44 Transformation::Calculate_TRS_withParent(const Mtx44& parentRotMat)
 {
 	//Final TRS + scale--------------------------------------------------//
@@ -177,6 +190,11 @@ Mtx44 Transformation::Calculate_TRS_withParent(const Mtx44& parentRotMat)
 	//apply parent TRS, then local TRS, then scaling
 	returnRot = parentRotMat * TRS;
 	finalTRS = returnRot * sharedMtx[2];
+
+	//get updateed pos aand vel-------------------------//
+	this->pos = GetPos();
+	this->vel = GetVel();
+
 	return returnRot;
 }
 

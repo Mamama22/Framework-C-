@@ -175,10 +175,7 @@ void Entity::ByParent_Rotate(float angle, Vector3 axis)
 	//parent is transforming-----------------------//
 	parentTransforming = true;
 
-	transform.axis = axis;
-	transform.angle += angle;
-	if (transform.angle < 0.f)transform.angle += 360.f;
-	else if (transform.angle > 360.f)transform.angle -= 360.f;
+	transform.Rotate_byParent(angle, axis);
 
 	//rotate all children by parent (angle, does not affect their TRS)-------------//
 	for (int i = 0; i < children.size(); ++i)
@@ -194,6 +191,8 @@ void Entity::ByParent_Translate(Vector3 vel)
 {
 	//parent is transforming-----------------------//
 	parentTransforming = true;
+
+	transform.Translate_byParent(vel);
 
 	//rotate all children by parent (angle, does not affect their TRS)-------------//
 	for (int i = 0; i < children.size(); ++i)

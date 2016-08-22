@@ -13,7 +13,8 @@ Date: 22/8/2016
 /*************************************************************/
 class AABB : public Renderer
 {
-	
+	Vector3 vel;	//offset vel
+	bool collided;
 
 public:
 
@@ -29,7 +30,7 @@ public:
 	void Init(const char* name, Mesh* debugMesh, Vector3 pos, Vector3 scale);
 
 	/******************** collision functions **********************/
-	void CollisionCheck(AABB& checkMe);
+	bool CollisionCheck(AABB& checkMe);
 
 	/******************** CALLED BY PARENT ENTITY ONLY **********************/
 	//transformation---------------------------------------------//

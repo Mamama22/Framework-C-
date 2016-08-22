@@ -51,6 +51,7 @@ Every entity/comp to have it
 Usage: 
 -Entity must call children's Translate if translate being called!!!
 -Add/remove transformations to apply to entity (Note: If scale is final transformation, it will not be passed on)
+-Pos and Vel will be updated after calculating final TRS at stage 2
 
 Improvement:
 -customisable transformation steps
@@ -97,8 +98,9 @@ public:
 	void Scale(Vector3 scale);
 	void Rotate(float angle, Vector3 axis);
 
-	/******************** Transform final TRS: modify final TRS if other functions need it **********************/
-	void TranslateFInalTRS(Vector3 vel);
+	/******************** Transformation by parent **********************/
+	void Translate_byParent(Vector3 vel);	//MAKE SURE childrens also called
+	void Rotate_byParent(float angle, Vector3 axis);
 
 	/******************** Custom Transformation **********************/
 	void Start_CustomTrans(bool applyToChildren);

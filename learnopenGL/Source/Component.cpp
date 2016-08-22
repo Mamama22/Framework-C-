@@ -68,15 +68,12 @@ Rotate by parent: does not affect TRS
 ********************************************************************************/
 void Component::ByParent_Rotate(float angle, Vector3 axis)
 {
-	transform.axis = axis;
-	transform.angle += angle;
-	if (transform.angle < 0.f)transform.angle += 360.f;
-	else if (transform.angle > 360.f)transform.angle -= 360.f;
+	transform.Rotate_byParent(angle, axis);
 }
 
 void Component::ByParent_Translate(Vector3 vel)
 {
-
+	transform.Translate_byParent(vel);
 }
 
 /********************************************************************************
