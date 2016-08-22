@@ -26,13 +26,15 @@ public:
 
 
 	/******************** Init functions **********************/
-	void Init(const char* name, Vector3 pos, Vector3 scale);
+	void Init(const char* name, Mesh* debugMesh, Vector3 pos, Vector3 scale);
 
 	/******************** collision functions **********************/
 	void CollisionCheck(AABB& checkMe);
 
 	/******************** CALLED BY PARENT ENTITY ONLY **********************/
 	//transformation---------------------------------------------//
+	void ByParent_Rotate(float angle, Vector3 axis);
+
 	void CalculateTRS_WithParent(const Mtx44& parentRotMat, bool GrandParentTransform);
 
 	/******************** Core functions **********************/

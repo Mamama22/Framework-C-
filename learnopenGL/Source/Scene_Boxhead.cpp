@@ -71,7 +71,7 @@ void Scene_Boxhead::InitCharacter(Entity** turnMe, Vector3 pos)
 	(*turnMe)->Init(pos, Vector3(1.f, 1.f, 1.f));
 
 	//Add collider shape to (*turnMe)------------------------------------------//
-	AABB_List[colliderCounter].Init("fuck u", pos, Vector3(20.f, 20.f, 1.f));
+	AABB_List[colliderCounter].Init("fuck u", CU::shared.quad_2, pos, Vector3(20.f, 20.f, 1.f));
 	AABB_List[colliderCounter].SetActive(true);
 
 	//add to it
@@ -112,7 +112,7 @@ Add random shapes to entity
 ********************************************************************************/
 void Scene_Boxhead::AddShape(Entity& addToMe)
 {
-	AABB_List[colliderCounter].Init("farkle2", addToMe.transform.pos, Vector3(50.f, 40.f, 1.f));
+	AABB_List[colliderCounter].Init("farkle2", CU::shared.quad_1, addToMe.transform.pos, Vector3(50.f, 40.f, 1.f));
 
 	//Add--------------------------//
 	AABB_List[colliderCounter].SetActive(true);

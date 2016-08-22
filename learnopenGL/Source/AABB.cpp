@@ -20,13 +20,26 @@ AABB::~AABB()
 /********************************************************************************
 Add point
 ********************************************************************************/
-void AABB::Init(const char* name, Vector3 pos, Vector3 scale)
+void AABB::Init(const char* name, Mesh* debugMesh, Vector3 pos, Vector3 scale)
 {
 	active = true;
 	Component::Init(name);
 	transform.Set(pos, scale);
+	this->mesh = debugMesh;
 }
 
+/********************************************************************************
+Rotate by parent: AFFECTS TRS
+-counter parent/ancestor's rotation
+********************************************************************************/
+void AABB::ByParent_Rotate(float angle, Vector3 axis)
+{
+	//rotate normally by parent first-------------------//
+	Component::ByParent_Rotate(angle, axis);
+
+	//child counters the parent rotation----------------//
+	transform.Rotate(-angle, axis);
+}
 /********************************************************************************
 Cal TRS with parent
 ********************************************************************************/
@@ -61,7 +74,7 @@ void AABB::Draw()
 
 	CU::view.SetIdentity();
 	CU::view.LoadMatrix(transform.finalTRS);
-	CU::view.RenderMesh(*CU::shared.quad_1);
+	CU::view.RenderMesh(*mesh);
 }
 
 /********************************************************************************
