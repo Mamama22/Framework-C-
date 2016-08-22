@@ -3,7 +3,6 @@
 
 //Scenes-------------------------//
 #include "Scene_Test.h"
-#include "Scene_ECS.h"
 #include "Scene_Collision.h"
 #include "Scene_SAT_Test.h"
 #include "Scene_ECS_2.h"
@@ -23,7 +22,6 @@ class Controller
 	//Scenes--------------------------------//
 	Scene* current_scene;
 	Scene_Test sceneTest;
-	Scene_ECS sceneECS;
 	Scene_Collision sceneCollision;
 	Scene_SAT_Test scene_SAT_Test;
 	Scene_ECS_2	scene_ECS_2;

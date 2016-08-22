@@ -79,6 +79,7 @@ public:
 	float angle;
 	Vector3 axis;
 	Vector3 pos;
+	Vector3 vel;	//travelling vel
 	Vector3 scale;
 	Mtx44 TRS, finalTRS;	//overall transformation matrix
 
@@ -87,8 +88,9 @@ public:
 	Transformation(const Transformation& copy);
 	~Transformation();
 
-	/******************** Init **********************/
+	/******************** Core functions **********************/
 	void Set(Vector3 pos, Vector3 scale);
+	void PreUpdate();
 
 	/******************** Transformation **********************/
 	void Translate(Vector3 vel);	//MAKE SURE childrens also called
@@ -112,6 +114,7 @@ public:
 	
 	/******************** Get functions **********************/
 	Vector3 GetPos();
+	Vector3 GetVel();
 
 	/******************** Operator overload **********************/
 	Transformation& operator= (const Transformation& copyMe);

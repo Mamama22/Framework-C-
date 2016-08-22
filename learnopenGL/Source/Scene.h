@@ -7,6 +7,7 @@
 #include "MeshBuilder.h"
 #include "Line.h"
 #include "Shape.h"
+#include "AABB.h"
 
 //Entity types---------------------------//
 #include "Entity.h"

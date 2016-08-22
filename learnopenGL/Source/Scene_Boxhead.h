@@ -15,7 +15,7 @@ class Scene_Boxhead : public Scene
 {
 	/******************** tmp Component system **********************/
 	const static int TOTAL_RENDERER = 40;
-	const static int TOTAL_SHAPE = 20;
+	const static int TOTAL_AABB = 20;
 	const static int TOTAL_ENTITY = 20;
 
 	int rendererCounter;
@@ -34,7 +34,7 @@ class Scene_Boxhead : public Scene
 	Render_InWorld Render_InWorld_List[TOTAL_RENDERER];
 
 	//shape comp assign----------------------//
-	Shape Shape_List[TOTAL_SHAPE];
+	AABB AABB_List[TOTAL_AABB];
 
 	//Entity----------------------//
 	Entity testEnt[TOTAL_ENTITY];

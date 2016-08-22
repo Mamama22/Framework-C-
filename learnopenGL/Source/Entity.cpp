@@ -238,6 +238,7 @@ pre update
 ********************************************************************************/
 void Entity::PreUpdate()
 {
+	transform.PreUpdate();
 	parentTransforming = false;
 }
 

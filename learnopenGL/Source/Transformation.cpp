@@ -25,6 +25,14 @@ void Transformation::Set(Vector3 pos, Vector3 scale)
 }
 
 /********************************************************************************
+Set transformation
+********************************************************************************/
+void Transformation::PreUpdate()
+{
+	vel.SetZero();
+}
+
+/********************************************************************************
 Translate
 ********************************************************************************/
 void Transformation::Translate(Vector3 vel)
@@ -34,6 +42,7 @@ void Transformation::Translate(Vector3 vel)
 	sharedMtx[0].SetToTranslation(vel.x, vel.y, vel.z);
 
 	TRS = TRS * sharedMtx[0];
+	this->vel += vel;
 }
 
 /********************************************************************************
@@ -179,6 +188,26 @@ Vector3 Transformation::GetPos()
 	Vector3 pos;
 	pos = finalTRS * pos;
 	return pos;
+}
+
+/********************************************************************************
+Get vel raking into account angle
+********************************************************************************/
+Vector3 xVel, yVel;
+float sinAngle, cosAngle;
+Vector3 Transformation::GetVel()
+{
+	sinAngle = sin(Math::DegreeToRadian(angle));
+	cosAngle = cos(Math::DegreeToRadian(angle));
+
+	//X vel----------------------------------------------//
+	xVel.x = vel.x * cosAngle;
+	xVel.y = vel.x * sinAngle;
+
+	//X vel----------------------------------------------//
+	yVel.x = vel.y * -sinAngle;
+	yVel.y = vel.y * cosAngle;
+	return xVel + yVel;
 }
 
 /********************************************************************************

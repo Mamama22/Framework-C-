@@ -71,18 +71,11 @@ void Scene_Boxhead::InitCharacter(Entity** turnMe, Vector3 pos)
 	(*turnMe)->Init(pos, Vector3(1.f, 1.f, 1.f));
 
 	//Add collider shape to (*turnMe)------------------------------------------//
-	Shape_List[colliderCounter].Init("fuck u", pos);
-
-	Shape_List[colliderCounter].AddPoint(Vector3(-20.0f, -20.f, 0.f));
-	Shape_List[colliderCounter].AddPoint(Vector3(20.f, -20.f, 0.f));
-	Shape_List[colliderCounter].AddPoint(Vector3(20.f, 20.f, 0.f));
-	Shape_List[colliderCounter].AddPoint(Vector3(-20.f, 20.f, 0.f));
-
-	Shape_List[colliderCounter].CalculateFaces();
-	Shape_List[colliderCounter].SetActive(true);
+	AABB_List[colliderCounter].Init("fuck u", pos, Vector3(20.f, 20.f, 1.f));
+	AABB_List[colliderCounter].SetActive(true);
 
 	//add to it
-	(*turnMe)->AddComponent(&Shape_List[colliderCounter]);
+	(*turnMe)->AddComponent(&AABB_List[colliderCounter]);
 
 	//Component counter
 	colliderCounter++;
@@ -119,22 +112,11 @@ Add random shapes to entity
 ********************************************************************************/
 void Scene_Boxhead::AddShape(Entity& addToMe)
 {
-	Shape_List[colliderCounter].Init("farkle2", addToMe.transform.pos);
-
-	//Shape type---------------------------------------//
-	Shape_List[colliderCounter].AddPoint(Vector3(-30.0f, -20.f, 0.f));
-	Shape_List[colliderCounter].AddPoint(Vector3(-10.0f, -60.f, 0.f));
-	Shape_List[colliderCounter].AddPoint(Vector3(40.f, 20.f, 0.f));
-	Shape_List[colliderCounter].AddPoint(Vector3(50.f, 70.f, 0.f));
-	Shape_List[colliderCounter].AddPoint(Vector3(-40.f, 40.0f, 0.f));
-	
-
-	//calculate faces for this shape--------------------------//
-	Shape_List[colliderCounter].CalculateFaces();
+	AABB_List[colliderCounter].Init("farkle2", addToMe.transform.pos, Vector3(50.f, 40.f, 1.f));
 
 	//Add--------------------------//
-	Shape_List[colliderCounter].SetActive(true);
-	addToMe.AddComponent(&Shape_List[colliderCounter]);
+	AABB_List[colliderCounter].SetActive(true);
+	addToMe.AddComponent(&AABB_List[colliderCounter]);
 	colliderCounter++;
 }
 
@@ -152,7 +134,7 @@ void Scene_Boxhead::Run()
 
 	//component pre-update (If have)----------------------------------------------//
 	for (int i = 0; i < colliderCounter; ++i)
-		Shape_List[i].PreUpdate();
+		AABB_List[i].PreUpdate();
 
 
 	//Stage 1: States, flags and values update ===========================================================//
@@ -170,15 +152,10 @@ void Scene_Boxhead::Run()
 	for (int i = 0; i < entityCounter; ++i)
 		testEnt[i].CalculateTRS();
 
-
 	//stage 3: Update with changes ===========================================================//
 	
 	//collision check-------------------------------//
-	for (int i = obStart_index; i < obEnd_index; ++i)
-	{
-		for (int j = playerStart_index; j < playerEnd_index; ++j)
-			Shape_List[j].CollisionCheck_2(Shape_List[i]);
-	}
+	
 
 
 	//Entity update------------------------------------------------------//
@@ -192,7 +169,7 @@ void Scene_Boxhead::Run()
 	}
 	for (int i = 0; i < colliderCounter; ++i)
 	{
-		Shape_List[i].Update();
+		AABB_List[i].Update();
 	}
 
 
@@ -263,14 +240,7 @@ void Scene_Boxhead::DrawOnScreen()
 
 	//shape Draw---------------------------------------------//
 	for (int i = 0; i < colliderCounter; ++i)
-		Shape_List[i].Draw();
-
-
-	//explosion sprite------------------------------------//
-	CU::view.SetIdentity();
-	CU::view.Translate(-200, 0, 0);
-	CU::view.Scale(300.f, 300.f, 1.f);
-	CU::view.RenderMesh(*CU::shared.explosion);
+		AABB_List[i].Draw();
 
 	//Text----------------------------------------------------//
 	CU::view.UseShader(View::TEXT_SHADER);	//use light shader

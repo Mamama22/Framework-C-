@@ -26,6 +26,7 @@ void Component::Init(const char* name)
 
 void Component::PreUpdate()
 {
+	transform.PreUpdate();
 	transformByGrandParent = false;
 }
 
