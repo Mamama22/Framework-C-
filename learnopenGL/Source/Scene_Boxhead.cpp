@@ -39,19 +39,19 @@ void Scene_Boxhead::InitObstacles()
 
 	testEnt[index].Init(Vector3(150.f, -100.f, 0.f), Vector3(1.f, 1.f, 1.f));
 	AddRendererToEntity(testEnt[index], CU::shared.quad_2, Vector3(35, 35, 35));
-	AddShape(testEnt[index]);
+	Add_AABB(testEnt[index], Vector3(80, 40, 1));
 
 	index++;
 
 	testEnt[index].Init(Vector3(150.f, 100.f, 0.f), Vector3(1.f, 1.f, 1.f));
 	AddRendererToEntity(testEnt[index], CU::shared.quad_2, Vector3(35, 35, 35));
-	AddShape(testEnt[index]);
+	Add_AABB(testEnt[index], Vector3(50, 50, 1));
 
 	index++;
 
 	testEnt[index].Init(Vector3(-150.f, 100.f, 0.f), Vector3(1.f, 1.f, 1.f));
 	AddRendererToEntity(testEnt[index], CU::shared.quad_2, Vector3(35, 35, 35));
-	AddShape(testEnt[index]);
+	Add_AABB(testEnt[index], Vector3(20, 70, 1));
 
 	index++;
 
@@ -110,9 +110,9 @@ void Scene_Boxhead::AddAsChild(Entity& parent, Entity& child)
 /********************************************************************************
 Add random shapes to entity
 ********************************************************************************/
-void Scene_Boxhead::AddShape(Entity& addToMe)
+void Scene_Boxhead::Add_AABB(Entity& addToMe, Vector3 scale)
 {
-	AABB_List[colliderCounter].Init("farkle2", CU::shared.quad_1, addToMe.transform.pos, Vector3(50.f, 40.f, 1.f));
+	AABB_List[colliderCounter].Init("farkle2", CU::shared.quad_1, addToMe.transform.pos, scale);
 
 	//Add--------------------------//
 	AABB_List[colliderCounter].SetActive(true);

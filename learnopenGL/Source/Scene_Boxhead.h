@@ -46,7 +46,7 @@ class Scene_Boxhead : public Scene
 	/******************** Utilities **********************/
 	void AddRendererToEntity(Entity& addToMe, Mesh* mesh, Vector3 scale);
 	void AddAsChild(Entity& parent, Entity& child);
-	void AddShape(Entity& addToMe);
+	void Add_AABB(Entity& addToMe, Vector3 scale);
 
 	/******************** Init **********************/
 	void InitCharacter(Entity** turnMe, Vector3 pos);

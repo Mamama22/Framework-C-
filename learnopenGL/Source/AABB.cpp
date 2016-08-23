@@ -63,6 +63,7 @@ Collision check
 Vector2 xtremeX_points, xtremeY_points;
 Vector3 thisBox_Pos, checkBox_Pos;	//[0] = left, [1] = right
 Vector3 prevVel;
+Vector3 AABB_dir;
 bool AABB::CollisionCheck(AABB& checkMe)
 {
 	//Get the prev. collision check vel----------------------------//
@@ -100,53 +101,52 @@ bool AABB::CollisionCheck(AABB& checkMe)
 
 	//collision true-----------------------------------------------------------------//
 	vel.SetZero();	//reset offset vel
-	
-	float offsetX = combinedX_length - point_lengthX;
-	float offsetY = combinedY_length - point_lengthY;
 
 	//Get offset angle--------------------------------------------------------------//
 	float transformAngle = CU::entityMan.GetEntity(parentHandle)->transform.angle;	//use local angle
-
 
 	//if transformed by grandparent, use grandparent's angle, if not dir will be wrong------//
 	if (transformByGrandParent)
 		transformAngle = CU::entityMan.GetTopParent_Entity(parentHandle)->transform.angle;
 
-	//minus off prev vel if have-------------------------------------------------//
-	transform.pos -= prevVel;
-
 	//the cos/sin valeus---------------------------------------------------//
 	float sinAngle = sin(Math::DegreeToRadian(-transformAngle));
 	float cosAngle = cos(Math::DegreeToRadian(-transformAngle));
+	
+	float offsetX = combinedX_length - point_lengthX;
+	float offsetY = combinedY_length - point_lengthY;
+
+	//minus off prev vel if have-------------------------------------------------//
+	transform.pos -= prevVel;
+
+	float theOffset = 0.f;	//offset magnitude
 
 	//X side
 	if (offsetX < offsetY)
 	{
 		//Collides on This's axis--------------------------------------------------------------------------------//
-		offsetX = offsetX;	//offset parent/ancestor rotation
-		vel.x = offsetX * dirX;
+		theOffset = offsetX * dirX;
 
 		//translate on the spot
-		transform.pos += vel;
-
-		//offset the angle of rotation of parent/ancestor---------------------------------//
-		vel.x = vel.x * cosAngle;
-		vel.y = vel.x * sinAngle;
+		transform.pos.x += theOffset;
+		AABB_dir.Set(1.f, 0.f);
 	}
 	else
 	{
 		//Collides on This's axis--------------------------------------------------------------------------------//
-		offsetY = offsetY;
-		vel.y = offsetY * dirY;
+		theOffset = offsetY * dirY;
 
 		//translate on the spot
-		transform.pos += vel;
-
-		//offset the angle of rotation of parent/ancestor---------------------------------//
-		vel.x = vel.y * -sinAngle;
-		vel.y = vel.y * cosAngle;
+		transform.pos.y += theOffset;
+		AABB_dir.Set(0.f, 1.f);
 	}
 
+	//offset away------------------------------------------//
+	float angle = Vector3::getAngleFromDir(AABB_dir.x, AABB_dir.y);
+	angle -= transformAngle;
+	AABB_dir.x = cos(Math::DegreeToRadian(angle));
+	AABB_dir.y = sin(Math::DegreeToRadian(angle));
+	vel = AABB_dir * theOffset;
 }
 
 /********************************************************************************
