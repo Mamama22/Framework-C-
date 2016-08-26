@@ -382,12 +382,10 @@ void Shape::CollisionCheck_2(Shape& obstacle)
 	//Set collision offset vel-------------------------------------------------------------------------------------//
 	vel = offsetAway * 1.05f;
 
-	//translate children shapes by the offset------------------------------------------------------//
-	//for (int i = 0; i < childrenShapes.size(); ++i)
-	//{
-	////	childrenShapes[i]->transform.TranslateFInalTRS(vel);
-	////	childrenShapes[i]->RecalculatePoints();	//accurate real-time pos
-	//}
+	if (collide_withParent)	//ancestor transform with this shape
+		CU::entityMan.GetTopParent_Entity(parentHandle)->Translate(vel);
+	else
+		CU::entityMan.GetEntity(parentHandle)->Translate(vel);
 }
 
 void Shape::TranslatePosWithAngle(Vector3& pos, Vector3 dir, float speed)
@@ -570,15 +568,6 @@ void Shape::Update()
 {
 	//reset flags--------------------------------------------------------//
 	transformByGrandParent = false;
-
-	if (collide_withParent)	//ancestor transform with this shape
-	{
-		CU::entityMan.GetTopParent_Entity(parentHandle)->Translate(vel);
-	}
-	else
-	{
-		CU::entityMan.GetEntity(parentHandle)->Translate(vel);
-	}
 }
 
 /********************************************************************************

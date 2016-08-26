@@ -69,11 +69,13 @@ Rotate by parent: does not affect TRS
 void Component::ByParent_Rotate(float angle, Vector3 axis)
 {
 	transform.Rotate_byParent(angle, axis);
+	transformByGrandParent = true;
 }
 
 void Component::ByParent_Translate(Vector3 vel)
 {
 	transform.Translate_byParent(vel);
+	transformByGrandParent = true;
 }
 
 /********************************************************************************
@@ -112,8 +114,8 @@ void Component::CalculateTRS_WithParent(const Mtx44& parentRotMat, bool GrandPar
 	transform.Calculate_TRS_withParent(parentRotMat);
 
 	//if entity's parent has transformation this frame------------------------//
-	if (GrandParentTransform)
-		transformByGrandParent = true;
+	//if (GrandParentTransform)
+	//	transformByGrandParent = true;
 }
 
 /********************************************************************************

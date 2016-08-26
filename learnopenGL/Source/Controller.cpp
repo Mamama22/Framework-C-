@@ -19,7 +19,7 @@ void Controller::Init()
 	//Init scene-----------------------------------//
 	//scene_boxhead
 	//scene_ECS_2
-	current_scene = &scene_boxhead;
+	current_scene = &scene_ECS_2;
 	current_scene->Init();
 }
 

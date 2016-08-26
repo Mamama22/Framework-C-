@@ -102,17 +102,7 @@ void Entity::Added(Entity* parent)
 
 
 	//apply action on all children and components-------------------------//
-	Entity* theParent = parent;	//get parent
-
-	while (theParent)
-	{
-		Added_ToEntity(theParent);
-		theParent = theParent->GetParent();
-	}
-
-	//Comp added------------------------------------------------//
-	for (int i = 0; i < componentList.size(); ++i)
-		componentList[i]->Added_ToEntity(parent->handle);
+	Added_ToEntity(parent);
 }
 
 /********************************************************************************
