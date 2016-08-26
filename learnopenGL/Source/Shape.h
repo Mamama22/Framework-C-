@@ -95,7 +95,6 @@ public:
 
 	//flags------------------//
 	bool collided;
-	bool collide_withParent;
 
 	/******************** constructor/destructor **********************/
 	Shape();

@@ -10,7 +10,7 @@ Entity::Entity()
 { 
 	parent = NULL; 
 	CU::entityMan.RegisterEntity(this);	//MUST REGISTER
-	parentTransforming = false;
+	transforming = false;
 }
 
 Entity::~Entity()
@@ -125,7 +125,7 @@ Init func
 void Entity::Init(Vector3 pos, Vector3 scale)
 {
 	transform.Set(pos, scale);
-	parentTransforming = false;
+	transforming = false;
 }
 
 /********************************************************************************
@@ -135,6 +135,7 @@ No need to roate children by parent, their pos will be derived from TRS
 void Entity::Translate(Vector3 vel)
 {
 	transform.Translate(vel);
+	transforming = true;
 
 	//rotate all children by parent (angle, does not affect their TRS)-------------//
 	for (int i = 0; i < children.size(); ++i)
@@ -149,6 +150,7 @@ Rotates entity
 void Entity::Rotate(float angle, Vector3 axis)
 {
 	transform.Rotate(angle, axis);
+	transforming = true;
 
 	//rotate all children by parent (angle, does not affect their TRS)-------------//
 	for (int i = 0; i < children.size(); ++i)
@@ -162,9 +164,6 @@ Rotate by parent: does not affect TRS
 ********************************************************************************/
 void Entity::ByParent_Rotate(float angle, Vector3 axis)
 {
-	//parent is transforming-----------------------//
-	parentTransforming = true;
-
 	transform.Rotate_byParent(angle, axis);
 
 	//rotate all children by parent (angle, does not affect their TRS)-------------//
@@ -179,9 +178,6 @@ Translate by parent: does not affect TRS and vec3 pos
 ********************************************************************************/
 void Entity::ByParent_Translate(Vector3 vel)
 {
-	//parent is transforming-----------------------//
-	parentTransforming = true;
-
 	transform.Translate_byParent(vel);
 
 	//rotate all children by parent (angle, does not affect their TRS)-------------//
@@ -202,9 +198,9 @@ void Entity::CalculateTRS()
 	transform.Calculate_TRS();
 
 	for (int i = 0; i < children.size(); ++i)
-		children[i]->CalculateTRS_WithParent(transform.TRS);
-	for (int i = 0; i < componentList.size(); ++i)
-		componentList[i]->CalculateTRS_WithParent(transform.TRS, parentTransforming);
+		children[i]->CalculateTRS_WithParent(transform.TRS, transforming);	//if parent(THIS) transform
+	for (int i = 0; i < componentList.size(); ++i)	
+		componentList[i]->CalculateTRS_WithParent(transform.TRS, false);	//no grandparent
 }
 
 
@@ -212,14 +208,17 @@ void Entity::CalculateTRS()
 Rotate with entity (parent): when entity rotates, pos of this component
 changes along the axis entity rotates
 ********************************************************************************/
-void Entity::CalculateTRS_WithParent(const Mtx44& parentRotMat)
+void Entity::CalculateTRS_WithParent(const Mtx44& parentRotMat, bool parentTransforming)
 {
 	Mtx44 tmp = transform.Calculate_TRS_withParent(parentRotMat);
 
 	for (int i = 0; i < children.size(); ++i)
-		children[i]->CalculateTRS_WithParent(tmp);
+		children[i]->CalculateTRS_WithParent(tmp, transforming);	//if parent(THIS) transform
+
+	//Assumes grandparent is transforming, since child entity collision always affect grandparent, or else it shouldn't be
+	//a child of grandparent's shape
 	for (int i = 0; i < componentList.size(); ++i)
-		componentList[i]->CalculateTRS_WithParent(tmp, parentTransforming);
+		componentList[i]->CalculateTRS_WithParent(tmp, true);
 }
 
 /********************************************************************************
@@ -228,7 +227,7 @@ pre update
 void Entity::PreUpdate()
 {
 	transform.PreUpdate();
-	parentTransforming = false;
+	transforming = false;
 }
 
 /********************************************************************************

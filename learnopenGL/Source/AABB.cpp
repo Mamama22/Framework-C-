@@ -147,6 +147,15 @@ bool AABB::CollisionCheck(AABB& checkMe)
 	AABB_dir.x = cos(Math::DegreeToRadian(angle));
 	AABB_dir.y = sin(Math::DegreeToRadian(angle));
 	vel = AABB_dir * theOffset;
+
+	if (transformByGrandParent)	//ancestor transform with this shape
+	{
+		CU::entityMan.GetTopParent_Entity(parentHandle)->Translate(vel);
+	}
+	else
+	{
+		CU::entityMan.GetEntity(parentHandle)->Translate(vel);
+	}
 }
 
 /********************************************************************************
@@ -154,18 +163,6 @@ Update
 ********************************************************************************/
 void AABB::Update()
 {
-	if (collided)
-	{
-		if (transformByGrandParent)	//ancestor transform with this shape
-		{
-			CU::entityMan.GetTopParent_Entity(parentHandle)->Translate(vel);
-		}
-		else
-		{
-			CU::entityMan.GetEntity(parentHandle)->Translate(vel);
-		}
-	}
-
 	//reset flags--------------------------------------------------------//
 	transformByGrandParent = false;
 }

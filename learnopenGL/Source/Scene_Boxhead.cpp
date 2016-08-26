@@ -196,26 +196,26 @@ void Scene_Boxhead::UpdatePlayerInput()
 	if (CU::input.IsKeyPressed(Input::D))
 		player->Translate(Vector3(2.f, 0, 0));
 
-	/*if (CU::input.IsKeyPressed(Input::ARROW_UP))
+	if (CU::input.IsKeyPressed(Input::ARROW_UP))
 		pickUp->Translate(Vector3(0, 2.f, 0));
 	if (CU::input.IsKeyPressed(Input::ARROW_DOWN))
 		pickUp->Translate(Vector3(0, -2.f, 0));
 	if (CU::input.IsKeyPressed(Input::ARROW_LEFT))
 		pickUp->Translate(Vector3(-2.f, 0, 0));
 	if (CU::input.IsKeyPressed(Input::ARROW_RIGHT))
-		pickUp->Translate(Vector3(2.f, 0, 0));*/
+		pickUp->Translate(Vector3(2.f, 0, 0));
 
-	//player's rotation--------------------------------------//
-	if (CU::input.IsKeyPressed(Input::ARROW_LEFT))
-		player->Rotate(2.f, Vector3(0, 0, 1));
-	if (CU::input.IsKeyPressed(Input::ARROW_RIGHT))
-		player->Rotate(-2.f, Vector3(0, 0, 1));
+	////player's rotation--------------------------------------//
+	//if (CU::input.IsKeyPressed(Input::ARROW_LEFT))
+	//	player->Rotate(2.f, Vector3(0, 0, 1));
+	//if (CU::input.IsKeyPressed(Input::ARROW_RIGHT))
+	//	player->Rotate(-2.f, Vector3(0, 0, 1));
 
-	//pick up's rotation--------------------------------------//
-	if (CU::input.IsKeyPressed(Input::V))
-		pickUp->Rotate(2.f, Vector3(0, 0, 1));
-	if (CU::input.IsKeyPressed(Input::B))
-		pickUp->Rotate(-2.f, Vector3(0, 0, 1));
+	////pick up's rotation--------------------------------------//
+	//if (CU::input.IsKeyPressed(Input::V))
+	//	pickUp->Rotate(2.f, Vector3(0, 0, 1));
+	//if (CU::input.IsKeyPressed(Input::B))
+	//	pickUp->Rotate(-2.f, Vector3(0, 0, 1));
 }
 
 /********************************************************************************

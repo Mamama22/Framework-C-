@@ -2,6 +2,4 @@
 -Renderer is a entity type? It needs to contain children to modify their scale
 -CAMERA crashes
 -use quaternions
--collision: if top parent collides, it will offset the children
-
--SAT collision: parallel sides + rotate = GLITCH
+-aabb and parallel SAT sides, if child moves and collides, parent will be offseted into a wall and unable to slide, resulting in glitch

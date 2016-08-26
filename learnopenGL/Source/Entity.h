@@ -61,7 +61,7 @@ protected:
 public:
 	
 	/******************** public var **********************/
-	bool parentTransforming;
+	bool transforming;
 	Transformation transform;
 
 	/******************** Constructor/destructor **********************/
@@ -91,7 +91,7 @@ public:
 
 	/******************** CALLED BY PARENT ONLY **********************/
 	//TRS---------------------------------------------//
-	virtual void CalculateTRS_WithParent(const Mtx44& parentRotMat);
+	virtual void CalculateTRS_WithParent(const Mtx44& parentRotMat, bool parentTransforming);
 
 	//transformation---------------------------------------------//
 	virtual void ByParent_Translate(Vector3 vel);

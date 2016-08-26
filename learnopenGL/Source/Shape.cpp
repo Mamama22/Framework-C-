@@ -152,13 +152,13 @@ Constructor/destructor
 ********************************************************************************/
 Shape::Shape() : Renderer()
 {
-	collided = collide_withParent = false;
+	collided = false;
 	parent_shape = NULL;
 }
 
 Shape::Shape(const Shape& copyMe) : Renderer(copyMe)
 {
-	collided = collide_withParent = false;
+	collided = false;
 	parent_shape = NULL;
 }
 
@@ -320,11 +320,6 @@ Vector3 normal1, normal2;
 float bounce1 = 0.f, bounce2 = 0.f;
 void Shape::CollisionCheck_2(Shape& obstacle)
 {
-	//If transformed by parent and collides, check if parent's shape is colliding,
-	//if yes, child shape will collide by itself
-	collide_withParent = transformByGrandParent;
-
-
 	if (parent_shape && transformByGrandParent)
 	{
 		//	collide_withParent = !parent_shape->collided;	//cal. collision with Parent if Parent is not collided
@@ -361,11 +356,10 @@ void Shape::CollisionCheck_2(Shape& obstacle)
 
 	//Collides on This's axis--------------------------------------------------------------------------------//
 	Vector3 offsetAway;
-	float transformAngle = transform.angle;	//use local angle
+	//float transformAngle = transform.angle;	//use local angle
 
 	//if transformed by grandparent, use grandparent's angle, if not dir will be wrong------//
-	if (collide_withParent)
-		transformAngle = CU::entityMan.GetTopParent_Entity(parentHandle)->transform.angle;
+	float transformAngle = CU::entityMan.GetTopParent_Entity(parentHandle)->transform.angle;
 
 
 	//Collide offset--------------------------------------------------------------------------------------------//
@@ -382,10 +376,7 @@ void Shape::CollisionCheck_2(Shape& obstacle)
 	//Set collision offset vel-------------------------------------------------------------------------------------//
 	vel = offsetAway * 1.05f;
 
-	if (collide_withParent)	//ancestor transform with this shape
-		CU::entityMan.GetTopParent_Entity(parentHandle)->Translate(vel);
-	else
-		CU::entityMan.GetEntity(parentHandle)->Translate(vel);
+	CU::entityMan.GetTopParent_Entity(parentHandle)->Translate(vel);
 }
 
 void Shape::TranslatePosWithAngle(Vector3& pos, Vector3 dir, float speed)
@@ -560,7 +551,7 @@ void Shape::CalculateTRS_WithParent(const Mtx44& parentRotMat, bool GrandParentT
 void Shape::PreUpdate()
 {
 	Component::PreUpdate();
-	collided = collide_withParent = false;
+	collided = false;
 	vel.SetZero();
 }
 
