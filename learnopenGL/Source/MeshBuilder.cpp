@@ -1,45 +1,5 @@
 #include "MeshBuilder.h"
 
-void MeshBuilder::BindBuffers(Mesh& mesh, std::vector<Vertex>& vertex_buffer_data, std::vector<GLuint>& index_buffer_data, unsigned drawMode)
-{
-	//Bind VAO------------------------------------------------------------------//
-	glBindVertexArray(mesh.m_vertexArrayID);
-
-	//vertices---------------------------------------------------------------------//
-	glBindBuffer(GL_ARRAY_BUFFER, mesh.vertexBuffer);
-	glBufferData(GL_ARRAY_BUFFER, vertex_buffer_data.size() * sizeof(Vertex), &vertex_buffer_data[0], GL_STATIC_DRAW);
-
-	//indexe---------------------------------------------------------------------//
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.indexBuffer);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_data.size() * sizeof(GLuint), &index_buffer_data[0], GL_STATIC_DRAW);
-
-	glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
-	glEnableVertexAttribArray(2);
-	glEnableVertexAttribArray(3);
-
-	//Attributes------------------------------------------------------------------------------------//
-	//All mesh can share the same VAO
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);	//Position
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)sizeof(Position));	//Color
-	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(Position)+sizeof(Color)));	//normal
-	glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(Position)+sizeof(Color)+sizeof(Vector3)));	//texcoord
-
-
-	mesh.indexSize = index_buffer_data.size();
-	mesh.mode = drawMode;
-	
-	//Unbind-----------------------------------------------------------------//
-	glBindVertexArray(0);	//VAO stores unbind calls too, UNBIND BEFORE UNBINDING BUFFERS
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-	glDisableVertexAttribArray(0);
-	glDisableVertexAttribArray(1);
-	glDisableVertexAttribArray(2);
-	glDisableVertexAttribArray(3);
-}
-
 /******************************************************************************
 Axes
 ******************************************************************************/
@@ -78,7 +38,7 @@ Mesh* MeshBuilder::GenerateAxes(float lengthX, float lengthY, float lengthZ)
 	index_buffer_data.push_back(4);
 	index_buffer_data.push_back(5);
 
-	BindBuffers(*mesh, vertex_buffer_data, index_buffer_data, GL_LINES);
+	mesh->Setup(vertex_buffer_data, index_buffer_data, GL_LINES);
 
 	return mesh;
 }
@@ -113,7 +73,7 @@ Mesh* MeshBuilder::GenerateLine(Color color, bool start0)
 	index_buffer_data.push_back(0);
 	index_buffer_data.push_back(1);
 
-	BindBuffers(*mesh, vertex_buffer_data, index_buffer_data, GL_LINES);
+	mesh->Setup(vertex_buffer_data, index_buffer_data, GL_LINES);
 
 	return mesh;
 }
@@ -151,7 +111,7 @@ Mesh* MeshBuilder::GenerateDebugQuad(Color color)
 	index_buffer_data.push_back(3);
 	index_buffer_data.push_back(0);
 
-	BindBuffers(*mesh, vertex_buffer_data, index_buffer_data, GL_LINES);
+	mesh->Setup(vertex_buffer_data, index_buffer_data, GL_LINES);
 
 	return mesh;
 }
@@ -191,7 +151,7 @@ Mesh* MeshBuilder::GenerateRTriangle(Color color)
 	index_buffer_data.push_back(1);
 	index_buffer_data.push_back(0);
 
-	BindBuffers(*mesh, vertex_buffer_data, index_buffer_data, GL_TRIANGLES);
+	mesh->Setup(vertex_buffer_data, index_buffer_data, GL_TRIANGLES);
 
 	return mesh;
 }
@@ -245,9 +205,115 @@ Mesh* MeshBuilder::GenerateSphere(Color color, unsigned numStack, unsigned numSl
 		}
 	}
 
-	BindBuffers(*mesh, vertex_buffer_data, index_buffer_data, GL_TRIANGLE_STRIP);
+	mesh->Setup(vertex_buffer_data, index_buffer_data, GL_TRIANGLE_STRIP);
 
 	return mesh;
+}
+
+/******************************************************************************
+Generate quad vertices
+******************************************************************************/
+void MeshBuilder::GenQuadVertices(Color color, float length, std::vector<Vertex>& vertex_buffer_data, std::vector<GLuint>& index_buffer_data, int totalX, int totalY, bool start0)
+{
+	Vertex v;
+
+	const float xUnit = 1.f / (float)totalX;
+	const float yUnit = 1.f / (float)totalY;
+	float x = 0.f;
+	float y = 0.f;
+
+	if (start0)
+	{
+		int count = 0;
+		for (float X = 0; X < totalX; ++X)
+		{
+			for (float Y = 0; Y < totalY; ++Y)
+			{
+				count++;
+				v.pos.Set(x, y, 0);//
+				v.color = color;
+				v.normal.Set(0, 0, 1);
+				v.texcoord.Set(x, y);//
+				vertex_buffer_data.push_back(v);
+				//======================================================================//
+				v.pos.Set(x + xUnit, y, 0);//
+				v.color = color;
+				v.normal.Set(0, 0, 1);
+				v.texcoord.Set(x + xUnit, y);//
+				vertex_buffer_data.push_back(v);
+				//======================================================================//
+				v.pos.Set(x + xUnit, y + yUnit, 0);//
+				v.color = color;
+				v.normal.Set(0, 0, 1);
+				v.texcoord.Set(x + xUnit, y + yUnit);//
+				vertex_buffer_data.push_back(v);
+				//======================================================================//
+				v.pos.Set(x, y + yUnit, 0);//
+				v.color = color;
+				v.normal.Set(0, 0, 1);
+				v.texcoord.Set(x, y + yUnit);//
+				vertex_buffer_data.push_back(v);
+
+				y += yUnit;
+
+				//index-------------------------------------//
+				index_buffer_data.push_back((Y * 4) + (X * (totalY * 4)) + 3);
+				index_buffer_data.push_back((Y * 4) + (X * (totalY * 4)) + 0);
+				index_buffer_data.push_back((Y * 4) + (X * (totalY * 4)) + 2);
+				index_buffer_data.push_back((Y * 4) + (X * (totalY * 4)) + 1);
+				index_buffer_data.push_back((Y * 4) + (X * (totalY * 4)) + 2);
+				index_buffer_data.push_back((Y * 4) + (X * (totalY * 4)) + 0);
+			}
+			y = 0.f;
+			x += xUnit;
+		}
+	}
+	else
+	{
+		float start = length * 0.5f;
+
+		for (float X = 0; X < totalX; ++X)
+		{
+			for (float Y = 0; Y < totalY; ++Y)
+			{
+				v.pos.Set(x - start, y - start, 0);//
+				v.color = color;
+				v.normal.Set(0, 0, 1);
+				v.texcoord.Set(x, y);//
+				vertex_buffer_data.push_back(v);
+				//======================================================================//
+				v.pos.Set(x + xUnit - start, y - start, 0);//
+				v.color = color;
+				v.normal.Set(0, 0, 1);
+				v.texcoord.Set(x + xUnit, y);//
+				vertex_buffer_data.push_back(v);
+				//======================================================================//
+				v.pos.Set(x + xUnit - start, y + yUnit - start, 0);//
+				v.color = color;
+				v.normal.Set(0, 0, 1);
+				v.texcoord.Set(x + xUnit, y + yUnit);//
+				vertex_buffer_data.push_back(v);
+				//======================================================================//
+				v.pos.Set(x - start, y + yUnit - start, 0);//
+				v.color = color;
+				v.normal.Set(0, 0, 1);
+				v.texcoord.Set(x, y + yUnit);//
+				vertex_buffer_data.push_back(v);
+
+				y += yUnit;
+
+				//index-------------------------------------//
+				index_buffer_data.push_back((Y * 4) + (X * (totalY * 4)) + 3);
+				index_buffer_data.push_back((Y * 4) + (X * (totalY * 4)) + 0);
+				index_buffer_data.push_back((Y * 4) + (X * (totalY * 4)) + 2);
+				index_buffer_data.push_back((Y * 4) + (X * (totalY * 4)) + 1);
+				index_buffer_data.push_back((Y * 4) + (X * (totalY * 4)) + 2);
+				index_buffer_data.push_back((Y * 4) + (X * (totalY * 4)) + 0);
+			}
+			y = 0.f;
+			x += xUnit;
+		}
+	}
 }
 
 /******************************************************************************
@@ -256,66 +322,27 @@ Generate a quad
 Mesh* MeshBuilder::GenerateQuad(Color color, float length, float texCoord, bool start0)
 {
 	Mesh *mesh = new Mesh();
-	Vertex v;
-
+	
 	std::vector<Vertex> vertex_buffer_data;
 	std::vector<GLuint> index_buffer_data;
 
-	if (start0)
-	{
-		v.pos.Set(0, 0, 0);
-		v.color = color;
-		v.normal.Set(0, 0, 1);
-		v.texcoord.Set(0, 0);
-		vertex_buffer_data.push_back(v);
-		v.pos.Set(length, 0, 0);
-		v.color = color;
-		v.normal.Set(0, 0, 1);
-		v.texcoord.Set(1, 0);
-		vertex_buffer_data.push_back(v);
-		v.pos.Set(length, length, 0);
-		v.color = color;
-		v.normal.Set(0, 0, 1);
-		v.texcoord.Set(1, 1);
-		vertex_buffer_data.push_back(v);
-		v.pos.Set(0, length, 0);
-		v.color = color;
-		v.normal.Set(0, 0, 1);
-		v.texcoord.Set(0, 1);
-		vertex_buffer_data.push_back(v);
-	}
-	else
-	{
-		v.pos.Set(-0.5f * length, -0.5f * length, 0);
-		v.color = color;
-		v.normal.Set(0, 0, 1);
-		v.texcoord.Set(0, 0);
-		vertex_buffer_data.push_back(v);
-		v.pos.Set(0.5f * length, -0.5f * length, 0);
-		v.color = color;
-		v.normal.Set(0, 0, 1);
-		v.texcoord.Set(1, 0);
-		vertex_buffer_data.push_back(v);
-		v.pos.Set(0.5f * length, 0.5f * length, 0);
-		v.color = color;
-		v.normal.Set(0, 0, 1);
-		v.texcoord.Set(1, 1);
-		vertex_buffer_data.push_back(v);
-		v.pos.Set(-0.5f * length, 0.5f * length, 0);
-		v.color = color;
-		v.normal.Set(0, 0, 1);
-		v.texcoord.Set(0, 1);
-		vertex_buffer_data.push_back(v);
-	}
+	GenQuadVertices(color, length, vertex_buffer_data, index_buffer_data, 1, 1, start0);
+	mesh->Setup(vertex_buffer_data, index_buffer_data, GL_TRIANGLES);
 
-	index_buffer_data.push_back(3);
-	index_buffer_data.push_back(0);
-	index_buffer_data.push_back(2);
-	index_buffer_data.push_back(1);
-	index_buffer_data.push_back(2);
-	index_buffer_data.push_back(0);
+	return mesh;
+}
 
-	BindBuffers(*mesh, vertex_buffer_data, index_buffer_data, GL_TRIANGLES);
+/******************************************************************************
+Generate a custom quad for tilemapping etc. 
+
+1) Create a customisable mesh, pass in own vertex vector, which you can modify later on
+2) call setup function after every modifcation
+******************************************************************************/
+Mesh* MeshBuilder::GenerateCustomQuad(std::vector<Vertex>& vertex_buffer_data, std::vector<GLuint>& index_buffer_data, int totalX, int totalY, bool start0)
+{
+	Mesh *mesh = new Mesh();
+
+	GenQuadVertices(Color(1, 0, 0), 1.f, vertex_buffer_data, index_buffer_data, totalX, totalY, start0);
 
 	return mesh;
 }
@@ -367,7 +394,7 @@ Mesh* MeshBuilder::GenerateSpriteAnimation(const std::string&, unsigned numRow, 
 	}
 
 
-	BindBuffers(*mesh, vertex_buffer_data, index_buffer_data, GL_TRIANGLES);
+	mesh->Setup(vertex_buffer_data, index_buffer_data, GL_TRIANGLES);
 
 	return mesh;
 }

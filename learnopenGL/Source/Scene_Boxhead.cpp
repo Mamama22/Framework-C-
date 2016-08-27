@@ -27,6 +27,15 @@ void Scene_Boxhead::Init()
 
 	//obstacles--------------------------------------------------------//
 	InitObstacles();
+	
+
+	//tilemap---------------------------------------------------------//
+	Render_GridMap* gridMap = new Render_GridMap;
+	gridMap->Init("asdsad", TEX_MUSIC, Vector3(0, 0, 0), 20.f, 10, 10);
+	gridMap->SetActive(true);
+	Render_InWorld_List[rendererCounter] = gridMap;
+	testEnt[4].AddComponent(Render_InWorld_List[rendererCounter]);
+	rendererCounter++;
 }
 
 /********************************************************************************
@@ -93,9 +102,11 @@ void Scene_Boxhead::AddRendererToEntity(Entity& addToMe, Mesh* mesh, Vector3 sca
 {
 	Vector3 pos = addToMe.transform.GetPos();
 
-	Render_InWorld_List[rendererCounter].Init("fuck u", mesh, pos, scale);	//assign available renderer
-	Render_InWorld_List[rendererCounter].SetActive(true);
-	addToMe.AddComponent(&Render_InWorld_List[rendererCounter]);
+	Render_InWorld* mama = new Render_InWorld;
+	mama->Init("fuck u", mesh, pos, scale);	//assign available renderer
+	mama->SetActive(true);
+	Render_InWorld_List[rendererCounter] = mama;
+	addToMe.AddComponent(Render_InWorld_List[rendererCounter]);
 	rendererCounter++;
 }
 
@@ -169,7 +180,7 @@ void Scene_Boxhead::Run()
 	//Comp update-----------------------------------------------------//
 	for (int i = 0; i < rendererCounter; ++i)
 	{
-		Render_InWorld_List[i].Update();
+		Render_InWorld_List[i]->Update();
 	}
 	for (int i = 0; i < colliderCounter; ++i)
 	{
@@ -240,7 +251,7 @@ void Scene_Boxhead::DrawOnScreen()
 	//Special: Renderer components has a draw function====================================================================//
 	//Renderer Draw---------------------------------------------//
 	for (int i = 0; i < rendererCounter; ++i)
-		Render_InWorld_List[i].Draw();
+		Render_InWorld_List[i]->Draw();
 
 	//shape Draw---------------------------------------------//
 	for (int i = 0; i < colliderCounter; ++i)
@@ -266,4 +277,7 @@ void Scene_Boxhead::Exit()
 {
 	//Call parent--------------------------------------//
 	Scene::Exit();
+
+	for (int i = 0; i < rendererCounter; ++i)
+		delete Render_InWorld_List[i];
 }

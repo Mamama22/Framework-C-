@@ -34,6 +34,10 @@ public:
 	Mesh();
 	~Mesh();
 
+	//Setup-------------------------------//
+	void Setup(std::vector<Vertex>& vertex_buffer_data, std::vector<GLuint>& index_buffer_data, unsigned drawMode);
+	void SetupVertexOnly(std::vector<Vertex>& vertex_buffer_data, std::vector<GLuint>& index_buffer_data, unsigned drawMode);
+
 	//Core------------------------------//
 	virtual void Render();
 	virtual void Render(unsigned offset, unsigned count);

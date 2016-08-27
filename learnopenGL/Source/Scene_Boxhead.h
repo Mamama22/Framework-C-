@@ -31,7 +31,7 @@ class Scene_Boxhead : public Scene
 	int playerEnd_index;
 
 	//Renderer comp assign----------------------//
-	Render_InWorld Render_InWorld_List[TOTAL_RENDERER];
+	Renderer* Render_InWorld_List[TOTAL_RENDERER];
 
 	//shape comp assign----------------------//
 	AABB AABB_List[TOTAL_AABB];
