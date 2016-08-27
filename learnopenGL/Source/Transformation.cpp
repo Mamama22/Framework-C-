@@ -1,5 +1,5 @@
 #include "Transformation.h"
-Transformation::Transformation(){ angle = 0.f; axis.Set(0, 1, 0); }
+Transformation::Transformation(){ transforming = false; angle = 0.f; axis.Set(0, 1, 0); }
 Transformation::Transformation(const Transformation& copy){ *this = copy; }
 Transformation::~Transformation(){}
 TransformNode Transformation::shareNode;
@@ -8,6 +8,8 @@ Mtx44 Transformation::CustomTrans_Mtx;
 bool Transformation::apply_ToChildren = true;
 TransformNode Transformation::customTrans[20];
 int Transformation::totalTrans = 0;
+int Transformation::TRS_count = 0;
+int Transformation::TRS_cal_count = 0;
 
 /********************************************************************************
 Set transformation
@@ -30,6 +32,7 @@ Set transformation
 void Transformation::PreUpdate()
 {
 	vel.SetZero();
+	transforming = false;
 }
 
 /********************************************************************************
@@ -43,6 +46,8 @@ void Transformation::Translate(Vector3 vel)
 
 	TRS = TRS * sharedMtx[0];
 	this->vel += vel;
+	transforming = true;
+	TRS_count++;
 }
 
 /********************************************************************************
@@ -51,6 +56,8 @@ Scale
 void Transformation::Scale(Vector3 scale)
 {
 	this->scale += scale;
+	transforming = true;
+	TRS_count++;
 }
 
 /********************************************************************************
@@ -66,6 +73,8 @@ void Transformation::Rotate(float angle, Vector3 axis)
 	sharedMtx[0].SetToRotation(angle, axis.x, axis.y, axis.z);
 
 	TRS = TRS * sharedMtx[0];
+	transforming = true;
+	TRS_count++;
 }
 
 /********************************************************************************
@@ -75,6 +84,8 @@ void Transformation::Translate_byParent(Vector3 vel)
 {
 	this->pos += vel;
 	this->vel += vel;
+	transforming = true;
+	TRS_count++;
 }
 
 void Transformation::Rotate_byParent(float angle, Vector3 axis)
@@ -83,6 +94,8 @@ void Transformation::Rotate_byParent(float angle, Vector3 axis)
 	this->angle += angle;
 	if (this->angle < 0.f)this->angle += 360.f;
 	else if (this->angle > 360.f)this->angle -= 360.f;
+	transforming = true;
+	TRS_count++;
 }
 
 /********************************************************************************
@@ -93,6 +106,12 @@ Scale not counted
 void Transformation::AddedToParent(Transformation& trans)
 {
 	TRS = trans.TRS.GetInverse() * TRS;
+
+	//both parent and child needs to update their final TRS
+	transforming = true;
+	trans.transforming = true;
+	TRS_count++;
+	TRS_count++;
 }
 
 /********************************************************************************
@@ -115,6 +134,8 @@ void Transformation::Start_CustomTrans(bool applyToChildren)
 {
 	totalTrans = 0;
 	apply_ToChildren = applyToChildren;
+	transforming = true;
+	TRS_count++;
 }
 
 void Transformation::Custom_Translate(Vector3 vel)
@@ -163,8 +184,12 @@ void Transformation::End_CustomTrans()
 /********************************************************************************
 Calculate final TRS
 ********************************************************************************/
-Mtx44 Transformation::Calculate_TRS()
+void Transformation::Calculate_TRS()
 {
+	//if never transform, no need to update TRS and final TRS
+	if (!transforming)
+		return;
+
 	//Final TRS + scale--------------------------------------------------//
 	sharedMtx[2].SetToScale(scale.x, scale.y, scale.z);
 	finalTRS = TRS * sharedMtx[2];
@@ -173,7 +198,7 @@ Mtx44 Transformation::Calculate_TRS()
 	this->pos = GetPos();
 	this->vel = GetVel();
 
-	return TRS;
+	TRS_cal_count++;
 }
 
 /********************************************************************************
@@ -184,6 +209,10 @@ Mtx44 returnRot;
 int counter = 0;
 Mtx44 Transformation::Calculate_TRS_withParent(const Mtx44& parentRotMat)
 {
+	//if never transform, no need to update TRS and final TRS, just return parent TRS * this TRS to children in case they transforms
+	if (!transforming)
+		return parentRotMat * TRS;
+
 	//Final TRS + scale--------------------------------------------------//
 	sharedMtx[2].SetToScale(scale.x, scale.y, scale.z);
 
@@ -194,6 +223,8 @@ Mtx44 Transformation::Calculate_TRS_withParent(const Mtx44& parentRotMat)
 	//get updateed pos aand vel-------------------------//
 	this->pos = GetPos();
 	this->vel = GetVel();
+
+	TRS_cal_count++;
 
 	return returnRot;
 }

@@ -74,15 +74,22 @@ class Transformation
 	/******************** Utilities **********************/
 	void Calculate_transformList();
 
+	//Flags---------------------------------------------------------//
+	bool transforming;
+
 public:
 
-	//Default--------------------------------//
+	static int TRS_count;
+	static int TRS_cal_count;
+
+	//Values---------------------------------------------------------//
 	float angle;
 	Vector3 axis;
 	Vector3 pos;
 	Vector3 vel;	//travelling vel
 	Vector3 scale;
 	Mtx44 TRS, finalTRS;	//overall transformation matrix
+
 
 	/******************** constructor/destructor **********************/
 	Transformation();
@@ -110,10 +117,12 @@ public:
 	void End_CustomTrans();
 
 	/******************** Calculate TRS **********************/
-	void AddedToParent(Transformation& trans);	//to offset child to be based on parent TRS
-	Mtx44 Calculate_TRS();
+	void Calculate_TRS();
 	Mtx44 Calculate_TRS_withParent(const Mtx44& parentRotMat);
 	
+	/******************** Parent/child **********************/
+	void AddedToParent(Transformation& trans);	//to offset child to be based on parent TRS
+
 	/******************** Get functions **********************/
 	Vector3 GetPos();
 	Vector3 GetVel();

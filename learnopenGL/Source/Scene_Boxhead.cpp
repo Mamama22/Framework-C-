@@ -36,6 +36,10 @@ void Scene_Boxhead::Init()
 	Render_InWorld_List[rendererCounter] = gridMap;
 	testEnt[4].AddComponent(Render_InWorld_List[rendererCounter]);
 	rendererCounter++;
+
+	//Calculate TRS----------------------------------------------------//
+	for (int i = 0; i < entityCounter; ++i)
+		testEnt[i].CalculateTRS();
 }
 
 /********************************************************************************
@@ -139,6 +143,9 @@ void Scene_Boxhead::Run()
 	//Call parent--------------------------------------//
 	Scene::Run();
 
+	Transformation::TRS_count = 0;
+	Transformation::TRS_cal_count = 0;
+
 	//PRE-UPDATE ===========================================================//
 	for (int i = 0; i < entityCounter; ++i)
 		testEnt[i].PreUpdate();
@@ -146,6 +153,9 @@ void Scene_Boxhead::Run()
 	//component pre-update (If have)----------------------------------------------//
 	for (int i = 0; i < colliderCounter; ++i)
 		AABB_List[i].PreUpdate();
+
+	for (int i = 0; i < rendererCounter; ++i)
+		Render_InWorld_List[i]->PreUpdate();
 
 
 	//Stage 1: States, flags and values update ===========================================================//
@@ -157,7 +167,6 @@ void Scene_Boxhead::Run()
 	//Add entities to main test entity-------------------------------//
 	if (CU::input.IsKeyReleased(Input::N))
 		AddAsChild(*player, *pickUp);
-
 
 	//Stage 2: TRS calculations for Entity and Comp ===========================================================//
 	for (int i = 0; i < entityCounter; ++i)
@@ -267,6 +276,10 @@ void Scene_Boxhead::DrawOnScreen()
 	int findDot = theFPS.find('.');
 	theFPS = theFPS.substr(0, findDot);
 	CU::view.RenderText(theFPS, Vector2(-390.f, 250.f), 0.5f, Color(0.f, 255.f, 255.f));
+
+	ss.str("");
+	ss << "TRS cal count: " << Transformation::TRS_cal_count;
+	CU::view.RenderText(ss.str(), Vector2(-390.f, 190.f), 0.55f, Color(24.f, 196.f, 87.f));
 	CU::view.RenderText("OWL CITY", Vector2(50.f, -290.f), 1.f, Color(242.f, 242.f, 7.f));
 }
 

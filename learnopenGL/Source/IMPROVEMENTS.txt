@@ -3,3 +3,4 @@
 -CAMERA crashes
 -use quaternions
 -aabb and parallel SAT sides, if child moves and collides, parent will be offseted into a wall and unable to slide, resulting in glitch
+-If subsequent children does not transform, no need to pass in parent TRS * TRS, simply return NULL

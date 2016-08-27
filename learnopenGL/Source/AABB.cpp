@@ -150,11 +150,11 @@ bool AABB::CollisionCheck(AABB& checkMe)
 
 	if (transformByGrandParent)	//ancestor transform with this shape
 	{
-		CU::entityMan.GetTopParent_Entity(parentHandle)->Translate(vel);
+		CU::entityMan.GetTopParent_Entity(parentHandle)->Translate(vel * 1.01f);
 	}
 	else
 	{
-		CU::entityMan.GetEntity(parentHandle)->Translate(vel);
+		CU::entityMan.GetEntity(parentHandle)->Translate(vel * 1.01f);
 	}
 }
 
