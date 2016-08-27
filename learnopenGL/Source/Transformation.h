@@ -82,6 +82,9 @@ public:
 	static int TRS_count;
 	static int TRS_cal_count;
 
+	//Stages---------------------------------------------------------//
+	static int TRS_cal_stage;	//1 or 2
+
 	//Values---------------------------------------------------------//
 	float angle;
 	Vector3 axis;

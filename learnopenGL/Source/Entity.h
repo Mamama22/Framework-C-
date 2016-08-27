@@ -47,7 +47,7 @@ protected:
 	/******************** Var **********************/
 	Entity* parent;
 	int handle;
-
+	
 	/******************** Added/removed **********************/
 	void Added(Entity* parent);	//if this entity added, do something
 	void Removed();	//if this entity removed, do something

@@ -10,6 +10,7 @@ TransformNode Transformation::customTrans[20];
 int Transformation::totalTrans = 0;
 int Transformation::TRS_count = 0;
 int Transformation::TRS_cal_count = 0;
+int Transformation::TRS_cal_stage = 0;
 
 /********************************************************************************
 Set transformation
@@ -186,7 +187,7 @@ Calculate final TRS
 ********************************************************************************/
 void Transformation::Calculate_TRS()
 {
-	//if never transform, no need to update TRS and final TRS
+	//if never transform or calculated alr, no need to update TRS and final TRS
 	if (!transforming)
 		return;
 
@@ -198,7 +199,9 @@ void Transformation::Calculate_TRS()
 	this->pos = GetPos();
 	this->vel = GetVel();
 
+	//preparation for next stage-------------------------//
 	TRS_cal_count++;
+	transforming = false;
 }
 
 /********************************************************************************
@@ -209,7 +212,7 @@ Mtx44 returnRot;
 int counter = 0;
 Mtx44 Transformation::Calculate_TRS_withParent(const Mtx44& parentRotMat)
 {
-	//if never transform, no need to update TRS and final TRS, just return parent TRS * this TRS to children in case they transforms
+	//if never transform or calculated alr, no need to update TRS and final TRS, just return parent TRS * this TRS to children in case they transforms
 	if (!transforming)
 		return parentRotMat * TRS;
 
@@ -224,7 +227,9 @@ Mtx44 Transformation::Calculate_TRS_withParent(const Mtx44& parentRotMat)
 	this->pos = GetPos();
 	this->vel = GetVel();
 
+	//preparation for next stage-------------------------//
 	TRS_cal_count++;
+	transforming = false;
 
 	return returnRot;
 }
