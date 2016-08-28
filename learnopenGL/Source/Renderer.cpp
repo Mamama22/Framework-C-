@@ -28,6 +28,7 @@ void Renderer::Init(const char* name, Mesh* mesh, Vector3 pos, Vector3 scale)
 	Component::Init(name);
 	this->mesh = mesh;
 	transform.Set(pos, scale);
+	CU::rendererMan.RegisterRenderer(this);
 }
 
 /********************************************************************************
@@ -82,6 +83,7 @@ Draw mesh on screen
 void Render_GridMap::Init(const char* name, TEXTURE_ENUM tileMap_tex, Vector3 pos, float tileScale, int totalX_tiles, int totalY_tiles)
 {
 	Renderer::Init(name, NULL, pos, Vector3(1,1,1));
+
 	this->tileScale = tileScale;
 	this->totalX_tiles = totalX_tiles;
 	this->totalY_tiles = totalY_tiles;

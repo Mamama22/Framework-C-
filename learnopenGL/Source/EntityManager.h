@@ -37,6 +37,15 @@ public:
 	void GetEntityChildren(int handle);
 	void GetEntityComp(int handle);
 
+	/******************** Core functions **********************/
+	void PreUpdate();
+	void UpdateStage2();
+	void UpdateStage3();
+	void UpdateStage4();
+
+	/******************** Exit functions **********************/
+	void Exit();
+
 	/********************************************************************************
 	Check if given component is of this class type
 	********************************************************************************/

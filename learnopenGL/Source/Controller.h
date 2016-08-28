@@ -2,13 +2,6 @@
 #define CONTROLLER_H
 
 //Scenes-------------------------//
-#include "Scene_Test.h"
-#include "Scene_Collision.h"
-#include "Scene_SAT_Test.h"
-#include "Scene_ECS_2.h"
-#include "Scene_Intersection.h"
-#include "Scene_PlaneInter.h"
-#include "Scene_Game.h"
 #include "Scene_Boxhead.h"
 
 /*************************************************************
@@ -21,13 +14,6 @@ class Controller
 {
 	//Scenes--------------------------------//
 	Scene* current_scene;
-	Scene_Test sceneTest;
-	Scene_Collision sceneCollision;
-	Scene_SAT_Test scene_SAT_Test;
-	Scene_ECS_2	scene_ECS_2;
-	Scene_Intersection scene_inter;
-	Scene_PlaneInter scene_planeInter;
-	Scene_Game scene_game;
 	Scene_Boxhead scene_boxhead;
 
 	/********************** FPS **********************/

@@ -2,7 +2,6 @@
 
 Scene_Boxhead::Scene_Boxhead()
 {
-	entityCounter = rendererCounter = colliderCounter = 0;
 }
 
 
@@ -16,102 +15,54 @@ void Scene_Boxhead::Init()
 	//Call parent--------------------------------------//
 	Scene::Init();
 
-	colliderCounter = entityCounter = 0;
+	//gridmap--------------------------------------------------------//
+	InitGridmap();
 
-	//Player-----------------------------------------------------------//
-	//MAKE SURE PLAYER INIT FIRST< SINCE IT'S SHAPE WILL BE PARENT
-	playerStart_index = entityCounter;
-	InitCharacter(&player, Vector3(0,0,0));
-	InitCharacter(&pickUp, Vector3(100, -100, 0));
-	playerEnd_index = entityCounter;
+	//character----------------------------------------------//
+	player_AABB.resize(2);
+	player_AABB[0] = InitCharacter(&player, Vector3(100, 0, 0), Vector3(50, 50, 1), CU::shared.quad_2);
+	player_AABB[1] = InitCharacter(&pickup, Vector3(220, -100, 0), Vector3(40, 100, 1), CU::shared.quad_2);
 
-	//obstacles--------------------------------------------------------//
-	InitObstacles();
-	
-
-	//tilemap---------------------------------------------------------//
-	Render_GridMap* gridMap = new Render_GridMap;
-	gridMap->Init("asdsad", TEX_MUSIC, Vector3(0, 0, 0), 20.f, 10, 10);
-	gridMap->SetActive(true);
-	Render_InWorld_List[rendererCounter] = gridMap;
-	testEnt[4].AddComponent(Render_InWorld_List[rendererCounter]);
-	rendererCounter++;
-
-	//Calculate TRS----------------------------------------------------//
-	for (int i = 0; i < entityCounter; ++i)
-		testEnt[i].CalculateTRS();
+	//Obstacles-------------------------------------------------//
+	Entity* ob;
+	obstacle_AABB.resize(2);
+	obstacle_AABB[0] = InitCharacter(&ob, Vector3(-100, 60, 0), Vector3(30, 150, 1), CU::shared.quad_1);
+	obstacle_AABB[1] = InitCharacter(&ob, Vector3(220, -50, 0), Vector3(170, 70, 1), CU::shared.quad_1);
 }
 
 /********************************************************************************
-init obstacles
+Character
 ********************************************************************************/
-void Scene_Boxhead::InitObstacles()
+AABB* Scene_Boxhead::InitCharacter(Entity** pointer, Vector3 pos, Vector3 box_scale, Mesh* boxMesh)
 {
-	int index = entityCounter;
-	obStart_index = index;
+	*pointer = new Entity;
+	(*pointer)->Init(pos, Vector3(1.f, 1.f, 1.f));
+	(*pointer)->SetActive(true);
 
-	testEnt[index].Init(Vector3(150.f, -100.f, 0.f), Vector3(1.f, 1.f, 1.f));
-	AddRendererToEntity(testEnt[index], CU::shared.quad_2, Vector3(35, 35, 35));
-	Add_AABB(testEnt[index], Vector3(80, 40, 1));
-
-	index++;
-
-	testEnt[index].Init(Vector3(150.f, 100.f, 0.f), Vector3(1.f, 1.f, 1.f));
-	AddRendererToEntity(testEnt[index], CU::shared.quad_2, Vector3(35, 35, 35));
-	Add_AABB(testEnt[index], Vector3(50, 50, 1));
-
-	index++;
-
-	testEnt[index].Init(Vector3(-150.f, 100.f, 0.f), Vector3(1.f, 1.f, 1.f));
-	AddRendererToEntity(testEnt[index], CU::shared.quad_2, Vector3(35, 35, 35));
-	Add_AABB(testEnt[index], Vector3(20, 70, 1));
-
-	index++;
-
-	obEnd_index = index;
-	entityCounter = index;
-}
-
-/********************************************************************************
-Init player
-********************************************************************************/
-void Scene_Boxhead::InitCharacter(Entity** turnMe, Vector3 pos)
-{
-	int index = entityCounter;
-
-	//Assign entity from pool---------------------------------------------//
-	*turnMe = &testEnt[index];
-	(*turnMe)->Init(pos, Vector3(1.f, 1.f, 1.f));
-
-	//Add collider shape to (*turnMe)------------------------------------------//
-	AABB_List[colliderCounter].Init("fuck u", CU::shared.quad_2, pos, Vector3(20.f, 20.f, 1.f));
-	AABB_List[colliderCounter].SetActive(true);
-
-	//add to it
-	(*turnMe)->AddComponent(&AABB_List[colliderCounter]);
-
-	//Component counter
-	colliderCounter++;
-
-	//Add renderer to (*turnMe)-------------------------------------------------------//
-	AddRendererToEntity(testEnt[index], CU::shared.playerQuad, Vector3(40.f, 40.f, 1.f));
-
-	entityCounter += 1;
-}
-
-/********************************************************************************
-Add renderer to Entity
-********************************************************************************/
-void Scene_Boxhead::AddRendererToEntity(Entity& addToMe, Mesh* mesh, Vector3 scale)
-{
-	Vector3 pos = addToMe.transform.GetPos();
-
+	//Add renderer------------------------------------------------//
 	Render_InWorld* mama = new Render_InWorld;
-	mama->Init("fuck u", mesh, pos, scale);	//assign available renderer
+	mama->Init("fuck u", CU::shared.playerQuad, pos, Vector3(40.f, 40.f, 1.f));	//assign available renderer
 	mama->SetActive(true);
-	Render_InWorld_List[rendererCounter] = mama;
-	addToMe.AddComponent(Render_InWorld_List[rendererCounter]);
-	rendererCounter++;
+	(*pointer)->AddComponent(mama);
+
+	//Add AABB----------------------------------------------------//
+	AABB* boxy = new AABB;
+	boxy->Init("fuck u", boxMesh, pos, box_scale);
+	boxy->SetActive(true);
+	(*pointer)->AddComponent(boxy);
+
+	return boxy;
+}
+
+/********************************************************************************
+Init gridmap
+********************************************************************************/
+void Scene_Boxhead::InitGridmap()
+{
+	//gridmap---------------------------------------------------------//
+	GridMap* gridmap = new GridMap;
+	gridmap->Init(Vector3(-400, -300, 0), TEX_MUSIC, 10.f, 50, 50, 5, 5);
+	gridmap->SetActive(true);
 }
 
 /********************************************************************************
@@ -120,86 +71,6 @@ Add child entity to parent entity
 void Scene_Boxhead::AddAsChild(Entity& parent, Entity& child)
 {
 	parent.AddChildren(&child);
-}
-
-/********************************************************************************
-Add random shapes to entity
-********************************************************************************/
-void Scene_Boxhead::Add_AABB(Entity& addToMe, Vector3 scale)
-{
-	AABB_List[colliderCounter].Init("farkle2", CU::shared.quad_1, addToMe.transform.pos, scale);
-
-	//Add--------------------------//
-	AABB_List[colliderCounter].SetActive(true);
-	addToMe.AddComponent(&AABB_List[colliderCounter]);
-	colliderCounter++;
-}
-
-/********************************************************************************
-Run
-********************************************************************************/
-void Scene_Boxhead::Run()
-{
-	//Call parent--------------------------------------//
-	Scene::Run();
-
-	Transformation::TRS_count = 0;
-	Transformation::TRS_cal_count = 0;
-
-	//PRE-UPDATE ===========================================================//
-	for (int i = 0; i < entityCounter; ++i)
-		testEnt[i].PreUpdate();
-
-	//component pre-update (If have)----------------------------------------------//
-	for (int i = 0; i < colliderCounter; ++i)
-		AABB_List[i].PreUpdate();
-
-	for (int i = 0; i < rendererCounter; ++i)
-		Render_InWorld_List[i]->PreUpdate();
-
-
-	//Stage 1: States, flags and values update ===========================================================//
-
-	//Control---------------------------------------------------------------------//
-	//Input (Pre-update)
-	UpdatePlayerInput();
-
-	//Add entities to main test entity-------------------------------//
-	if (CU::input.IsKeyReleased(Input::N))
-		AddAsChild(*player, *pickUp);
-
-	//Stage 2: TRS calculations for Entity and Comp ===========================================================//
-	for (int i = 0; i < entityCounter; ++i)
-		testEnt[i].CalculateTRS();
-
-	//stage 3: Update with changes ===========================================================//
-	
-	//collision check-------------------------------//
-	for (int i = 2; i < colliderCounter; ++i)
-		AABB_List[0].CollisionCheck(AABB_List[i]);
-
-	for (int i = 2; i < colliderCounter; ++i)
-		AABB_List[1].CollisionCheck(AABB_List[i]);
-
-
-	//Entity update------------------------------------------------------//
-	for (int i = 0; i < entityCounter; ++i)
-		testEnt[i].Update();
-
-	//Comp update-----------------------------------------------------//
-	for (int i = 0; i < rendererCounter; ++i)
-	{
-		Render_InWorld_List[i]->Update();
-	}
-	for (int i = 0; i < colliderCounter; ++i)
-	{
-		AABB_List[i].Update();
-	}
-
-
-	//Stage 4: 2nd TRS calculations for Entity and Comp (For those with changes) ===========================================================//
-	for (int i = 0; i < entityCounter; ++i)
-		testEnt[i].CalculateTRS();
 }
 
 /********************************************************************************
@@ -217,29 +88,61 @@ void Scene_Boxhead::UpdatePlayerInput()
 		player->Translate(Vector3(2.f, 0, 0));
 
 	if (CU::input.IsKeyPressed(Input::ARROW_UP))
-		pickUp->Translate(Vector3(0, 2.f, 0));
+		pickup->Translate(Vector3(0, 2.f, 0));
 	if (CU::input.IsKeyPressed(Input::ARROW_DOWN))
-		pickUp->Translate(Vector3(0, -2.f, 0));
+		pickup->Translate(Vector3(0, -2.f, 0));
 	if (CU::input.IsKeyPressed(Input::ARROW_LEFT))
-		pickUp->Translate(Vector3(-2.f, 0, 0));
+		pickup->Translate(Vector3(-2.f, 0, 0));
 	if (CU::input.IsKeyPressed(Input::ARROW_RIGHT))
-		pickUp->Translate(Vector3(2.f, 0, 0));
+		pickup->Translate(Vector3(2.f, 0, 0));
 
-	////player's rotation--------------------------------------//
-	//if (CU::input.IsKeyPressed(Input::ARROW_LEFT))
-	//	player->Rotate(2.f, Vector3(0, 0, 1));
-	//if (CU::input.IsKeyPressed(Input::ARROW_RIGHT))
-	//	player->Rotate(-2.f, Vector3(0, 0, 1));
+	//player's rotation--------------------------------------//
+	/*if (CU::input.IsKeyPressed(Input::ARROW_LEFT))
+		player->Rotate(2.f, Vector3(0, 0, 1));
+	if (CU::input.IsKeyPressed(Input::ARROW_RIGHT))
+		player->Rotate(-2.f, Vector3(0, 0, 1));*/
 
 	////pick up's rotation--------------------------------------//
 	//if (CU::input.IsKeyPressed(Input::V))
 	//	pickUp->Rotate(2.f, Vector3(0, 0, 1));
 	//if (CU::input.IsKeyPressed(Input::B))
 	//	pickUp->Rotate(-2.f, Vector3(0, 0, 1));
+
+	//Add entities to main test entity------------------------------ -//
+	if (CU::input.IsKeyReleased(Input::N))
+		AddAsChild(*player, *pickup);
 }
 
 /********************************************************************************
-Draw in world
+Run
+********************************************************************************/
+void Scene_Boxhead::Run_Stage1()
+{
+	//Call parent--------------------------------------//
+	Scene::Run_Stage1();
+
+	UpdatePlayerInput();
+}
+
+/********************************************************************************
+Run
+********************************************************************************/
+void Scene_Boxhead::Run_Stage3()
+{
+	Scene::Run_Stage3();
+
+	//collision check-------------------------------//
+	for (int i = 0; i < player_AABB.size(); ++i)
+	{
+		for(int t = 0; t < obstacle_AABB.size(); ++t)
+		{
+			player_AABB[i]->CollisionCheck(*obstacle_AABB[t]);
+		}
+	}
+}
+
+/********************************************************************************
+Draw in world (3D)
 ********************************************************************************/
 void Scene_Boxhead::DrawInWorld()
 {
@@ -247,25 +150,21 @@ void Scene_Boxhead::DrawInWorld()
 }
 
 /********************************************************************************
-Draw on screen
+Draw on screen (2D)
 ********************************************************************************/
 void Scene_Boxhead::DrawOnScreen()
 {
-
 	//Axes----------------------------------------------------//
 	CU::view.SetIdentity();
 	CU::view.Scale(2000.f, 2000.f, 2000.f);
 	CU::view.RenderMesh(*CU::shared.axes);
+}
 
-	//Special: Renderer components has a draw function====================================================================//
-	//Renderer Draw---------------------------------------------//
-	for (int i = 0; i < rendererCounter; ++i)
-		Render_InWorld_List[i]->Draw();
-
-	//shape Draw---------------------------------------------//
-	for (int i = 0; i < colliderCounter; ++i)
-		AABB_List[i].Draw();
-
+/********************************************************************************
+Draw GUI
+********************************************************************************/
+void Scene_Boxhead::DrawGUI()
+{
 	//Text----------------------------------------------------//
 	CU::view.UseShader(View::TEXT_SHADER);	//use light shader
 
@@ -290,7 +189,4 @@ void Scene_Boxhead::Exit()
 {
 	//Call parent--------------------------------------//
 	Scene::Exit();
-
-	for (int i = 0; i < rendererCounter; ++i)
-		delete Render_InWorld_List[i];
 }

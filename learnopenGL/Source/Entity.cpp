@@ -11,6 +11,7 @@ Entity::Entity()
 	parent = NULL; 
 	CU::entityMan.RegisterEntity(this);	//MUST REGISTER
 	transforming = false;
+	active = false;
 }
 
 Entity::~Entity()
@@ -278,3 +279,6 @@ void Entity::GetCompList(vector<Component*>& list)
 
 int Entity::Gethandle(){ return handle; }
 void Entity::Sethandle(int handle){ this->handle = handle; }
+
+bool Entity::getActive(){ return active; }
+void Entity::SetActive(bool b){ active = b; }

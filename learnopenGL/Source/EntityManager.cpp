@@ -45,3 +45,63 @@ void EntityManager::GetEntityComp(int handle)
 {
 	entityList[handle]->GetCompList(compList);
 }
+
+/********************************************************************************
+Pre-update
+********************************************************************************/
+void EntityManager::PreUpdate()
+{
+	for (int i = 0; i < entityList.size(); ++i)
+	{
+		if (entityList[i]->getActive())
+			entityList[i]->PreUpdate();
+	}
+}
+
+/********************************************************************************
+update stage 2
+********************************************************************************/
+void EntityManager::UpdateStage2()
+{
+	for (int i = 0; i < entityList.size(); ++i)
+	{
+		if (entityList[i]->getActive())
+			entityList[i]->CalculateTRS();
+	}
+}
+
+/********************************************************************************
+update stage 3
+********************************************************************************/
+void EntityManager::UpdateStage3()
+{
+	for (int i = 0; i < entityList.size(); ++i)
+	{
+		if (entityList[i]->getActive())
+			entityList[i]->Update();
+	}
+}
+
+/********************************************************************************
+update stage 4
+********************************************************************************/
+void EntityManager::UpdateStage4()
+{
+	for (int i = 0; i < entityList.size(); ++i)
+	{
+		if (entityList[i]->getActive())
+			entityList[i]->CalculateTRS();
+	}
+}
+
+/********************************************************************************
+Exit
+********************************************************************************/
+void EntityManager::Exit()
+{
+	for (int i = 0; i < entityList.size(); ++i)
+	{
+		if (entityList[i])
+			delete entityList[i];
+	}
+}

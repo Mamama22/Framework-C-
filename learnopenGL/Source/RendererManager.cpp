@@ -1,58 +1,57 @@
-#include "Scene.h"
+#include "RendererManager.h"
 
 /********************************************************************************
-Init: common resources set to default values, overwrite in derived function if
-necessary
+Register renderer comp
 ********************************************************************************/
-void Scene::Init()
+void RendererManager::RegisterRenderer(Renderer* regMe)
 {
-	scene_state = TRANSITIONING_IN;
-
-	camera.Init(Vector3(0.f, 0.f, 10.f), Vector3(0.f, 0.f, 5.f), Vector3(0.f, 1.f, 0.f));
+	renderList.push_back(regMe);
 }
 
 /********************************************************************************
-Run
+Pre-update
 ********************************************************************************/
-void Scene::Run_Stage1()
+void RendererManager::PreUpdate()
 {
-	//cam/Mouse update----------------------------------------------//
-	//camera.Update(CU::dt);
-	//camera.UpdateInput(CU::dt);
-}
-
-void Scene::Run_Stage3()
-{
-}
-
-/********************************************************************************
-Draw
-********************************************************************************/
-void Scene::DrawInWorld()
-{
-
+	for (int i = 0; i < renderList.size(); ++i)
+	{
+		if (renderList[i]->isActive())
+			renderList[i]->PreUpdate();
+	}
 }
 
 /********************************************************************************
-Draw
+update stage 3
 ********************************************************************************/
-void Scene::DrawOnScreen()
+void RendererManager::UpdateStage3()
 {
-
+	for (int i = 0; i < renderList.size(); ++i)
+	{
+		if (renderList[i]->isActive())
+			renderList[i]->Update();
+	}
 }
 
 /********************************************************************************
-Draw
+Render renderer
 ********************************************************************************/
-void Scene::DrawGUI()
+void RendererManager::DrawRenderer()
 {
-
+	for (int i = 0; i < renderList.size(); ++i)
+	{
+		if (renderList[i]->isActive())
+			renderList[i]->Draw();
+	}
 }
 
 /********************************************************************************
-Exit
+delete renderers
 ********************************************************************************/
-void Scene::Exit()
+void RendererManager::Exit()
 {
-
+	for (int i = 0; i < renderList.size(); ++i)
+	{
+		if (renderList[i])
+			delete renderList[i];
+	}
 }

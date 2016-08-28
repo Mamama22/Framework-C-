@@ -37,6 +37,7 @@ class Entity
 
 	/******************** Var **********************/
 	string name;
+	bool active;
 
 	/******************** List **********************/
 	vector<Component*> componentList;
@@ -66,7 +67,7 @@ public:
 
 	/******************** Constructor/destructor **********************/
 	Entity();
-	~Entity();
+	virtual ~Entity();
 	
 	/******************** Addind/removing child/comp, overload for customisation **********************/
 	virtual void AddComponent(Component* comp);
@@ -104,6 +105,8 @@ public:
 	void GetCompList(vector<Component*>& list);
 	int Gethandle();
 	void Sethandle(int handle);
+	bool getActive();
+	void SetActive(bool b);
 
 	/******************** abstract functions **********************/
 	virtual void Exit(){}

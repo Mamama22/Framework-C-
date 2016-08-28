@@ -21,6 +21,8 @@ void Controller::Init()
 	//scene_ECS_2
 	current_scene = &scene_boxhead;
 	current_scene->Init();
+
+	CU::Post_Init();
 }
 
 /********************************************************************************
@@ -58,11 +60,19 @@ void Controller::Run()
 			//call before all-----------------------------------------//
 			CU::input.CheckForKeyPresses();
 
-			//core utilities update-----------------------------------//
-			CU::Update();
+			//CU pre update-----------------------------------//
+			CU::PreUpdate();
 
 			//Scene update-------------------------------------------//
-			current_scene->Run();
+			current_scene->Run_Stage1();
+			CU::Update_Stage1();
+
+			CU::Update_Stage2();
+
+			current_scene->Run_Stage3();
+			CU::Update_Stage3();
+
+			CU::Update_Stage4();
 			
 			//check if any input pressed------------------------------//
 			if (fps <= 40.f)
@@ -84,10 +94,15 @@ void Controller::Run()
 			//Screen Render-----------------------------------------------------------------------//
 			CU::view.Start_ScreenRender(-Screen::CAMERA_WIDTH*0.5f, -Screen::CAMERA_HEIGHT*0.5f);
 
+			CU::DrawOnScreen();	//framework draw on screen
 			current_scene->DrawOnScreen();
+
+			//GUI Render-------------------------------------------------------------------------//
+			current_scene->DrawGUI();
 
 			//Post Render-----------------------------------------------------------------------//
 			CU::view.PostRender();
+
 
 			m_dAccumulatedTime_thread2 = 0.0;
 		}

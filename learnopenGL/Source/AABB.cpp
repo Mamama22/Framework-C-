@@ -25,9 +25,7 @@ Add point
 void AABB::Init(const char* name, Mesh* debugMesh, Vector3 pos, Vector3 scale)
 {
 	active = true;
-	Component::Init(name);
-	transform.Set(pos, scale);
-	this->mesh = debugMesh;
+	Renderer::Init(name, debugMesh, pos, scale);
 }
 
 /********************************************************************************

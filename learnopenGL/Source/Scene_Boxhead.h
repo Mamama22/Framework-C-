@@ -13,44 +13,18 @@ Date: 18/8/2016
 /*************************************************************/
 class Scene_Boxhead : public Scene
 {
-	/******************** tmp Component system **********************/
-	const static int TOTAL_RENDERER = 40;
-	const static int TOTAL_AABB = 20;
-	const static int TOTAL_ENTITY = 20;
-
-	int rendererCounter;
-	int colliderCounter;
-	int entityCounter;
-
-	//ostacles indexes (keep tract of shapes that are obstacle collider)------------------------//
-	int obStart_index;
-	int obEnd_index;
-
-	//Player controlled entitites--------------------------------------------------------//
-	int playerStart_index;
-	int playerEnd_index;
-
-	//Renderer comp assign----------------------//
-	Renderer* Render_InWorld_List[TOTAL_RENDERER];
-
-	//shape comp assign----------------------//
-	AABB AABB_List[TOTAL_AABB];
-
-	//Entity----------------------//
-	Entity testEnt[TOTAL_ENTITY];
-
-	//player entity---------------------------//
 	Entity* player;
-	Entity* pickUp;
+	Entity* pickup;
+	vector<AABB*> player_AABB;
+	vector<AABB*> obstacle_AABB;
 
 	/******************** Utilities **********************/
-	void AddRendererToEntity(Entity& addToMe, Mesh* mesh, Vector3 scale);
-	void AddAsChild(Entity& parent, Entity& child);
-	void Add_AABB(Entity& addToMe, Vector3 scale);
+	static AABB* InitCharacter(Entity** pointer, Vector3 pos, Vector3 box_scale, Mesh* boxMesh);
+	static void AddAsChild(Entity& parent, Entity& child);
+
 
 	/******************** Init **********************/
-	void InitCharacter(Entity** turnMe, Vector3 pos);
-	void InitObstacles();
+	void InitGridmap();
 
 	/******************** Update **********************/
 	void UpdatePlayerInput();
@@ -62,9 +36,13 @@ public:
 
 	/******************** core functions: Extend the virtual ones!!! **********************/
 	void Init();
-	void Run();
+
+	void Run_Stage1();
+	void Run_Stage3();
+
 	void DrawInWorld();
 	void DrawOnScreen();
+	void DrawGUI();
 	void Exit();
 };
 
