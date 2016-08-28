@@ -24,13 +24,25 @@ protected:
 	int totalX_tiles;
 	int totalY_tiles;
 
-	int** tilemap;	//tilemap for all grids
+	//tiles of all the grid-----------------//
 	float tileScale;
 
-	int totalX_grids;	//grids
+	//grids-----------------------------//
+	int totalX_grids;
 	int totalY_grids;
 
+	int totalX_Tiles_perGrid;
+	int totalY_Tiles_perGrid;
+
+	//tilemap--------------------------//
+	int tileMap_sizeX;
+	int tileMap_sizeY;
+
 	vector<Render_GridMap*> gridMap;
+
+
+	//modifying tools--------------------------//
+	vector<Render_GridMap*> meshModified;
 
 public:
 
@@ -38,13 +50,27 @@ public:
 	GridMap();
 	~GridMap();
 
-	/******************** Addind/removing child/comp, overload for customisation **********************/
-
 	/******************** Core functions **********************/
-	void Init(Vector3 pos, TEXTURE_ENUM tilemesh, float tileScale, int totalX_tiles, int totalY_tiles, int totalX_grids, int totalY_grids);
+	void Init(Vector3 pos, TEXTURE_ENUM tilemesh, float tileScale, int totalX_tiles, int totalY_tiles, int totalX_grids, int totalY_grids, int tileMap_sizeX, int tileMap_sizeY);
 
 	//Will be called everytime BEFORE comp updates-------------------//
 	void Update();
+
+	/******************** Modify tiles **********************/
+	void ModifyTile(int tileType, int x, int y);
+	void RecalculateMesh();	//call after modifying tiles
+
+	/******************** Getter **********************/
+	int Get_TotalGridsX();
+	int Get_TotalGridsY();
+	int Get_TilesPerGridX();
+	int Get_TilesPerGridY();
+	int Get_TotalTilesX();
+	int Get_TotalTilesY();
+	int Get_TilemapSizeX();
+	int Get_TilemapSizeY();
+	int Get_TilemapSize();
+	float Get_TileScale();
 };
 
 #endif

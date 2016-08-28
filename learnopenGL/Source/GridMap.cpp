@@ -6,9 +6,13 @@ GridMap::~GridMap(){}
 /********************************************************************************
 init
 ********************************************************************************/
-void GridMap::Init(Vector3 pos, TEXTURE_ENUM tilemesh, float tileScale, int totalX_tiles, int totalY_tiles, int totalX_grids, int totalY_grids)
+void GridMap::Init(Vector3 pos, TEXTURE_ENUM tilemesh, float tileScale, int totalX_tiles, int totalY_tiles, int totalX_grids, int totalY_grids, int tileMap_sizeX, int tileMap_sizeY)
 {
 	Entity::Init(pos, Vector3(1.f, 1.f, 1.f));
+
+	//tilemap size---------------------------------------------//
+	this->tileMap_sizeX = tileMap_sizeX;
+	this->tileMap_sizeY = tileMap_sizeY;
 
 	//total tiles combined for entire map---------------------------------//
 	this->totalX_tiles = totalX_tiles;
@@ -21,8 +25,8 @@ void GridMap::Init(Vector3 pos, TEXTURE_ENUM tilemesh, float tileScale, int tota
 	this->totalY_grids = totalY_grids;
 
 	//total tiles per grid--------------------------------------------//
-	int totalX_Tiles_perGrid = totalX_tiles / totalX_grids;
-	int totalY_Tiles_perGrid = totalY_tiles / totalY_grids;
+	totalX_Tiles_perGrid = totalX_tiles / totalX_grids;
+	totalY_Tiles_perGrid = totalY_tiles / totalY_grids;
 	Vector3 startPos = pos;
 
 	//load gridmesh for each grid-------------------------------------//
@@ -53,3 +57,62 @@ void GridMap::Update()
 {
 
 }
+
+/********************************************************************************
+Modify tile
+********************************************************************************/
+void GridMap::ModifyTile(int tileType, int x, int y)
+{
+	//Get the to-be modified grid---------------------------//
+	int xGrid = x / totalX_Tiles_perGrid;
+	int yGrid = y / totalY_Tiles_perGrid;
+
+	Render_GridMap* modified = gridMap[(xGrid * totalY_grids) + yGrid];
+
+	//check if is added to modified meshes list---------------------//
+	bool add = true;
+	for (int i = 0; i < meshModified.size(); ++i)
+	{
+		if (meshModified[i] == modified)
+		{
+			add = false;
+			break;
+		}
+	}
+
+	//add to modified meshes list-------------------------------//
+	if (add)
+		meshModified.push_back(modified);
+
+	//modify the tile in THIS grid----------------------------------//
+	int tileX = x - (totalX_Tiles_perGrid * xGrid);
+	int tileY = y - (totalY_Tiles_perGrid * yGrid);
+
+	modified->ModifyTile(tileX, tileY, tileType, tileMap_sizeX, tileMap_sizeY);
+}
+
+/********************************************************************************
+Recalculate Mesh
+********************************************************************************/
+void GridMap::RecalculateMesh()
+{
+	for (int i = 0; i < meshModified.size(); ++i)
+	{
+		meshModified[i]->RecalculateMesh();
+	}
+	meshModified.clear();
+}
+
+/********************************************************************************
+Getters
+********************************************************************************/
+int GridMap::Get_TotalGridsX(){ return totalX_grids; }
+int GridMap::Get_TotalGridsY(){ return totalY_grids; }
+int GridMap::Get_TilesPerGridX(){ return totalX_Tiles_perGrid; }
+int GridMap::Get_TilesPerGridY(){ return totalY_Tiles_perGrid; }
+int GridMap::Get_TotalTilesX(){ return totalX_tiles; }
+int GridMap::Get_TotalTilesY(){ return totalY_tiles; }
+int GridMap::Get_TilemapSizeX(){ return tileMap_sizeX; }
+int GridMap::Get_TilemapSizeY(){ return tileMap_sizeY; }
+int GridMap::Get_TilemapSize(){ return tileMap_sizeX * tileMap_sizeY; }
+float GridMap::Get_TileScale(){ return tileScale; }

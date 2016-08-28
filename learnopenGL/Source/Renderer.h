@@ -95,7 +95,8 @@ public:
 	void Init(const char* name, TEXTURE_ENUM tileMap_tex, Vector3 pos, float tileScale, int totalX_tiles, int totalY_tiles);
 
 	/******************** Core functions **********************/
-	void ModifyTile(int x, int y, int tileType);
+	void ModifyTile(int x, int y, int tileType, int tilemap_sizeX, int tilemap_sizeY);
+	void RecalculateMesh();	//call after modifying tiles
 
 	/******************** abstract functions **********************/
 	void Draw();	//render

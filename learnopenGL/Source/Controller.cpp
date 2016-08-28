@@ -12,6 +12,9 @@ void Controller::Init()
 	m_dAccumulatedTime_thread1 = 0.0;
 	m_dAccumulatedTime_thread2 = 0.0;
 
+	//rand
+	srand(time(NULL));
+
 	//Core utils init------------------------------//
 	CU::Init();
 	CU::input.SetMouse(false);	//no mouse used

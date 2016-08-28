@@ -61,8 +61,19 @@ void Scene_Boxhead::InitGridmap()
 {
 	//gridmap---------------------------------------------------------//
 	GridMap* gridmap = new GridMap;
-	gridmap->Init(Vector3(-400, -300, 0), TEX_MUSIC, 10.f, 50, 50, 5, 5);
+	gridmap->Init(Vector3(-400, -300, 0), TEX_MC_TILEMAP, 11.f, 50, 50, 5, 5, 2, 2);
 	gridmap->SetActive(true);
+
+	//modify times----------------------------//
+	for (int x = 0; x < gridmap->Get_TotalTilesX(); ++x)
+	{
+		for (int y = 0; y < gridmap->Get_TotalTilesY(); ++y)
+		{
+			int tileType = rand() % gridmap->Get_TilemapSize();	//tilemap size is 4
+			gridmap->ModifyTile(tileType, x, y);
+		}
+	}
+	gridmap->RecalculateMesh();
 }
 
 /********************************************************************************

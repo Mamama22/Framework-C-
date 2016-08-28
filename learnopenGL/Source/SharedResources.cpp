@@ -34,6 +34,7 @@ void SharedResources::Init()
 	//testures------------------------------------------------------------------//
 	textureList[TEX_MUSIC] = LoadTGA("Image//CatPurple.tga");
 	textureList[TEX_SPRITE_EXPLOSION] = LoadTGA("Image//explosion_hd.tga");
+	textureList[TEX_MC_TILEMAP] = LoadTGA("Image//minecraft_tilemap.tga");
 
 	//preload some textures into meshes---------------------------------//
 	playerQuad->SetTexture(TEX_MUSIC);

@@ -120,29 +120,34 @@ void Render_GridMap::Init(const char* name, TEXTURE_ENUM tileMap_tex, Vector3 po
 	mesh->Setup(vertex_buffer_data, index_buffer_data, GL_TRIANGLES);
 
 	//test modify a tile--------------------------------------//
-	ModifyTile(2, 8, 27);
+	/*ModifyTile(2, 8, 27);
 	ModifyTile(4, 8, 27);
 	ModifyTile(2, 6, 27);
-	ModifyTile(4, 6, 27);
+	ModifyTile(4, 6, 27);*/
 }
 
 /********************************************************************************
 Modify tile
 ********************************************************************************/
-void Render_GridMap::ModifyTile(int x, int y, int tileType)
+void Render_GridMap::ModifyTile(int x, int y, int tileType, int tilemap_sizeX, int tilemap_sizeY)
 {
-	int xCur = tileType / totalY_tiles;
-	int yCur = tileType % totalY_tiles;
+	//current tile to set from tilemap-------------------------------------//
+	int xCur = tileType / tilemap_sizeX;
+	int yCur = tileType % tilemap_sizeY;
 
-	const float xUnit = 1.f / (float)totalX_tiles;
-	const float yUnit = 1.f / (float)totalY_tiles;
+	//percentage of size of a tile in tilemap-----------------------------//
+	const float xUnit = 1.f / (float)tilemap_sizeX;
+	const float yUnit = 1.f / (float)tilemap_sizeY;
 
 	//modify vertex_buffer_data, the tile at (X, Y)'s texcoord
 	vertex_buffer_data[(y * 4) + (x * (totalY_tiles * 4)) + 0].texcoord.Set(xCur * xUnit, yCur * yUnit);
 	vertex_buffer_data[(y * 4) + (x * (totalY_tiles * 4)) + 1].texcoord.Set(xCur * xUnit + xUnit, yCur * yUnit);
 	vertex_buffer_data[(y * 4) + (x * (totalY_tiles * 4)) + 2].texcoord.Set(xCur * xUnit + xUnit, yCur * yUnit + yUnit);
 	vertex_buffer_data[(y * 4) + (x * (totalY_tiles * 4)) + 3].texcoord.Set(xCur * xUnit, yCur * yUnit + yUnit);
+}
 
+void Render_GridMap::RecalculateMesh()
+{
 	//call setup and pass in our vertex_buffer_data
 	mesh->SetupVertexOnly(vertex_buffer_data, index_buffer_data, GL_TRIANGLES);
 }
