@@ -1,4 +1,5 @@
 #include "GridMap.h"
+#include "CoreUtilities.h"
 
 GridMap::GridMap(){}
 GridMap::~GridMap(){}
@@ -54,6 +55,20 @@ void GridMap::Init(Vector3 pos, TEXTURE_ENUM tilemesh, float tileScale, int tota
 	//Spartial partition-------------------------------------------//
 	this->total_SP_X = total_SP_X;
 	this->total_SP_Y = total_SP_Y;
+	float mapScaleX = tileScale * totalX_tiles;
+	float mapScaleY = tileScale * totalY_tiles;
+
+	//X sp lines-------------------------------------------------------------//
+	Render_Repetitive* render_line = new Render_Repetitive();
+	render_line->Init("SD", CU::shared.quad_start0, pos, Vector3(mapScaleX, 2, 1), Vector3(0, mapScaleY / (float)total_SP_Y, 0), total_SP_X);
+	render_line->SetActive(true);
+	AddComponent(render_line);
+	
+	//Y sp lines-------------------------------------------------------------//
+	render_line = new Render_Repetitive();
+	render_line->Init("SD", CU::shared.quad_start0, pos, Vector3(2, mapScaleY, 1), Vector3(mapScaleX / (float)total_SP_X, 0, 0), total_SP_Y);
+	render_line->SetActive(true);
+	AddComponent(render_line);
 }
 
 /********************************************************************************

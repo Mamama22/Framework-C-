@@ -102,4 +102,29 @@ public:
 	void Draw();	//render
 };
 
+
+
+/*==========================================================================================================================
+Render on screen repetitive
+
+How to use:
+1) Call init and pass in relevant info, make sure mesh is a tilemap
+
+Author: Tan Yie Cher
+Date: 26/8/2016
+/===========================================================================================================================*/
+class Render_Repetitive : public Renderer
+{
+	Vector3 offset;
+	int count;
+	
+public:
+
+	/******************** comp functions **********************/
+	void Init(const char* name, Mesh* mesh, Vector3 pos, Vector3 scale, Vector3 offset, int count);
+
+	/******************** abstract functions **********************/
+	void Draw();	//render
+};
+
 #endif

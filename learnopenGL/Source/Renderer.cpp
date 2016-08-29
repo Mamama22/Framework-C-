@@ -44,12 +44,9 @@ Draw mesh on screen
 ********************************************************************************/
 void Render_OnScreen::Draw()
 {
-	if (active)
-	{
 		CU::view.SetIdentity();
 		CU::view.LoadMatrix(transform.finalTRS);
 		CU::view.RenderMesh(*mesh);
-	}
 }
 
 /********************************************************************************
@@ -57,12 +54,9 @@ Draw mesh on screen
 ********************************************************************************/
 void Render_InWorld::Draw()
 {
-	if (active)
-	{
-		CU::view.SetIdentity();
-		CU::view.LoadMatrix(transform.finalTRS);
-		CU::view.RenderMesh(*mesh);
-	}
+	CU::view.SetIdentity();
+	CU::view.LoadMatrix(transform.finalTRS);
+	CU::view.RenderMesh(*mesh);
 }
 
 
@@ -108,22 +102,10 @@ void Render_GridMap::Init(const char* name, TEXTURE_ENUM tileMap_tex, Vector3 po
 	//Create draw quad--------------------------------------------------------------//
 	mesh = MeshBuilder::GenerateCustomQuad(vertex_buffer_data, index_buffer_data, totalX_tiles, totalY_tiles, true);
 
-	//gen. a tilemap quad with (X, Y) grids, DO NOT ALL SETUP
-
-
-	//call ModifyTile and modify random tile with 0 type
-	
-
 	//tmp: call setup so at least can render complete tilemap
 	mesh->SetTexture(tileMap_tex);
 	transform.Scale(Vector3(tileScale * totalX_tiles, tileScale * totalY_tiles, 1.f));
 	mesh->Setup(vertex_buffer_data, index_buffer_data, GL_TRIANGLES);
-
-	//test modify a tile--------------------------------------//
-	/*ModifyTile(2, 8, 27);
-	ModifyTile(4, 8, 27);
-	ModifyTile(2, 6, 27);
-	ModifyTile(4, 6, 27);*/
 }
 
 /********************************************************************************
@@ -157,10 +139,32 @@ Draw mesh on screen
 ********************************************************************************/
 void Render_GridMap::Draw()
 {
-	if (active)
+	CU::view.SetIdentity();
+	CU::view.LoadMatrix(transform.finalTRS);
+	CU::view.RenderMesh(*mesh);
+}
+
+/********************************************************************************
+Repetitive mesh
+********************************************************************************/
+void Render_Repetitive::Init(const char* name, Mesh* mesh, Vector3 pos, Vector3 scale, Vector3 offset, int count)
+{
+	Renderer::Init(name, mesh, pos, scale);
+	this->offset = offset.divideWithVector(scale);
+	this->count = count;
+}
+
+/********************************************************************************
+Repetitive mesh
+********************************************************************************/
+void Render_Repetitive::Draw()
+{
+	CU::view.SetIdentity();
+	CU::view.LoadMatrix(transform.finalTRS);
+
+	for (int i = 0; i < count; ++i)
 	{
-		CU::view.SetIdentity();
-		CU::view.LoadMatrix(transform.finalTRS);
 		CU::view.RenderMesh(*mesh);
+		CU::view.Translate(offset.x, offset.y, offset.z);
 	}
 }
