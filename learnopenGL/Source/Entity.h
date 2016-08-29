@@ -56,9 +56,6 @@ protected:
 	//added/removed action----------------------------------//
 	virtual void Added_ToEntity(Entity* addedTo);	//call for every entity in chain, immediate to bottom
 
-	/******************** Derive urself functions **********************/
-	virtual void UpdateEntity();
-
 public:
 	
 	/******************** public var **********************/
@@ -79,8 +76,8 @@ public:
 	void Init(Vector3 pos, Vector3 scale);
 
 	//Will be called everytime BEFORE comp updates-------------------//
-	void PreUpdate();
-	void Update();
+	virtual void PreUpdate();
+	virtual void Update();
 
 	//Call in stage 2 and 4--------------------------------------//
 	virtual void CalculateTRS();

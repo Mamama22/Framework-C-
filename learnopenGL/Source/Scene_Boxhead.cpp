@@ -60,8 +60,8 @@ Init gridmap
 void Scene_Boxhead::InitGridmap()
 {
 	//gridmap---------------------------------------------------------//
-	GridMap* gridmap = new GridMap;
-	gridmap->Init(Vector3(-400, -300, 0), TEX_MC_TILEMAP, 11.f, 50, 50, 5, 5, 2, 2);
+	gridmap = new GridMap;
+	gridmap->Init(Vector3(-400, -300, 0), TEX_MC_TILEMAP, 11.f, 50, 50, 5, 5, 2, 2, 5, 5);
 	gridmap->SetActive(true);
 
 	//modify times----------------------------//
@@ -99,13 +99,13 @@ void Scene_Boxhead::UpdatePlayerInput()
 		player->Translate(Vector3(2.f, 0, 0));
 
 	if (CU::input.IsKeyPressed(Input::ARROW_UP))
-		pickup->Translate(Vector3(0, 2.f, 0));
+		gridmap->Translate(Vector3(0, 2.f, 0));
 	if (CU::input.IsKeyPressed(Input::ARROW_DOWN))
-		pickup->Translate(Vector3(0, -2.f, 0));
+		gridmap->Translate(Vector3(0, -2.f, 0));
 	if (CU::input.IsKeyPressed(Input::ARROW_LEFT))
-		pickup->Translate(Vector3(-2.f, 0, 0));
+		gridmap->Translate(Vector3(-2.f, 0, 0));
 	if (CU::input.IsKeyPressed(Input::ARROW_RIGHT))
-		pickup->Translate(Vector3(2.f, 0, 0));
+		gridmap->Translate(Vector3(2.f, 0, 0));
 
 	//player's rotation--------------------------------------//
 	/*if (CU::input.IsKeyPressed(Input::ARROW_LEFT))

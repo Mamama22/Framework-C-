@@ -6,7 +6,8 @@ GridMap::~GridMap(){}
 /********************************************************************************
 init
 ********************************************************************************/
-void GridMap::Init(Vector3 pos, TEXTURE_ENUM tilemesh, float tileScale, int totalX_tiles, int totalY_tiles, int totalX_grids, int totalY_grids, int tileMap_sizeX, int tileMap_sizeY)
+void GridMap::Init(Vector3 pos, TEXTURE_ENUM tilemesh, float tileScale, int totalX_tiles, int totalY_tiles, 
+	int totalX_grids, int totalY_grids, int tileMap_sizeX, int tileMap_sizeY, int total_SP_X, int total_SP_Y)
 {
 	Entity::Init(pos, Vector3(1.f, 1.f, 1.f));
 
@@ -48,14 +49,24 @@ void GridMap::Init(Vector3 pos, TEXTURE_ENUM tilemesh, float tileScale, int tota
 		startPos.y = pos.y;
 		startPos.x += totalX_Tiles_perGrid * tileScale;
 	}
+
+
+	//Spartial partition-------------------------------------------//
+	this->total_SP_X = total_SP_X;
+	this->total_SP_Y = total_SP_Y;
 }
 
 /********************************************************************************
-init
+Update
 ********************************************************************************/
+void GridMap::PreUpdate()
+{
+	Entity::PreUpdate();
+}
+
 void GridMap::Update()
 {
-
+	Entity::Update();
 }
 
 /********************************************************************************

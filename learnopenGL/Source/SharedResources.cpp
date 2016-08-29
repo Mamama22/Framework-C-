@@ -25,6 +25,7 @@ void SharedResources::Init()
 	floorQuad = MeshBuilder::GenerateQuad(Color(104, 115, 88), 1.f, 1.f, false);
 	playerQuad = MeshBuilder::GenerateQuad(Color(157, 212, 76), 1.f, 1.f, false);
 	turretQuad = MeshBuilder::GenerateQuad(Color(28, 128, 65), 1.f, 1.f, false);
+	debug_quad = MeshBuilder::GenerateDebugQuad(Color(219, 135, 39));
 
 	//sprites: Col, Row
 	explosion = MeshBuilder::GenerateSpriteAnimation("FU?", 6, 8);
@@ -61,6 +62,7 @@ void SharedResources::Exit()
 	delete playerQuad;
 	delete turretQuad;
 	delete explosion;
+	delete debug_quad;
 }
 
 /********************************************************************************
