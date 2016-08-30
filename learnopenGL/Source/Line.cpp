@@ -61,12 +61,12 @@ void Line::Draw(Mesh* line, float thickness, Vector3 offset)
 	CU::view.SetIdentity();
 	CU::view.Translate(start.x + offset.x, start.y + offset.y, start.z);
 	CU::view.Scale(10.f, 10.f, 1.f);
-	CU::view.RenderMesh(*CU::shared.sphere);
+	CU::view.RenderMesh(*CU::shared.sphere, 1.f);
 
 	CU::view.SetIdentity();
 	CU::view.Translate(end.x + offset.x, end.y + offset.y, end.z);
 	CU::view.Scale(10.f, 10.f, 1.f);
-	CU::view.RenderMesh(*CU::shared.sphere);
+	CU::view.RenderMesh(*CU::shared.sphere, 1.f);
 
 	//Line----------------------------------------------------------//
 	glLineWidth(thickness);
@@ -74,7 +74,7 @@ void Line::Draw(Mesh* line, float thickness, Vector3 offset)
 	CU::view.Translate(start.x + offset.x, start.y + offset.y, 0.f);
 	CU::view.Rotate(Vector3::getAngleFromDir(dir.x, dir.y), 0, 0, 1);
 	CU::view.Scale(len, 1.f, 1.f);
-	CU::view.RenderMesh(*line);
+	CU::view.RenderMesh(*line, 1.f);
 	glLineWidth(1.f);
 }
 
@@ -90,13 +90,13 @@ void Line::DrawRightLines(Mesh* line, float thickness, Vector3 offset)
 	CU::view.Translate(start.x + offset.x, start.y + offset.y, start.z);
 	CU::view.Rotate(Vector3::getAngleFromDir(dir.x, dir.y), 0, 0, 1);
 	CU::view.Scale(1200.f, 1.f, 1.f);
-	CU::view.RenderMesh(*line);
+	CU::view.RenderMesh(*line, 1.f);
 	glLineWidth(1.f);
 
 	CU::view.SetIdentity();
 	CU::view.Translate(end.x + offset.x, end.y + offset.y, end.z);
 	CU::view.Rotate(Vector3::getAngleFromDir(dir.x, dir.y), 0, 0, 1);
 	CU::view.Scale(1200.f, 1.f, 1.f);
-	CU::view.RenderMesh(*line);
+	CU::view.RenderMesh(*line, 1.f);
 	glLineWidth(1.f);
 }

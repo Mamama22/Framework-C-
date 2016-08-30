@@ -20,14 +20,17 @@ void Scene_Boxhead::Init()
 
 	//character----------------------------------------------//
 	player_AABB.resize(2);
-	player_AABB[0] = InitCharacter(&player, Vector3(100, 0, 0), Vector3(50, 50, 1), CU::shared.quad_2);
-	player_AABB[1] = InitCharacter(&pickup, Vector3(220, -100, 0), Vector3(40, 100, 1), CU::shared.quad_2);
+	player_AABB[0] = InitCharacter(&player, Vector3(-100, -100, 0), Vector3(20, 20, 1), CU::shared.quad_2);
+	//player_AABB[1] = InitCharacter(&pickup, Vector3(220, -100, 0), Vector3(20, 20, 1), CU::shared.quad_2);
 
-	//Obstacles-------------------------------------------------//
-	Entity* ob;
-	obstacle_AABB.resize(2);
-	obstacle_AABB[0] = InitCharacter(&ob, Vector3(-100, 60, 0), Vector3(30, 150, 1), CU::shared.quad_1);
-	obstacle_AABB[1] = InitCharacter(&ob, Vector3(220, -50, 0), Vector3(170, 70, 1), CU::shared.quad_1);
+	//Add player and entity to gridmap--------------------------------------//
+	gridmap->AddChildren(player);
+
+	////Obstacles-------------------------------------------------//
+	//Entity* ob;
+	//obstacle_AABB.resize(2);
+	//obstacle_AABB[0] = InitCharacter(&ob, Vector3(-100, 60, 0), Vector3(30, 150, 1), CU::shared.quad_1);
+	//obstacle_AABB[1] = InitCharacter(&ob, Vector3(220, -50, 0), Vector3(170, 70, 1), CU::shared.quad_1);
 }
 
 /********************************************************************************
@@ -120,8 +123,8 @@ void Scene_Boxhead::UpdatePlayerInput()
 	//	pickUp->Rotate(-2.f, Vector3(0, 0, 1));
 
 	//Add entities to main test entity------------------------------ -//
-	if (CU::input.IsKeyReleased(Input::N))
-		AddAsChild(*player, *pickup);
+	/*if (CU::input.IsKeyReleased(Input::N))
+		AddAsChild(*player, *pickup);*/
 }
 
 /********************************************************************************
@@ -142,14 +145,14 @@ void Scene_Boxhead::Run_Stage3()
 {
 	Scene::Run_Stage3();
 
-	//collision check-------------------------------//
-	for (int i = 0; i < player_AABB.size(); ++i)
-	{
-		for(int t = 0; t < obstacle_AABB.size(); ++t)
-		{
-			player_AABB[i]->CollisionCheck(*obstacle_AABB[t]);
-		}
-	}
+	////collision check-------------------------------//
+	//for (int i = 0; i < player_AABB.size(); ++i)
+	//{
+	//	for(int t = 0; t < obstacle_AABB.size(); ++t)
+	//	{
+	//		player_AABB[i]->CollisionCheck(*obstacle_AABB[t]);
+	//	}
+	//}
 }
 
 /********************************************************************************
@@ -168,7 +171,7 @@ void Scene_Boxhead::DrawOnScreen()
 	//Axes----------------------------------------------------//
 	CU::view.SetIdentity();
 	CU::view.Scale(2000.f, 2000.f, 2000.f);
-	CU::view.RenderMesh(*CU::shared.axes);
+	CU::view.RenderMesh(*CU::shared.axes, 1.f);
 }
 
 /********************************************************************************

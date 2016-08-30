@@ -166,7 +166,7 @@ Init Uniforms
 ********************************************************************************/
 void View::InitUniforms()
 {
-	//Light shader---------------------------------------------------------------------------//
+	//Light shader=============================================================================================================//
 	uniformMap[LIGHT_SHADER]["uM_Matrix"] = glGetUniformLocation(m_programID, "uM_Matrix");
 	uniformMap[LIGHT_SHADER]["uMV_Matrix"] = glGetUniformLocation(m_programID, "uMV_Matrix");
 	uniformMap[LIGHT_SHADER]["uP_Matrix"] = glGetUniformLocation(m_programID, "uP_Matrix");
@@ -187,19 +187,25 @@ void View::InitUniforms()
 	uniformMap[LIGHT_SHADER]["u_SpotLight_Cutoff"] = glGetUniformLocation(m_programID, "u_SpotLight_Cutoff");
 	uniformMap[LIGHT_SHADER]["u_TotalSpotLight"] = glGetUniformLocation(m_programID, "u_TotalSpotLight");
 
+	//alpha---------------------------------------------------------------//
+	uniformMap[LIGHT_SHADER]["u_Alpha"] = glGetUniformLocation(m_programID, "u_Alpha");
+
 	//textures------------------------------------------------------------//
 	uniformMap[LIGHT_SHADER]["u_TextureEnabled"] = glGetUniformLocation(m_programID, "u_TextureEnabled");
 	uniformMap[LIGHT_SHADER]["u_Texture"] = glGetUniformLocation(m_programID, "u_Texture");
 
-	//basic shader------------------------------------------------------------------------//
+	//basic shader=============================================================================================================//
 	uniformMap[BASIC_SHADER]["uMV_Matrix"] = glGetUniformLocation(m_basicProgramID, "uMV_Matrix");
 	uniformMap[BASIC_SHADER]["uP_Matrix"] = glGetUniformLocation(m_basicProgramID, "uP_Matrix");
+
+	//alpha---------------------------------------------------------------//
+	uniformMap[BASIC_SHADER]["u_Alpha"] = glGetUniformLocation(m_basicProgramID, "u_Alpha");
 
 	//textures------------------------------------------------------------//
 	uniformMap[BASIC_SHADER]["u_TextureEnabled"] = glGetUniformLocation(m_basicProgramID, "u_TextureEnabled");
 	uniformMap[BASIC_SHADER]["u_Texture"] = glGetUniformLocation(m_basicProgramID, "u_Texture");
 
-	//text shader--------------------------------------------------------//
+	//text shader=============================================================================================================//
 	uniformMap[TEXT_SHADER]["uP_Matrix"] = glGetUniformLocation(m_textProgramID, "uP_Matrix");
 	uniformMap[TEXT_SHADER]["textColor"] = glGetUniformLocation(m_textProgramID, "textColor");
 }
@@ -440,7 +446,7 @@ void View::Scale(float x, float y, float z)
 /********************************************************************************
 Render
 ********************************************************************************/
-void View::RenderMesh(Mesh& renderMe)
+void View::RenderMesh(Mesh& renderMe, float alpha)
 {
 	//Get MV matrix---------------------------------------------------------//
 	mvMatrix = viewStack.Top() * modelStack.Top();
@@ -476,8 +482,11 @@ void View::RenderMesh(Mesh& renderMe)
 		glUniformMatrix4fv(uniformMap[BASIC_SHADER]["uP_Matrix"], 1, GL_FALSE, &projectionStack.Top().a[0]);
 	}
 
+	//alpha-------------------------------------------------------------------//
+	glUniform1f(uniformMap[shaderType]["u_Alpha"], alpha);
+
 	//textures: shaders use the same uniform name-------------------------------------------------------------------------------//
-	if (renderMe.GetTextureID() != -1)
+	if (renderMe.GetTextureID() != TEX_NONE)
 	{
 		glUniform1i(uniformMap[shaderType]["u_TextureEnabled"], 1);
 		glActiveTexture(GL_TEXTURE0);

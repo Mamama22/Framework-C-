@@ -57,18 +57,31 @@ void GridMap::Init(Vector3 pos, TEXTURE_ENUM tilemesh, float tileScale, int tota
 	this->total_SP_Y = total_SP_Y;
 	float mapScaleX = tileScale * totalX_tiles;
 	float mapScaleY = tileScale * totalY_tiles;
+	float gridScaleX = mapScaleX / (float)total_SP_X;
+	float gridScaleY = mapScaleY / (float)total_SP_Y;
 
 	//X sp lines-------------------------------------------------------------//
 	Render_Repetitive* render_line = new Render_Repetitive();
-	render_line->Init("SD", CU::shared.quad_start0, pos, Vector3(mapScaleX, 2, 1), Vector3(0, mapScaleY / (float)total_SP_Y, 0), total_SP_X);
+	render_line->Init("SD", CU::shared.quad_start0, pos, Vector3(mapScaleX, 2, 1), Vector3(0, mapScaleY / (float)total_SP_Y, 0), total_SP_X + 1);
 	render_line->SetActive(true);
 	AddComponent(render_line);
 	
 	//Y sp lines-------------------------------------------------------------//
 	render_line = new Render_Repetitive();
-	render_line->Init("SD", CU::shared.quad_start0, pos, Vector3(2, mapScaleY, 1), Vector3(mapScaleX / (float)total_SP_X, 0, 0), total_SP_Y);
+	render_line->Init("SD", CU::shared.quad_start0, pos, Vector3(2, mapScaleY, 1), Vector3(mapScaleX / (float)total_SP_X, 0, 0), total_SP_Y + 1);
 	render_line->SetActive(true);
 	AddComponent(render_line);
+
+	//highlight intersected-----------------------------------------------//
+	intersectedGrid = new Render_GridMap;
+	//intersectedGrid->Init("Asd", CU::shared.quad_start0, Vector3(0, 0, 0), Vector3(mapScaleX / (float)total_SP_X, mapScaleY / (float)total_SP_Y, 1));
+	intersectedGrid->Init("d", TEX_PERRY, pos, gridScaleX, total_SP_X, total_SP_Y);
+	intersectedGrid->SetActive(true);
+	intersectedGrid->SetAlpha(0.7f);
+	intersectedGrid->SetAllTilesEmpty();
+	intersectedGrid->ModifyTile(1, 0, 0, 1, 1);
+	intersectedGrid->RecalculateMesh();
+	AddComponent(intersectedGrid);
 }
 
 /********************************************************************************

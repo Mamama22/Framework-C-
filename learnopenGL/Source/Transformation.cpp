@@ -123,9 +123,11 @@ void Transformation::Calculate_transformList()
 {
 	sharedMtx[0].SetToTranslation(pos.x, pos.y, pos.z);
 	sharedMtx[1].SetToRotation(angle, axis.x, axis.y, axis.z);
+	sharedMtx[2].SetToScale(scale.x, scale.y, scale.z);
 
 	TRS = TRS * sharedMtx[0] * sharedMtx[1];
 	finalTRS = TRS;
+	finalTRS = finalTRS * sharedMtx[2];
 }
 
 /********************************************************************************

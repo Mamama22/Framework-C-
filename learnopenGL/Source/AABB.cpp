@@ -175,7 +175,7 @@ void AABB::Draw()
 
 	CU::view.SetIdentity();
 	CU::view.LoadMatrix(transform.finalTRS);
-	CU::view.RenderMesh(*mesh);
+	CU::view.RenderMesh(*mesh, 1.f);
 }
 
 /********************************************************************************

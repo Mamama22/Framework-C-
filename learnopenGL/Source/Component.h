@@ -1,5 +1,5 @@
-#ifndef RENDERER_H
-#define RENDERER_H
+#ifndef COMP_H
+#define COMP_H
 
 #include "Header.h"
 #include "Transformation.h"

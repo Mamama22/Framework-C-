@@ -88,7 +88,7 @@ public:
 	void Scale(float x, float y, float z);
 
 	/********************** Render *****************************/
-	void RenderMesh(Mesh& renderMe);
+	void RenderMesh(Mesh& renderMe, float alpha);
 	void RenderText(string text, Vector2 pos, float yScale, Color color);
 
 	/********************** Getter/setter *****************************/

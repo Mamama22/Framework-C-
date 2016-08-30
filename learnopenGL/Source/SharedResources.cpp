@@ -37,6 +37,7 @@ void SharedResources::Init()
 	textureList[TEX_MUSIC] = LoadTGA("Image//CatPurple.tga");
 	textureList[TEX_SPRITE_EXPLOSION] = LoadTGA("Image//explosion_hd.tga");
 	textureList[TEX_MC_TILEMAP] = LoadTGA("Image//minecraft_tilemap.tga");
+	textureList[TEX_PERRY] = LoadTGA("Image//perry_da_platypus.tga");
 
 	//preload some textures into meshes---------------------------------//
 	playerQuad->SetTexture(TEX_MUSIC);
@@ -107,7 +108,7 @@ void SharedResources::DrawLine_Offset(Mesh* line, Vector3 startPos, float angle,
 	CU::view.Translate(startPos.x + offset.x, startPos.y + offset.y, 0.f);
 	CU::view.Rotate(angle, 0, 0, 1);
 	CU::view.Scale(length, 1.f, 1.f);
-	CU::view.RenderMesh(*line);
+	CU::view.RenderMesh(*line, 1.f);
 	glLineWidth(1.f);
 }
 
@@ -118,7 +119,7 @@ void SharedResources::DrawLine(Mesh* line, Vector3 startPos, float angle, float 
 	CU::view.Translate(startPos.x, startPos.y, 0.f);
 	CU::view.Rotate(angle, 0, 0, 1);
 	CU::view.Scale(length, 1.f, 1.f);
-	CU::view.RenderMesh(*line);
+	CU::view.RenderMesh(*line, 1.f);
 	glLineWidth(1.f);
 }
 
@@ -130,5 +131,5 @@ void SharedResources::DrawMesh(Mesh* mesh, Vector3 pos, float scale)
 	CU::view.SetIdentity();
 	CU::view.Translate(pos.x, pos.y, pos.z);
 	CU::view.Scale(scale, scale, 1.f);
-	CU::view.RenderMesh(*mesh);
+	CU::view.RenderMesh(*mesh, 1.f);
 }

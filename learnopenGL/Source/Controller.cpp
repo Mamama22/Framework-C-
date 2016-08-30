@@ -68,11 +68,13 @@ void Controller::Run()
 
 			//Scene update-------------------------------------------//
 			current_scene->Run_Stage1();
+
 			CU::Update_Stage1();
 
 			CU::Update_Stage2();
 
 			current_scene->Run_Stage3();
+
 			CU::Update_Stage3();
 
 			CU::Update_Stage4();

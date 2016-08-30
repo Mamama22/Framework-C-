@@ -51,6 +51,7 @@ protected:
 	/******************** Spartial partition **********************/
 	int total_SP_X;
 	int total_SP_Y;
+	Render_GridMap* intersectedGrid;	//highlights intersected grid
 
 public:
 

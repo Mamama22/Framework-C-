@@ -16,6 +16,7 @@ Note:
 class Mesh
 {
 protected:
+
 	static int currentMesh;	//Keeps track of last rendered mesh ID
 	static int totalMeshes;
 	int meshID;

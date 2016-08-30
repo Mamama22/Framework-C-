@@ -3,7 +3,7 @@
 #define ERROR_CHECK 0
 
 //component types-----------------------------//
-#include "Renderer.h"
+#include "Renderer_GridMap.h"
 
 /********************************************************************************
 error
