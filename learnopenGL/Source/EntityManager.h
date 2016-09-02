@@ -39,6 +39,7 @@ public:
 
 	/******************** Core functions **********************/
 	void PreUpdate();
+	void UpdateStage1();
 	void UpdateStage2();
 	void UpdateStage3();
 	void UpdateStage4();
@@ -50,7 +51,7 @@ public:
 	Check if given component is of this class type
 	********************************************************************************/
 	template<class T>
-	bool CheckCompType(Component* checkMe)
+	static bool CheckCompType(Component* checkMe)
 	{
 		if (dynamic_cast<T*>(checkMe))
 				return true;

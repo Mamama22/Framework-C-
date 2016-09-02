@@ -4,6 +4,7 @@
 
 //component types-----------------------------//
 #include "Renderer_GridMap.h"
+#include "SP_Comp.h"
 
 /********************************************************************************
 error
@@ -53,41 +54,42 @@ protected:
 	void Added(Entity* parent);	//if this entity added, do something
 	void Removed();	//if this entity removed, do something
 
-	//added/removed action----------------------------------//
-	virtual void Added_ToEntity(Entity* addedTo);	//call for every entity in chain, immediate to bottom
 
 public:
 	
-	/******************** public var **********************/
+	/**************************************** public var ******************************************/
 	bool transforming;
 	Transformation transform;
 
-	/******************** Constructor/destructor **********************/
+	/**************************************** Constructor/destructor ******************************************/
 	Entity();
 	virtual ~Entity();
 	
-	/******************** Addind/removing child/comp, overload for customisation **********************/
+	/**************************************** Addind/removing child/comp, overload for customisation ******************************************/
 	virtual void AddComponent(Component* comp);
 	virtual void AddChildren(Entity* child);
 	virtual void RemoveComponent(Component* comp);
 	virtual void RemoveChildren(Entity* child);
 
-	/******************** Core functions **********************/
+	/**************************************** Core functions ******************************************/
 	void Init(Vector3 pos, Vector3 scale);
 
 	//Will be called everytime BEFORE comp updates-------------------//
 	virtual void PreUpdate();
-	virtual void Update();
+	virtual void Update_Stage1();
+	virtual void Update_Stage2();
+	virtual void Update_Stage3();
+	virtual void Update_Stage4();
 
 	//Call in stage 2 and 4--------------------------------------//
 	virtual void CalculateTRS();
 
-	/******************** Transformation function **********************/
+	/**************************************** Transformation function ******************************************/
 	void Translate(Vector3 vel);
 	void Rotate(float angle, Vector3 axis);
 
 
-	/******************** CALLED BY PARENT ONLY **********************/
+	/**************************************** CALLED BY PARENT ONLY ******************************************/
 	//TRS---------------------------------------------//
 	virtual void CalculateTRS_WithParent(const Mtx44& parentRotMat, bool parentTransforming);
 
@@ -95,7 +97,7 @@ public:
 	virtual void ByParent_Translate(Vector3 vel);
 	virtual void ByParent_Rotate(float angle, Vector3 axis);
 
-	/******************** Get set **********************/
+	/**************************************** Get set ******************************************/
 	Entity* GetParent();
 	Entity* GetTopParent();	//get the very top parent
 	void GetChildrenList(vector<Entity*>& list);
@@ -105,7 +107,7 @@ public:
 	bool getActive();
 	void SetActive(bool b);
 
-	/******************** abstract functions **********************/
+	/**************************************** abstract functions ******************************************/
 	virtual void Exit(){}
 
 

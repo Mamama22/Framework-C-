@@ -86,9 +86,9 @@ void Component::Added(Transformation& parentTrans, int parentHandle)
 }
 
 /********************************************************************************
-Added to entity action
+if current entity is added to parent entity
 ********************************************************************************/
-void Component::Added_ToEntity(int handle)
+void Component::Added_ToGrandparent(int handle)
 {
 }
 
@@ -122,6 +122,7 @@ Getter/setter
 const char* Component::GetName(){ return name; }
 bool Component::isActive(){ return active; }
 bool Component::GetTransByGrandParent(){ return transformByGrandParent; }
+int Component::GetParentHandle(){ return parentHandle; }
 
 /********************************************************************************
 State

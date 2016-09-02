@@ -28,6 +28,9 @@ uniform int u_TotalSpotLight;
 
 uniform vec3 u_EyePos;
 
+//Alpha----------------------------//
+uniform float u_Alpha;
+
 //Texture----------------------------//
 uniform bool u_TextureEnabled;
 uniform sampler2D u_Texture;
@@ -122,7 +125,7 @@ void main()
 		totalColor += CalSpotLight(u_SpotLight_Pos[i], u_SpotLight_Dir[i], normalize(u_SpotLight_Pos[i] - vertexPos), u_SpotLight_Cutoff[i], NobjNormal, VertToEye);
 		
 	if(u_TextureEnabled == true)
-		color = texture2D( u_Texture, vertexTexcoord ) * vec4(totalColor, 1.0);
+		color = texture2D( u_Texture, vertexTexcoord ) * vec4(totalColor, u_Alpha);
 	else
-		color = vec4(vertexColor * totalColor, 1.0f);
+		color = vec4(vertexColor * totalColor, u_Alpha);
 }

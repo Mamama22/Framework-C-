@@ -52,7 +52,7 @@ void Render_GridMap::Init(const char* name, TEXTURE_ENUM tileMap_tex, Vector3 po
 /********************************************************************************
 Modify tile
 ********************************************************************************/
-void Render_GridMap::ModifyTile(int x, int y, int tileType, int tilemap_sizeX, int tilemap_sizeY)
+void Render_GridMap::SetTile(int x, int y, int tileType, int tilemap_sizeX, int tilemap_sizeY)
 {
 	float mesh_TS = 1.f / tileScale;
 

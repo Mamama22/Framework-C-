@@ -103,16 +103,8 @@ void Entity::Added(Entity* parent)
 
 
 	//apply action on all children and components-------------------------//
-	Added_ToEntity(parent);
-}
-
-/********************************************************************************
-If associated with an entity, whether as a direct parent or further down
-********************************************************************************/
-void Entity::Added_ToEntity(Entity* addedTo)
-{
 	for (int i = 0; i < componentList.size(); ++i)
-		componentList[i]->Added_ToEntity(addedTo->handle);
+		componentList[i]->Added_ToGrandparent(parent->handle);
 }
 
 void Entity::Removed()
@@ -234,10 +226,27 @@ void Entity::PreUpdate()
 /********************************************************************************
 Update if active
 ********************************************************************************/
-void Entity::Update()
+void Entity::Update_Stage1()
 {
 	
 }
+
+void Entity::Update_Stage2()
+{
+	CalculateTRS();
+}
+
+void Entity::Update_Stage3()
+{
+
+}
+
+
+void Entity::Update_Stage4()
+{
+	CalculateTRS();
+}
+
 
 /********************************************************************************
 Get

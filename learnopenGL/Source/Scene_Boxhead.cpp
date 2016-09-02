@@ -21,10 +21,11 @@ void Scene_Boxhead::Init()
 	//character----------------------------------------------//
 	player_AABB.resize(2);
 	player_AABB[0] = InitCharacter(&player, Vector3(-100, -100, 0), Vector3(20, 20, 1), CU::shared.quad_2);
-	//player_AABB[1] = InitCharacter(&pickup, Vector3(220, -100, 0), Vector3(20, 20, 1), CU::shared.quad_2);
+	player_AABB[1] = InitCharacter(&pickup, Vector3(120, -100, 0), Vector3(20, 20, 1), CU::shared.quad_2);
 
 	//Add player and entity to gridmap--------------------------------------//
 	gridmap->AddChildren(player);
+	gridmap->AddChildren(pickup);
 
 	////Obstacles-------------------------------------------------//
 	//Entity* ob;
@@ -44,7 +45,7 @@ AABB* Scene_Boxhead::InitCharacter(Entity** pointer, Vector3 pos, Vector3 box_sc
 
 	//Add renderer------------------------------------------------//
 	Render_InWorld* mama = new Render_InWorld;
-	mama->Init("fuck u", CU::shared.playerQuad, pos, Vector3(40.f, 40.f, 1.f));	//assign available renderer
+	mama->Init("fuck u", CU::shared.playerQuad, pos, Vector3(10.f, 10.f, 1.f));	//assign available renderer
 	mama->SetActive(true);
 	(*pointer)->AddComponent(mama);
 
@@ -53,6 +54,12 @@ AABB* Scene_Boxhead::InitCharacter(Entity** pointer, Vector3 pos, Vector3 box_sc
 	boxy->Init("fuck u", boxMesh, pos, box_scale);
 	boxy->SetActive(true);
 	(*pointer)->AddComponent(boxy);
+
+	//Add SP comp---------------------------------------------------//
+	SP_Comp* spcomp = new SP_Comp;
+	spcomp->Init("asdasd", pos, box_scale);
+	spcomp->SetActive(true);
+	(*pointer)->AddComponent(spcomp);
 
 	return boxy;
 }
@@ -102,13 +109,13 @@ void Scene_Boxhead::UpdatePlayerInput()
 		player->Translate(Vector3(2.f, 0, 0));
 
 	if (CU::input.IsKeyPressed(Input::ARROW_UP))
-		gridmap->Translate(Vector3(0, 2.f, 0));
+		pickup->Translate(Vector3(0, 2.f, 0));
 	if (CU::input.IsKeyPressed(Input::ARROW_DOWN))
-		gridmap->Translate(Vector3(0, -2.f, 0));
+		pickup->Translate(Vector3(0, -2.f, 0));
 	if (CU::input.IsKeyPressed(Input::ARROW_LEFT))
-		gridmap->Translate(Vector3(-2.f, 0, 0));
+		pickup->Translate(Vector3(-2.f, 0, 0));
 	if (CU::input.IsKeyPressed(Input::ARROW_RIGHT))
-		gridmap->Translate(Vector3(2.f, 0, 0));
+		pickup->Translate(Vector3(2.f, 0, 0));
 
 	//player's rotation--------------------------------------//
 	/*if (CU::input.IsKeyPressed(Input::ARROW_LEFT))
@@ -118,9 +125,9 @@ void Scene_Boxhead::UpdatePlayerInput()
 
 	////pick up's rotation--------------------------------------//
 	//if (CU::input.IsKeyPressed(Input::V))
-	//	pickUp->Rotate(2.f, Vector3(0, 0, 1));
+	//	pickup->Rotate(2.f, Vector3(0, 0, 1));
 	//if (CU::input.IsKeyPressed(Input::B))
-	//	pickUp->Rotate(-2.f, Vector3(0, 0, 1));
+	//	pickup->Rotate(-2.f, Vector3(0, 0, 1));
 
 	//Add entities to main test entity------------------------------ -//
 	/*if (CU::input.IsKeyReleased(Input::N))

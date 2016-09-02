@@ -129,6 +129,7 @@ public:
 	/******************** Get functions **********************/
 	Vector3 GetPos();
 	Vector3 GetVel();
+	bool isTransforming();
 
 	/******************** Operator overload **********************/
 	Transformation& operator= (const Transformation& copyMe);

@@ -267,7 +267,7 @@ void Shape::ByParent_Rotate(float angle, Vector3 axis)
 /********************************************************************************
 If shae added to entity
 ********************************************************************************/
-void Shape::Added_ToEntity(int handle)
+void Shape::Added_ToGrandparent(int handle)
 {
 	//Get list of children comp of grand parent
 	CU::entityMan.GetEntityComp(handle);

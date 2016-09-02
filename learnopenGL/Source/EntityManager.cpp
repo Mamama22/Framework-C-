@@ -59,6 +59,18 @@ void EntityManager::PreUpdate()
 }
 
 /********************************************************************************
+Update stage 1
+********************************************************************************/
+void EntityManager::UpdateStage1()
+{
+	for (int i = 0; i < entityList.size(); ++i)
+	{
+		if (entityList[i]->getActive())
+			entityList[i]->Update_Stage1();
+	}
+}
+
+/********************************************************************************
 update stage 2
 ********************************************************************************/
 void EntityManager::UpdateStage2()
@@ -66,7 +78,7 @@ void EntityManager::UpdateStage2()
 	for (int i = 0; i < entityList.size(); ++i)
 	{
 		if (entityList[i]->getActive())
-			entityList[i]->CalculateTRS();
+			entityList[i]->Update_Stage2();
 	}
 }
 
@@ -78,7 +90,7 @@ void EntityManager::UpdateStage3()
 	for (int i = 0; i < entityList.size(); ++i)
 	{
 		if (entityList[i]->getActive())
-			entityList[i]->Update();
+			entityList[i]->Update_Stage3();
 	}
 }
 
@@ -90,7 +102,7 @@ void EntityManager::UpdateStage4()
 	for (int i = 0; i < entityList.size(); ++i)
 	{
 		if (entityList[i]->getActive())
-			entityList[i]->CalculateTRS();
+			entityList[i]->Update_Stage4();
 	}
 }
 

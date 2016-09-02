@@ -78,10 +78,6 @@ class Shape : public Renderer
 	static bool IntersectionTest(float proj_1[], float proj_2[], float& intersectedLen);
 	void TranslatePosWithAngle(Vector3& pos, Vector3 dir, float speed);
 
-
-	/************************************* optional abstract functions to overload  ***************************************/
-	void Added_ToEntity(int handle);
-
 public:
 
 	vector<Shape*> childrenShapes;
@@ -114,8 +110,16 @@ public:
 	void AddPoint(Vector3 pos);
 	void CalculateFaces();	//CALL AFTER ALL POINTS ADDED
 
+	/******************** Core functions **********************/
+	void PreUpdate();
+	void Update();
+	void Draw();
+
 	/******************** collision functions **********************/
 	void CollisionCheck_2(Shape& obstacle);
+
+	/************************************* optional abstract functions to overload  ***************************************/
+	void Added_ToGrandparent(int handle);
 
 	/******************** CALLED BY PARENT ENTITY ONLY **********************/
 	//transformation---------------------------------------------//
@@ -125,11 +129,7 @@ public:
 
 	/************************************* Projection functions ***************************************/
 	void ProjectShapeOntoThis(Shape& projectMe, float** list);	//project passed in shape onto this shape
-	
-	/******************** Core functions **********************/
-	void PreUpdate();
-	void Update();
-	void Draw();
+
 
 	/******************** Get set functions **********************/
 	int Get_TotalPoints();

@@ -266,6 +266,8 @@ Vector3 Transformation::GetVel()
 	return xVel + yVel;
 }
 
+bool Transformation::isTransforming(){ return transforming; }
+
 /********************************************************************************
 operator overloads
 ********************************************************************************/

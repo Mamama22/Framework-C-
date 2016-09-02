@@ -57,8 +57,8 @@ public:
 	//Add/removal---------------------------------------------//
 	void Added(Transformation& parentTrans, int parentHandle);	//Init
 
-	//Added to GRAND PARENT entity
-	virtual void Added_ToEntity(int handle);	//Update, call for every entity in chain, immediate to bottom
+	//Added to GRAND PARENT entity------------------------------//
+	virtual void Added_ToGrandparent(int handle);	//Update, call for every entity in chain, immediate to bottom
 	
 	//removal---------------------------------------------//
 	void Removed();
@@ -74,6 +74,7 @@ public:
 	const char* GetName();
 	bool isActive();
 	bool GetTransByGrandParent();
+	int GetParentHandle();
 
 	/******************** State functions **********************/
 	void SetActive(bool b);
