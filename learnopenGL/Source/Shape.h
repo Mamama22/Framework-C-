@@ -120,6 +120,7 @@ public:
 
 	/************************************* optional abstract functions to overload  ***************************************/
 	void Added_ToGrandparent(int handle);
+	void RemovedFrom_Grandparent(int handle);
 
 	/******************** CALLED BY PARENT ENTITY ONLY **********************/
 	//transformation---------------------------------------------//

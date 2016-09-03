@@ -109,6 +109,25 @@ void Entity::Added(Entity* parent)
 
 void Entity::Removed()
 {
+	//Do preparations for being a child-----------------------------------------//
+	Entity* parent_ptr = parent;
+
+	//Get the highest parent------------------//
+	vector<Entity*> parentList;
+	while (parent_ptr)
+	{
+		parentList.push_back(parent_ptr);
+		parent_ptr = parent_ptr->parent;
+	}
+
+	//transform--------------------------//
+	for (int i = 0; i < parentList.size(); ++i)
+		transform.RemovedFromParent(parentList[i]->transform);
+
+	//apply action on all children and components-------------------------//
+	for (int i = 0; i < componentList.size(); ++i)
+		componentList[i]->RemovedFrom_Grandparent(parent->handle);
+
 	parent = NULL;
 }
 

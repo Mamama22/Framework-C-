@@ -285,6 +285,35 @@ void Shape::Added_ToGrandparent(int handle)
 }
 
 /********************************************************************************
+If shae removed from entity
+********************************************************************************/
+void Shape::RemovedFrom_Grandparent(int handle)
+{
+	//Get list of children comp of grand parent
+	CU::entityMan.GetEntityComp(handle);
+
+	//Get their shape collider
+	for (int j = 0; j < CU::entityMan.compList.size(); ++j)
+	{
+		if (CU::entityMan.CheckCompType<Shape>(CU::entityMan.compList[j]))	//if matchs shape
+		{
+			for (int i = 0; i < static_cast<Shape*>(CU::entityMan.compList[j])->childrenShapes.size(); ++i)
+			{
+				//removed this shape from child list
+				if (static_cast<Shape*>(CU::entityMan.compList[j])->childrenShapes[i] == this)
+				{
+					static_cast<Shape*>(CU::entityMan.compList[j])->childrenShapes[i] = static_cast<Shape*>(CU::entityMan.compList[j])->childrenShapes.back();
+					static_cast<Shape*>(CU::entityMan.compList[j])->childrenShapes.pop_back();
+					break;
+				}
+			}
+
+			break;
+		}
+	}
+}
+
+/********************************************************************************
 Draw outlines
 ********************************************************************************/
 void Shape::RecalculatePoints()

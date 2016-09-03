@@ -106,7 +106,18 @@ Scale not counted
 ********************************************************************************/
 void Transformation::AddedToParent(Transformation& trans)
 {
-	TRS = trans.TRS.GetInverse() * TRS;
+	TRS = trans.TRS.GetInverse() * TRS;	//offset back by this TRS
+
+	//both parent and child needs to update their final TRS
+	transforming = true;
+	trans.transforming = true;
+	TRS_count++;
+	TRS_count++;
+}
+
+void Transformation::RemovedFromParent(Transformation& trans)
+{
+	TRS = trans.TRS * TRS;	//offset out by this TRS
 
 	//both parent and child needs to update their final TRS
 	transforming = true;

@@ -125,6 +125,7 @@ public:
 	
 	/******************** Parent/child **********************/
 	void AddedToParent(Transformation& trans);	//to offset child to be based on parent TRS
+	void RemovedFromParent(Transformation& trans);	//to offset child to be based on parent TRS
 
 	/******************** Get functions **********************/
 	Vector3 GetPos();

@@ -59,6 +59,7 @@ public:
 
 	//Added to GRAND PARENT entity------------------------------//
 	virtual void Added_ToGrandparent(int handle);	//Update, call for every entity in chain, immediate to bottom
+	virtual void RemovedFrom_Grandparent(int handle);	//Update, call for every entity in chain, immediate to bottom
 	
 	//removal---------------------------------------------//
 	void Removed();

@@ -15,6 +15,7 @@ class Scene_Boxhead : public Scene
 {
 	Entity* player;
 	Entity* pickup;
+	Entity* pickup_1;
 	GridMap* gridmap;
 	vector<AABB*> player_AABB;
 	vector<AABB*> obstacle_AABB;
@@ -22,6 +23,7 @@ class Scene_Boxhead : public Scene
 	/******************** Utilities **********************/
 	static AABB* InitCharacter(Entity** pointer, Vector3 pos, Vector3 box_scale, Mesh* boxMesh);
 	static void AddAsChild(Entity& parent, Entity& child);
+	static void RemoveChild(Entity& parent, Entity& child);
 
 
 	/******************** Init **********************/

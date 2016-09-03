@@ -19,19 +19,21 @@ void Scene_Boxhead::Init()
 	InitGridmap();
 
 	//character----------------------------------------------//
-	player_AABB.resize(2);
+	player_AABB.resize(3);
 	player_AABB[0] = InitCharacter(&player, Vector3(-100, -100, 0), Vector3(20, 20, 1), CU::shared.quad_2);
 	player_AABB[1] = InitCharacter(&pickup, Vector3(120, -100, 0), Vector3(20, 20, 1), CU::shared.quad_2);
+	player_AABB[2] = InitCharacter(&pickup_1, Vector3(120, 100, 0), Vector3(20, 20, 1), CU::shared.quad_2);
 
 	//Add player and entity to gridmap--------------------------------------//
 	gridmap->AddChildren(player);
 	gridmap->AddChildren(pickup);
+	gridmap->AddChildren(pickup_1);
 
-	////Obstacles-------------------------------------------------//
-	//Entity* ob;
-	//obstacle_AABB.resize(2);
-	//obstacle_AABB[0] = InitCharacter(&ob, Vector3(-100, 60, 0), Vector3(30, 150, 1), CU::shared.quad_1);
-	//obstacle_AABB[1] = InitCharacter(&ob, Vector3(220, -50, 0), Vector3(170, 70, 1), CU::shared.quad_1);
+	//Obstacles-------------------------------------------------//
+	/*Entity* ob;
+	obstacle_AABB.resize(2);
+	obstacle_AABB[0] = InitCharacter(&ob, Vector3(-100, 60, 0), Vector3(30, 150, 1), CU::shared.quad_1);
+	obstacle_AABB[1] = InitCharacter(&ob, Vector3(220, -50, 0), Vector3(170, 70, 1), CU::shared.quad_1);*/
 }
 
 /********************************************************************************
@@ -94,6 +96,11 @@ void Scene_Boxhead::AddAsChild(Entity& parent, Entity& child)
 	parent.AddChildren(&child);
 }
 
+void Scene_Boxhead::RemoveChild(Entity& parent, Entity& child)
+{
+	parent.RemoveChildren(&child);
+}
+
 /********************************************************************************
 Update player input
 ********************************************************************************/
@@ -109,18 +116,18 @@ void Scene_Boxhead::UpdatePlayerInput()
 		player->Translate(Vector3(2.f, 0, 0));
 
 	if (CU::input.IsKeyPressed(Input::ARROW_UP))
-		pickup->Translate(Vector3(0, 2.f, 0));
+		gridmap->Translate(Vector3(0, 2.f, 0));
 	if (CU::input.IsKeyPressed(Input::ARROW_DOWN))
-		pickup->Translate(Vector3(0, -2.f, 0));
+		gridmap->Translate(Vector3(0, -2.f, 0));
 	if (CU::input.IsKeyPressed(Input::ARROW_LEFT))
-		pickup->Translate(Vector3(-2.f, 0, 0));
+		gridmap->Translate(Vector3(-2.f, 0, 0));
 	if (CU::input.IsKeyPressed(Input::ARROW_RIGHT))
-		pickup->Translate(Vector3(2.f, 0, 0));
+		gridmap->Translate(Vector3(2.f, 0, 0));
 
 	//player's rotation--------------------------------------//
 	/*if (CU::input.IsKeyPressed(Input::ARROW_LEFT))
 		player->Rotate(2.f, Vector3(0, 0, 1));
-	if (CU::input.IsKeyPressed(Input::ARROW_RIGHT))
+		if (CU::input.IsKeyPressed(Input::ARROW_RIGHT))
 		player->Rotate(-2.f, Vector3(0, 0, 1));*/
 
 	////pick up's rotation--------------------------------------//
@@ -129,9 +136,28 @@ void Scene_Boxhead::UpdatePlayerInput()
 	//if (CU::input.IsKeyPressed(Input::B))
 	//	pickup->Rotate(-2.f, Vector3(0, 0, 1));
 
-	//Add entities to main test entity------------------------------ -//
-	/*if (CU::input.IsKeyReleased(Input::N))
-		AddAsChild(*player, *pickup);*/
+	//Add entities to main test entity-------------------------------//
+	if (CU::input.IsKeyReleased(Input::N))
+	{
+		RemoveChild(*gridmap, *pickup);
+		AddAsChild(*player, *pickup);
+	}
+	if (CU::input.IsKeyReleased(Input::M))
+	{
+		RemoveChild(*gridmap, *pickup_1);
+		AddAsChild(*pickup, *pickup_1);
+	}
+
+	if (CU::input.IsKeyReleased(Input::O))
+	{
+		RemoveChild(*player, *pickup);
+		AddAsChild(*gridmap, *pickup);
+	}
+	if (CU::input.IsKeyReleased(Input::P))
+	{
+		RemoveChild(*pickup, *pickup_1);
+		AddAsChild(*gridmap, *pickup_1);
+	}
 }
 
 /********************************************************************************
