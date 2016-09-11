@@ -1,6 +1,6 @@
 #ifndef SPRITEANIMATION_H
 #define SPRITEANIMATION_H
-#include "Mesh.h"
+#include "TileMap.h"
 #include "Vector2.h"
 
 /*** mesh class for animation ***/

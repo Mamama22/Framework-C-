@@ -1,7 +1,7 @@
 #ifndef SHARED_RESOURCES_H
 #define SHARED_RESOURCES_H
 
-#include "Mesh.h"
+#include "TileMap.h"
 
 /*************************************************************
 Some commonly used resoures, like certain meshes.
@@ -39,6 +39,7 @@ public:
 
 	/******************** texture list **********************/
 	GLuint textureList[TOTAL_TEXTURES];
+	TileMap tilemapList[TOTAL_TILEMAP];
 
 	/******************** core **********************/
 	void Init();

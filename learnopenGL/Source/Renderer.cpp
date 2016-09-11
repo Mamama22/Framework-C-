@@ -53,9 +53,9 @@ Draw mesh on screen
 ********************************************************************************/
 void Render_OnScreen::Draw()
 {
-		CU::view.SetIdentity();
-		CU::view.LoadMatrix(transform.finalTRS);
-		CU::view.RenderMesh(*mesh, alpha);
+	CU::view.SetIdentity();
+	CU::view.LoadMatrix(transform.finalTRS);
+	mesh->Render(alpha);
 }
 
 /********************************************************************************
@@ -65,7 +65,7 @@ void Render_InWorld::Draw()
 {
 	CU::view.SetIdentity();
 	CU::view.LoadMatrix(transform.finalTRS);
-	CU::view.RenderMesh(*mesh, alpha);
+	mesh->Render(alpha);
 }
 
 /********************************************************************************
@@ -88,7 +88,7 @@ void Render_Repetitive::Draw()
 
 	for (int i = 0; i < count; ++i)
 	{
-		CU::view.RenderMesh(*mesh, alpha);
+		mesh->Render(alpha);
 		CU::view.Translate(offset.x, offset.y, offset.z);
 	}
 }

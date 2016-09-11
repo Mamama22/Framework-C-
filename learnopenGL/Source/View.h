@@ -52,6 +52,12 @@ private:
 	//Text----------------------------------//
 	FreeType_Text textMan;
 
+	//misc-----------------------------------//
+	SHADER_TYPE shaderType;
+
+	//utility functions---------------------//
+	void PassInUniforms(float alpha = 1.f);
+
 public:
 
 	/********************** constructor/destructor *****************************/
@@ -89,6 +95,7 @@ public:
 
 	/********************** Render *****************************/
 	void RenderMesh(Mesh& renderMe, float alpha);
+	void RenderTilemap(Mesh& renderMe, float alpha);
 	void RenderText(string text, Vector2 pos, float yScale, Color color);
 
 	/********************** Getter/setter *****************************/

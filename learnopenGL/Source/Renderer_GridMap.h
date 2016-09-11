@@ -23,21 +23,21 @@ public:
 	int totalY_tiles;
 	int** gridmap;
 	float tileScale;
-	TEXTURE_ENUM tileMap_tex;
+	TILEMAP_ENUM tileMap_tex;
 
 	Render_GridMap();
 	Render_GridMap(const Render_GridMap& copyMe);
 	~Render_GridMap();
 
 	/******************** comp functions **********************/
-	void Init(const char* name, TEXTURE_ENUM tileMap_tex, Vector3 pos, float tileScale, int totalX_tiles, int totalY_tiles);
+	void Init(const char* name, TILEMAP_ENUM tileMap_tex, Vector3 pos, float tileScale, int totalX_tiles, int totalY_tiles);
 
 	/******************** Core functions **********************/
-	void SetTile(int x, int y, int tileType, int tilemap_sizeX, int tilemap_sizeY);
+	void SetTile(int x, int y, int tileType);
 	void RecalculateMesh();	//call after modifying tiles
 
 	/******************** Utilities functions **********************/
-	void SetAllTiles(int tileType, int tilemap_sizeX, int tilemap_sizeY);
+	void SetAllTiles(int tileType);
 	void SetTileEmpty(int x, int y);
 	void SetAllTilesEmpty();
 

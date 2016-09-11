@@ -81,7 +81,6 @@ void SP_Comp::UpdateSP(int totalGrids_X, int totalGrids_Y, const Vector3& gridma
 		xGrid[i] = (int)(xVal >= 0.f) ? xVal : -1;
 		yGrid[i] = (int)(yVal >= 0.f) ? yVal : -1;
 	}
-	cout << "Y grid: " << int(-0.1f) << endl;
 
 	//keep them in bounds------------------------------------------------------------------//
 	if (xGrid[0] < 0)

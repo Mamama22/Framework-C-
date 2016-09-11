@@ -11,6 +11,7 @@
 
 //Entity types---------------------------//
 #include "GridMap.h"
+#include "AI_Map.h"
 
 /*************************************************************
 Scene class, create your own scene:

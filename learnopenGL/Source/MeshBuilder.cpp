@@ -338,9 +338,9 @@ Generate a custom quad for tilemapping etc.
 1) Create a customisable mesh, pass in own vertex vector, which you can modify later on
 2) call setup function after every modifcation
 ******************************************************************************/
-Mesh* MeshBuilder::GenerateCustomQuad(std::vector<Vertex>& vertex_buffer_data, std::vector<GLuint>& index_buffer_data, int totalX, int totalY, bool start0)
+Mesh_Tilemap* MeshBuilder::GenerateTilemapQuad(std::vector<Vertex>& vertex_buffer_data, std::vector<GLuint>& index_buffer_data, int totalX, int totalY, bool start0)
 {
-	Mesh *mesh = new Mesh();
+	Mesh_Tilemap *mesh = new Mesh_Tilemap();
 
 	GenQuadVertices(Color(1, 0, 0), 1.f, vertex_buffer_data, index_buffer_data, totalX, totalY, start0);
 

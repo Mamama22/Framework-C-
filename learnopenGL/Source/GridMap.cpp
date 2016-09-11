@@ -49,6 +49,11 @@ void SP_Grid::RemoveEntity(int handle)
 	}
 }
 
+void SP_Grid::ClearAll()
+{
+	entityCount = 0;
+}
+
 /********************************************************************************
 Get set
 ********************************************************************************/
@@ -61,16 +66,12 @@ GridMap::~GridMap(){}
 /********************************************************************************
 init
 ********************************************************************************/
-void GridMap::Init(Vector3 pos, TEXTURE_ENUM tilemesh, float tileScale, int totalX_tiles, int totalY_tiles, 
+void GridMap::Init(Vector3 pos, TILEMAP_ENUM tilemesh, float tileScale, int totalX_tiles, int totalY_tiles,
 	int totalX_grids, int totalY_grids, int tileMap_sizeX, int tileMap_sizeY, int total_SP_X, int total_SP_Y)
 {
 	float mapScaleX = tileScale * totalX_tiles;
 	float mapScaleY = tileScale * totalY_tiles;
 	Entity::Init(pos, Vector3(mapScaleX, mapScaleY, 1.f));
-
-	//tilemap size---------------------------------------------//
-	this->tileMap_sizeX = tileMap_sizeX;
-	this->tileMap_sizeY = tileMap_sizeY;
 
 	//total tiles combined for entire map---------------------------------//
 	this->totalX_tiles = totalX_tiles;
@@ -92,12 +93,11 @@ void GridMap::Init(Vector3 pos, TEXTURE_ENUM tilemesh, float tileScale, int tota
 	{
 		for (int y = 0; y < totalY_grids; ++y)
 		{
-			gridMap.push_back(new Render_GridMap());
-			gridMap.back()->Init("d", tilemesh, startPos, tileScale, totalX_Tiles_perGrid, totalY_Tiles_perGrid);
-			gridMap.back()->SetActive(true);
+			render_gridMap.push_back(new Render_GridMap());
+			render_gridMap.back()->Init("d", tilemesh, startPos, tileScale, totalX_Tiles_perGrid, totalY_Tiles_perGrid);
 			//gridMap[(x * totalY_grids) + y]
-			//gridMap.back()->SetActive(true);
-			AddComponent(gridMap.back());
+			//render_gridMap.back()->SetActive(true);
+			AddComponent(render_gridMap.back());
 
 			startPos.y += totalY_Tiles_perGrid * tileScale;
 		}
@@ -117,23 +117,19 @@ void GridMap::Init(Vector3 pos, TEXTURE_ENUM tilemesh, float tileScale, int tota
 	//X sp lines-------------------------------------------------------------//
 	Render_Repetitive* render_line = new Render_Repetitive();
 	render_line->Init("SD", CU::shared.quad_start0, pos, Vector3(mapScaleX, 2, 1), Vector3(0, mapScaleY / (float)total_SP_Y, 0), total_SP_X + 1);
-	render_line->SetActive(true);
 	AddComponent(render_line);
 	
 	//Y sp lines-------------------------------------------------------------//
 	render_line = new Render_Repetitive();
 	render_line->Init("SD", CU::shared.quad_start0, pos, Vector3(2, mapScaleY, 1), Vector3(mapScaleX / (float)total_SP_X, 0, 0), total_SP_Y + 1);
-	render_line->SetActive(true);
 	AddComponent(render_line);
 
 	//highlight intersected-----------------------------------------------//
 	intersectedGrid = new Render_GridMap;
 	//intersectedGrid->Init("Asd", CU::shared.quad_start0, Vector3(0, 0, 0), Vector3(mapScaleX / (float)total_SP_X, mapScaleY / (float)total_SP_Y, 1));
-	intersectedGrid->Init("d", TEX_PERRY, pos, gridScaleX, total_SP_X, total_SP_Y);
-	intersectedGrid->SetActive(true);
-	intersectedGrid->SetAlpha(0.7f);
+	intersectedGrid->Init("d", TILEMAP_AI, pos, gridScaleX, total_SP_X, total_SP_Y);
+	intersectedGrid->SetAlpha(0.5f);
 	intersectedGrid->SetAllTilesEmpty();
-	intersectedGrid->SetTile(1, 0, 0, 1, 1);
 	intersectedGrid->RecalculateMesh();
 	AddComponent(intersectedGrid);
 
@@ -142,6 +138,15 @@ void GridMap::Init(Vector3 pos, TEXTURE_ENUM tilemesh, float tileScale, int tota
 	//SP grids----------------------------------------------------------------//
 	SP_Grids.resize(total_SP_X * total_SP_Y);
 
+
+	//misc-----------------------------------------------------------------//
+	tilemap_enum = tilemesh;
+}
+
+void GridMap::PreUpdate()
+{
+	for (int i = 0; i < SP_Grids.size(); ++i)
+		SP_Grids[i].ClearAll();
 }
 
 /********************************************************************************
@@ -158,51 +163,27 @@ void GridMap::Update_Stage2()
 	//Check spartial partition with updated pos--------------------------------//
 	for (int i = 0; i < spComp_List.size(); ++i)
 	{
-		if (spComp_List[i]->is_stage1_transformed())	//if transformation detected
+		if (!spComp_List[i]->isActive())
+			continue;
+
+		spComp_List[i]->UpdateSP(total_SP_X, total_SP_Y, transform.pos, sp_GridScale, prev_storePoints, current_storePoints);
+		intersect_type = spComp_List[i]->Get_IntersectType();
+
+		if (intersect_type != SP_Comp::OUT_OF_BOUNDS)
 		{
-			//get prev intersect type----------------//
-			prev_intersect_type = spComp_List[i]->Get_IntersectType();
-
-			//check new intersected grids------------//
-			spComp_List[i]->UpdateSP(total_SP_X, total_SP_Y, transform.pos, sp_GridScale, prev_storePoints, current_storePoints);
-
-			//get current intersect type--------------//
-			intersect_type = spComp_List[i]->Get_IntersectType();
-
-			//if grids have changes, remove from old ones and add to new ones--------------------------------------------//
-			for (int k = 0; k < 4; ++k)
-			{
-				//changes detected, remove from all prev. grids and add again
-				if (prev_storePoints[k] != current_storePoints[k])
-				{
-					changes = true;
-
-					//remove from previous intersected grids-------------------------//
-					if (prev_intersect_type != SP_Comp::OUT_OF_BOUNDS)
-						RemoveSP_FromAllGrids(spComp_List[i], prev_storePoints);
-
-					//add to current intersected grids-----------------------------//
-					if (intersect_type != SP_Comp::OUT_OF_BOUNDS)
-						AddSP_ToGrids(spComp_List[i], current_storePoints);
-
-					break;
-				}
-			}
+			AddSP_ToGrids(spComp_List[i], current_storePoints);
 		}
 	}
 
 	//Update gridmap debug--------------------------------------------------------------------//
-	if (changes)
+	for (int x = 0; x < total_SP_X; ++x)
 	{
-		for (int x = 0; x < total_SP_X; ++x)
+		for (int y = 0; y < total_SP_Y; ++y)
 		{
-			for (int y = 0; y < total_SP_Y; ++y)
-			{
-				if (SP_Grids[(x * total_SP_Y) + y].Get_entityCount() == 0)
-					intersectedGrid->SetTileEmpty(x, y);
-				else
-					intersectedGrid->SetTile(x, y, 0, 1, 1);
-			}
+			if (SP_Grids[(x * total_SP_Y) + y].Get_entityCount() == 0)
+				intersectedGrid->SetTileEmpty(x, y);
+			else
+				intersectedGrid->SetTile(x, y, 3);
 		}
 		intersectedGrid->RecalculateMesh();
 	}
@@ -263,10 +244,10 @@ void GridMap::AddChildren(Entity* child)
 		if (EntityManager::CheckCompType<SP_Comp>(CU::entityMan.compList[i]))
 		{
 			spComp_List.push_back(static_cast<SP_Comp*>(CU::entityMan.compList[i]));
-			Entity::AddChildren(child);	//add as children ONLY if got SP comp
 			break;
 		}
 	}
+	Entity::AddChildren(child);	//add as children ONLY if got SP comp
 }
 
 /********************************************************************************
@@ -278,7 +259,7 @@ void GridMap::ModifyTile(int tileType, int x, int y)
 	int xGrid = x / totalX_Tiles_perGrid;
 	int yGrid = y / totalY_Tiles_perGrid;
 
-	Render_GridMap* modified = gridMap[(xGrid * totalY_grids) + yGrid];
+	Render_GridMap* modified = render_gridMap[(xGrid * totalY_grids) + yGrid];
 
 	//check if is added to modified meshes list---------------------//
 	bool add = true;
@@ -299,7 +280,7 @@ void GridMap::ModifyTile(int tileType, int x, int y)
 	int tileX = x - (totalX_Tiles_perGrid * xGrid);
 	int tileY = y - (totalY_Tiles_perGrid * yGrid);
 
-	modified->SetTile(tileX, tileY, tileType, tileMap_sizeX, tileMap_sizeY);
+	modified->SetTile(tileX, tileY, tileType);
 }
 
 /********************************************************************************
@@ -323,7 +304,5 @@ int GridMap::Get_TilesPerGridX(){ return totalX_Tiles_perGrid; }
 int GridMap::Get_TilesPerGridY(){ return totalY_Tiles_perGrid; }
 int GridMap::Get_TotalTilesX(){ return totalX_tiles; }
 int GridMap::Get_TotalTilesY(){ return totalY_tiles; }
-int GridMap::Get_TilemapSizeX(){ return tileMap_sizeX; }
-int GridMap::Get_TilemapSizeY(){ return tileMap_sizeY; }
-int GridMap::Get_TilemapSize(){ return tileMap_sizeX * tileMap_sizeY; }
+TILEMAP_ENUM GridMap::Get_TilemapEnum(){ return tilemap_enum; }
 float GridMap::Get_TileScale(){ return tileScale; }

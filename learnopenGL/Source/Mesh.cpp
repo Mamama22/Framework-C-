@@ -1,4 +1,5 @@
 #include "Mesh.h"
+#include "CoreUtilities.h"
 int Mesh::totalMeshes = 0;
 int Mesh::currentMesh = -1;
 
@@ -95,8 +96,10 @@ void Mesh::SetupVertexOnly(std::vector<Vertex>& vertex_buffer_data, std::vector<
 /********************************************************************************
 Render
 ********************************************************************************/
-void Mesh::Render()
+void Mesh::Render(float alpha)
 {
+	CU::view.RenderMesh(*this, alpha);
+
 	//If rendering this mesh for first time this frame, bind it's VAO
 	if (currentMesh != meshID)
 	{
@@ -112,8 +115,49 @@ void Mesh::Render()
 /********************************************************************************
 Render
 ********************************************************************************/
-void Mesh::Render(unsigned offset, unsigned count)
+void Mesh::Render(unsigned offset, unsigned count, float alpha)
 {
+	CU::view.RenderMesh(*this, alpha);
+
+	//If rendering this mesh for first time this frame, bind it's VAO
+	if (currentMesh != meshID)
+	{
+		glBindVertexArray(m_vertexArrayID);
+	}
+
+	currentMesh = meshID;
+
+	//Bind VAO---------------------------------------------//
+	glDrawElements(mode, count, GL_UNSIGNED_INT, (void*)(offset * sizeof(GLuint)));
+}
+
+/********************************************************************************
+Tilemap mesh
+********************************************************************************/
+void Mesh_Tilemap::SetTilemapTex(TILEMAP_ENUM id){ textureID = id; }
+int Mesh_Tilemap::GetTilemapTex(){ return textureID; }
+
+//Core------------------------------//
+void Mesh_Tilemap::Render(float alpha)
+{
+	CU::view.RenderTilemap(*this, alpha);
+
+	//If rendering this mesh for first time this frame, bind it's VAO
+	if (currentMesh != meshID)
+	{
+		glBindVertexArray(m_vertexArrayID);
+	}
+
+	currentMesh = meshID;
+
+	//Bind VAO---------------------------------------------//
+	glDrawElements(mode, indexSize, GL_UNSIGNED_INT, 0);
+}
+
+void Mesh_Tilemap::Render(unsigned offset, unsigned count, float alpha)
+{
+	CU::view.RenderTilemap(*this, alpha);
+
 	//If rendering this mesh for first time this frame, bind it's VAO
 	if (currentMesh != meshID)
 	{

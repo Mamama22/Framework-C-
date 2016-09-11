@@ -24,7 +24,7 @@ public:
 	static Mesh* GenerateSpriteAnimation(const std::string& meshName, unsigned numRow, unsigned numCol);
 
 	//custom quad---------------------------------------------------------------------//
-	static Mesh* GenerateCustomQuad(std::vector<Vertex>& vertex_buffer_data, std::vector<GLuint>& index_buffer_data, int totalX, int totalY, bool start0 = false);
+	static Mesh_Tilemap* GenerateTilemapQuad(std::vector<Vertex>& vertex_buffer_data, std::vector<GLuint>& index_buffer_data, int totalX, int totalY, bool start0 = false);
 };
 
 #endif

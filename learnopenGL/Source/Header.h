@@ -71,10 +71,24 @@ enum TEXTURE_ENUM
 	TEX_SPRITE_EXPLOSION,
 	TEX_MC_TILEMAP,
 	TEX_PERRY,
+	TEX_AI_TILEMAP,
 
 	TOTAL_TEXTURES,
 
 	TEX_NONE = -1,
+};
+
+/*************************************************************
+Tilemap Texture enum
+/*************************************************************/
+enum TILEMAP_ENUM
+{
+	TILEMAP_MC,
+	TILEMAP_AI,
+
+	TOTAL_TILEMAP,
+
+	TILEMAP_NONE = -1,
 };
 
 #endif

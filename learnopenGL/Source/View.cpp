@@ -444,14 +444,14 @@ void View::Scale(float x, float y, float z)
 }
 
 /********************************************************************************
-Render
+Store uniforms into shader
 ********************************************************************************/
-void View::RenderMesh(Mesh& renderMe, float alpha)
+void View::PassInUniforms(float alpha)
 {
 	//Get MV matrix---------------------------------------------------------//
 	mvMatrix = viewStack.Top() * modelStack.Top();
-	SHADER_TYPE shaderType = LIGHT_SHADER;
-	
+	shaderType = LIGHT_SHADER;
+
 	//Pass in uniforms------------------------------------------------------//
 	if (currentShader == LIGHT_SHADER)
 	{
@@ -484,6 +484,14 @@ void View::RenderMesh(Mesh& renderMe, float alpha)
 
 	//alpha-------------------------------------------------------------------//
 	glUniform1f(uniformMap[shaderType]["u_Alpha"], alpha);
+}
+
+/********************************************************************************
+Render
+********************************************************************************/
+void View::RenderMesh(Mesh& renderMe, float alpha)
+{
+	PassInUniforms(alpha);
 
 	//textures: shaders use the same uniform name-------------------------------------------------------------------------------//
 	if (renderMe.GetTextureID() != TEX_NONE)
@@ -497,9 +505,24 @@ void View::RenderMesh(Mesh& renderMe, float alpha)
 	{
 		glUniform1i(uniformMap[shaderType]["u_TextureEnabled"], 0);
 	}
+}
 
-	//Render the mesh-------------------------------------------------------//
-	renderMe.Render();
+void View::RenderTilemap(Mesh& renderMe, float alpha)
+{
+	PassInUniforms(alpha);
+
+	//textures: shaders use the same uniform name-------------------------------------------------------------------------------//
+	if (renderMe.GetTextureID() != TILEMAP_NONE)
+	{
+		glUniform1i(uniformMap[shaderType]["u_TextureEnabled"], 1);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, CU::shared.tilemapList[renderMe.GetTextureID()].getID());
+		glUniform1i(uniformMap[shaderType]["u_Texture"], 0);
+	}
+	else
+	{
+		glUniform1i(uniformMap[shaderType]["u_TextureEnabled"], 0);
+	}
 }
 
 /********************************************************************************

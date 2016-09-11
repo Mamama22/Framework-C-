@@ -43,25 +43,23 @@ AABB* Scene_Boxhead::InitCharacter(Entity** pointer, Vector3 pos, Vector3 box_sc
 {
 	*pointer = new Entity;
 	(*pointer)->Init(pos, Vector3(1.f, 1.f, 1.f));
-	(*pointer)->SetActive(true);
 
 	//Add renderer------------------------------------------------//
 	Render_InWorld* mama = new Render_InWorld;
 	mama->Init("fuck u", CU::shared.playerQuad, pos, Vector3(10.f, 10.f, 1.f));	//assign available renderer
-	mama->SetActive(true);
 	(*pointer)->AddComponent(mama);
 
 	//Add AABB----------------------------------------------------//
 	AABB* boxy = new AABB;
 	boxy->Init("fuck u", boxMesh, pos, box_scale);
-	boxy->SetActive(true);
 	(*pointer)->AddComponent(boxy);
 
 	//Add SP comp---------------------------------------------------//
 	SP_Comp* spcomp = new SP_Comp;
 	spcomp->Init("asdasd", pos, box_scale);
-	spcomp->SetActive(true);
 	(*pointer)->AddComponent(spcomp);
+
+	(*pointer)->SetActive(true);
 
 	return boxy;
 }
@@ -73,7 +71,8 @@ void Scene_Boxhead::InitGridmap()
 {
 	//gridmap---------------------------------------------------------//
 	gridmap = new GridMap;
-	gridmap->Init(Vector3(-400, -300, 0), TEX_MC_TILEMAP, 11.f, 50, 50, 5, 5, 2, 2, 5, 5);
+	//pos, mesh, tilescale, total tiles X, total tiles Y, total X grids, total Y grids, tilemap size X, tilemap size Y, total SP X, total SP Y
+	gridmap->Init(Vector3(-400, -300, 0), TILEMAP_MC, 20.f, 25, 25, 1, 1, 2, 2, 2, 2);
 	gridmap->SetActive(true);
 
 	//modify times----------------------------//
@@ -81,11 +80,45 @@ void Scene_Boxhead::InitGridmap()
 	{
 		for (int y = 0; y < gridmap->Get_TotalTilesY(); ++y)
 		{
-			int tileType = rand() % gridmap->Get_TilemapSize();	//tilemap size is 4
+			int tileType = rand() % CU::shared.tilemapList[gridmap->Get_TilemapEnum()].total_tiles();	//tilemap size is 4
 			gridmap->ModifyTile(tileType, x, y);
 		}
 	}
 	gridmap->RecalculateMesh();
+
+
+	//ai map---------------------------------------------------//
+	vector< vector<int> > pathMap;
+	pathMap.resize(25);
+
+	for (int x = 0; x < 25; ++x)
+	{
+		pathMap[x].resize(25);
+
+		if (x >= 4 && x <= 20)
+		{
+			for (int y = 0; y < 25; ++y)
+			{
+				if (y >= 4 && y <= 20)
+					pathMap[x][y] = -1;
+				else
+					pathMap[x][y] = 1;
+			}
+		}
+		else
+		{
+			for (int y = 0; y < 25; ++y)
+			{
+				pathMap[x][y] = 1;
+			}
+		}
+	}
+
+	AImap = new AI_Map;
+
+	AImap->Init(gridmap->transform.pos, pathMap, gridmap->Get_TileScale(), gridmap->Get_TotalTilesX(), gridmap->Get_TotalTilesY());
+	AImap->SetActive(true);
+	gridmap->AddChildren(AImap);
 }
 
 /********************************************************************************
@@ -107,22 +140,22 @@ Update player input
 void Scene_Boxhead::UpdatePlayerInput()
 {
 	if (CU::input.IsKeyPressed(Input::W))
-		player->Translate(Vector3(0, 2.f, 0));
+		gridmap->Translate(Vector3(0, 2.f, 0));
 	if (CU::input.IsKeyPressed(Input::S))
-		player->Translate(Vector3(0, -2.f, 0));
+		gridmap->Translate(Vector3(0, -2.f, 0));
 	if (CU::input.IsKeyPressed(Input::A))
-		player->Translate(Vector3(-2.f, 0, 0));
+		gridmap->Translate(Vector3(-2.f, 0, 0));
 	if (CU::input.IsKeyPressed(Input::D))
-		player->Translate(Vector3(2.f, 0, 0));
+		gridmap->Translate(Vector3(2.f, 0, 0));
 
 	if (CU::input.IsKeyPressed(Input::ARROW_UP))
-		gridmap->Translate(Vector3(0, 2.f, 0));
+		pickup->Translate(Vector3(0, 2.f, 0));
 	if (CU::input.IsKeyPressed(Input::ARROW_DOWN))
-		gridmap->Translate(Vector3(0, -2.f, 0));
+		pickup->Translate(Vector3(0, -2.f, 0));
 	if (CU::input.IsKeyPressed(Input::ARROW_LEFT))
-		gridmap->Translate(Vector3(-2.f, 0, 0));
+		pickup->Translate(Vector3(-2.f, 0, 0));
 	if (CU::input.IsKeyPressed(Input::ARROW_RIGHT))
-		gridmap->Translate(Vector3(2.f, 0, 0));
+		pickup->Translate(Vector3(2.f, 0, 0));
 
 	//player's rotation--------------------------------------//
 	/*if (CU::input.IsKeyPressed(Input::ARROW_LEFT))

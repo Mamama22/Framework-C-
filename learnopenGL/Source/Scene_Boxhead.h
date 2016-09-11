@@ -16,6 +16,8 @@ class Scene_Boxhead : public Scene
 	Entity* player;
 	Entity* pickup;
 	Entity* pickup_1;
+	AI_Map* AImap;
+
 	GridMap* gridmap;
 	vector<AABB*> player_AABB;
 	vector<AABB*> obstacle_AABB;

@@ -301,4 +301,13 @@ int Entity::Gethandle(){ return handle; }
 void Entity::Sethandle(int handle){ this->handle = handle; }
 
 bool Entity::getActive(){ return active; }
-void Entity::SetActive(bool b){ active = b; }
+void Entity::SetActive(bool b)
+{ 
+	active = b; 
+
+	//children and comp set active
+	for (int i = 0; i < children.size(); ++i)
+		children[i]->SetActive(b);
+	for (int i = 0; i < componentList.size(); ++i)
+		componentList[i]->SetActive(b);
+}

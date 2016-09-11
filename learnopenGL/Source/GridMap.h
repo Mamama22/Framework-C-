@@ -19,6 +19,7 @@ public:
 
 	void AddEntity(int handle);
 	void RemoveEntity(int handle);
+	void ClearAll();
 
 	int* GetEntityList();
 	int Get_entityCount();
@@ -32,7 +33,7 @@ How to use:
 1) call init and pass in relevant info, Render_GridMaps will be created as child components
 2) The gridmap will be seperated into grids as specifed by totalX_grids and totalY_grids
 
-Children will only be added if it has a SP comp
+REMOVED: Children will only be added if it has a SP comp
 
 NOTE:
 -Make sure no spartial partition bound for your entity is larger than a SP grid
@@ -61,11 +62,10 @@ protected:
 	int totalX_Tiles_perGrid;
 	int totalY_Tiles_perGrid;
 
-	//tilemap--------------------------//
-	int tileMap_sizeX;
-	int tileMap_sizeY;
+	TILEMAP_ENUM tilemap_enum;
 	
-	vector<Render_GridMap*> gridMap;
+	vector<Render_GridMap*> render_gridMap;
+	vector< vector<int> > pathMap;
 
 	//modifying tools--------------------------//
 	vector<Render_GridMap*> meshModified;
@@ -97,10 +97,11 @@ public:
 	~GridMap();
 
 	/******************** Core functions **********************/
-	void Init(Vector3 pos, TEXTURE_ENUM tilemesh, float tileScale, int totalX_tiles, int totalY_tiles, 
+	void Init(Vector3 pos, TILEMAP_ENUM tilemesh, float tileScale, int totalX_tiles, int totalY_tiles, 
 		int totalX_grids, int totalY_grids, int tileMap_sizeX, int tileMap_sizeY, int total_SP_X, int total_SP_Y);
 
 	//Will be called everytime BEFORE comp updates-------------------//
+	void PreUpdate();
 	void Update_Stage2();
 
 	/***************************** Addind/removing child/comp, overload for customisation *****************************/
@@ -120,9 +121,7 @@ public:
 	int Get_TilesPerGridY();
 	int Get_TotalTilesX();
 	int Get_TotalTilesY();
-	int Get_TilemapSizeX();
-	int Get_TilemapSizeY();
-	int Get_TilemapSize();
+	TILEMAP_ENUM Get_TilemapEnum();
 	float Get_TileScale();
 };
 

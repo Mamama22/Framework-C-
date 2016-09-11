@@ -15,7 +15,7 @@ Render_GridMap::~Render_GridMap()
 /********************************************************************************
 Draw mesh on screen
 ********************************************************************************/
-void Render_GridMap::Init(const char* name, TEXTURE_ENUM tileMap_tex, Vector3 pos, float tileScale, int totalX_tiles, int totalY_tiles)
+void Render_GridMap::Init(const char* name, TILEMAP_ENUM tileMap_tex, Vector3 pos, float tileScale, int totalX_tiles, int totalY_tiles)
 {
 	Renderer::Init(name, NULL, pos, Vector3(1, 1, 1));
 
@@ -41,28 +41,31 @@ void Render_GridMap::Init(const char* name, TEXTURE_ENUM tileMap_tex, Vector3 po
 	this->tileMap_tex = tileMap_tex;
 
 	//Create draw quad--------------------------------------------------------------//
-	mesh = MeshBuilder::GenerateCustomQuad(vertex_buffer_data, index_buffer_data, totalX_tiles, totalY_tiles, true);
+	Mesh_Tilemap* mesh_tilemap = MeshBuilder::GenerateTilemapQuad(vertex_buffer_data, index_buffer_data, totalX_tiles, totalY_tiles, true);
 
-	//tmp: call setup so at least can render complete tilemap
-	mesh->SetTexture(tileMap_tex);
+	//tmp: call setup so at least can render complete tilemap----------------------------------------------------//
+	mesh_tilemap->SetTilemapTex(tileMap_tex);
 	transform.Scale(Vector3(tileScale * totalX_tiles, tileScale * totalY_tiles, 1.f));
-	mesh->Setup(vertex_buffer_data, index_buffer_data, GL_TRIANGLES);
+	mesh_tilemap->Setup(vertex_buffer_data, index_buffer_data, GL_TRIANGLES);
+
+	//set the main mesh to tilemap mesh
+	mesh = mesh_tilemap;
 }
 
 /********************************************************************************
 Modify tile
 ********************************************************************************/
-void Render_GridMap::SetTile(int x, int y, int tileType, int tilemap_sizeX, int tilemap_sizeY)
+void Render_GridMap::SetTile(int x, int y, int tileType)
 {
 	float mesh_TS = 1.f / tileScale;
 
 	//current tile to set from tilemap-------------------------------------//
-	int xCur = tileType / tilemap_sizeX;
-	int yCur = tileType % tilemap_sizeY;
+	int xCur = tileType / CU::shared.tilemapList[tileMap_tex].total_tilesX();
+	int yCur = tileType % CU::shared.tilemapList[tileMap_tex].total_tilesY();
 
 	//percentage of size of a tile in tilemap-----------------------------//
-	const float xUnit = 1.f / (float)tilemap_sizeX;
-	const float yUnit = 1.f / (float)tilemap_sizeY;
+	const float xUnit = 1.f / (float)CU::shared.tilemapList[tileMap_tex].total_tilesX();
+	const float yUnit = 1.f / (float)CU::shared.tilemapList[tileMap_tex].total_tilesY();
 
 	//size of a tile in mesh---------------------------------------------//
 	const float xT = 1.f / (float)totalX_tiles;
@@ -79,15 +82,15 @@ void Render_GridMap::SetTile(int x, int y, int tileType, int tilemap_sizeX, int 
 	vertex_buffer_data[(y * 4) + (x * (totalY_tiles * 4)) + 3].texcoord.Set(xCur * xUnit, yCur * yUnit + yUnit);
 }
 
-void Render_GridMap::SetAllTiles(int tileType, int tilemap_sizeX, int tilemap_sizeY)
+void Render_GridMap::SetAllTiles(int tileType)
 {
 	//current tile to set from tilemap-------------------------------------//
-	int xCur = tileType / tilemap_sizeX;
-	int yCur = tileType % tilemap_sizeY;
+	int xCur = tileType / CU::shared.tilemapList[tileMap_tex].total_tilesX();
+	int yCur = tileType % CU::shared.tilemapList[tileMap_tex].total_tilesY();
 
 	//percentage of size of a tile in tilemap-----------------------------//
-	const float xUnit = 1.f / (float)tilemap_sizeX;
-	const float yUnit = 1.f / (float)tilemap_sizeY;
+	const float xUnit = 1.f / (float)CU::shared.tilemapList[tileMap_tex].total_tilesX();
+	const float yUnit = 1.f / (float)CU::shared.tilemapList[tileMap_tex].total_tilesY();
 
 	//size of a tile in mesh---------------------------------------------//
 	const float xT = 1.f / (float)totalX_tiles;
@@ -151,5 +154,5 @@ void Render_GridMap::Draw()
 {
 	CU::view.SetIdentity();
 	CU::view.LoadMatrix(transform.finalTRS);
-	CU::view.RenderMesh(*mesh, alpha);
+	mesh->Render(alpha);
 }
