@@ -1,73 +1,67 @@
-﻿Build started 28/6/2016 5:15:29 PM.
-     1>Project "C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\new framework\learnopenGL\learnopenGL.vcxproj" on node 2 (Build target(s)).
+﻿Build started 13/9/2016 1:59:13 AM.
+     1>Project "C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\learnopenGL\learnopenGL.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\new framework\\glew\include" /I"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\new framework\\glfw\include" /I"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\new framework\\Common\Source" /I"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\new framework\\freetype" /I"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\new framework\/lua/include" /I"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\new framework\\irrKlang\include" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Source\Camera.cpp Source\Controller.cpp Source\CoreUtilities.cpp Source\FPS_Camera.cpp Source\Input.cpp Source\main.cpp Source\Mesh.cpp Source\MeshBuilder.cpp Source\shader.cpp Source\Text_Renderer.cpp Source\View.cpp
-         View.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\\freetype" /I"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\\glew\include" /I"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\\glfw\include" /I"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\\Common\Source" /I"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\\freetype" /I"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\/lua/include" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Source\Entity.cpp
+         Entity.cpp
      1>c:\program files (x86)\windows kits\8.1\include\shared\minwindef.h(130): warning C4005: 'APIENTRY' : macro redefinition
-                 c:\users\tanyiecher\desktop\semester 5\practice\new framework\glfw\include\glfw\glfw3.h(92) : see previous definition of 'APIENTRY'
-     1>c:\users\tanyiecher\desktop\semester 5\practice\new framework\learnopengl\source\view.cpp(11): warning C4244: 'initializing' : conversion from 'float' to 'unsigned short', possible loss of data
-     1>c:\users\tanyiecher\desktop\semester 5\practice\new framework\learnopengl\source\view.cpp(12): warning C4244: 'initializing' : conversion from 'float' to 'unsigned short', possible loss of data
-     1>c:\users\tanyiecher\desktop\semester 5\practice\new framework\learnopengl\source\view.cpp(103): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
-         Text_Renderer.cpp
-     1>c:\program files (x86)\windows kits\8.1\include\shared\minwindef.h(130): warning C4005: 'APIENTRY' : macro redefinition
-                 c:\users\tanyiecher\desktop\semester 5\practice\new framework\glfw\include\glfw\glfw3.h(92) : see previous definition of 'APIENTRY'
-     1>c:\users\tanyiecher\desktop\semester 5\practice\new framework\learnopengl\source\text_renderer.cpp(64): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
-     1>c:\users\tanyiecher\desktop\semester 5\practice\new framework\learnopengl\source\text_renderer.cpp(65): warning C4244: 'argument' : conversion from 'FT_Int' to 'float', possible loss of data
-         shader.cpp
-         MeshBuilder.cpp
-     1>c:\program files (x86)\windows kits\8.1\include\shared\minwindef.h(130): warning C4005: 'APIENTRY' : macro redefinition
-                 c:\users\tanyiecher\desktop\semester 5\practice\new framework\glfw\include\glfw\glfw3.h(92) : see previous definition of 'APIENTRY'
-         Mesh.cpp
-     1>c:\program files (x86)\windows kits\8.1\include\shared\minwindef.h(130): warning C4005: 'APIENTRY' : macro redefinition
-                 c:\users\tanyiecher\desktop\semester 5\practice\new framework\glfw\include\glfw\glfw3.h(92) : see previous definition of 'APIENTRY'
-         main.cpp
-     1>c:\program files (x86)\windows kits\8.1\include\shared\minwindef.h(130): warning C4005: 'APIENTRY' : macro redefinition
-                 c:\users\tanyiecher\desktop\semester 5\practice\new framework\glfw\include\glfw\glfw3.h(92) : see previous definition of 'APIENTRY'
-         Input.cpp
-     1>c:\program files (x86)\windows kits\8.1\include\shared\minwindef.h(130): warning C4005: 'APIENTRY' : macro redefinition
-                 c:\users\tanyiecher\desktop\semester 5\practice\new framework\glfw\include\glfw\glfw3.h(92) : see previous definition of 'APIENTRY'
-     1>c:\users\tanyiecher\desktop\semester 5\practice\new framework\learnopengl\source\input.cpp(13): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\tanyiecher\desktop\semester 5\practice\new framework\learnopengl\source\input.cpp(89): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\tanyiecher\desktop\semester 5\practice\new framework\learnopengl\source\input.cpp(118): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\tanyiecher\desktop\semester 5\practice\new framework\learnopengl\source\input.cpp(119): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
-     1>c:\users\tanyiecher\desktop\semester 5\practice\new framework\learnopengl\source\input.cpp(120): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
-         FPS_Camera.cpp
-     1>c:\program files (x86)\windows kits\8.1\include\shared\minwindef.h(130): warning C4005: 'APIENTRY' : macro redefinition
-                 c:\users\tanyiecher\desktop\semester 5\practice\new framework\glfw\include\glfw\glfw3.h(92) : see previous definition of 'APIENTRY'
-     1>c:\users\tanyiecher\desktop\semester 5\practice\new framework\learnopengl\source\fps_camera.cpp(92): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\tanyiecher\desktop\semester 5\practice\new framework\learnopengl\source\fps_camera.cpp(93): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\tanyiecher\desktop\semester 5\practice\new framework\learnopengl\source\fps_camera.cpp(102): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\tanyiecher\desktop\semester 5\practice\new framework\learnopengl\source\fps_camera.cpp(103): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\tanyiecher\desktop\semester 5\practice\new framework\learnopengl\source\fps_camera.cpp(117): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\tanyiecher\desktop\semester 5\practice\new framework\learnopengl\source\fps_camera.cpp(140): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\tanyiecher\desktop\semester 5\practice\new framework\learnopengl\source\fps_camera.cpp(149): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\tanyiecher\desktop\semester 5\practice\new framework\learnopengl\source\fps_camera.cpp(150): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
-         CoreUtilities.cpp
-     1>c:\program files (x86)\windows kits\8.1\include\shared\minwindef.h(130): warning C4005: 'APIENTRY' : macro redefinition
-                 c:\users\tanyiecher\desktop\semester 5\practice\new framework\glfw\include\glfw\glfw3.h(92) : see previous definition of 'APIENTRY'
-         Controller.cpp
-     1>c:\program files (x86)\windows kits\8.1\include\shared\minwindef.h(130): warning C4005: 'APIENTRY' : macro redefinition
-                 c:\users\tanyiecher\desktop\semester 5\practice\new framework\glfw\include\glfw\glfw3.h(92) : see previous definition of 'APIENTRY'
-     1>c:\users\tanyiecher\desktop\semester 5\practice\new framework\learnopengl\source\controller.cpp(2): warning C4305: 'initializing' : truncation from 'int' to 'const unsigned char'
-     1>c:\users\tanyiecher\desktop\semester 5\practice\new framework\learnopengl\source\controller.cpp(2): warning C4309: 'initializing' : truncation of constant value
-         Camera.cpp
-         Generating Code...
+                 c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\glfw\include\glfw\glfw3.h(92) : see previous definition of 'APIENTRY'
+     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\entity.h(129): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\spriteanimmanager.h(25): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\entity.cpp(40): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\entity.cpp(55): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\entity.cpp(72): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\entity.cpp(109): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\entity.cpp(127): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\entity.cpp(131): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\entity.cpp(156): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\entity.cpp(158): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\entity.cpp(171): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\entity.cpp(173): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\entity.cpp(185): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\entity.cpp(187): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\entity.cpp(199): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\entity.cpp(201): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\entity.cpp(221): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\entity.cpp(223): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\entity.cpp(249): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\entity.cpp(254): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\entity.cpp(313): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\entity.cpp(319): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\entity.cpp(332): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\entity.cpp(334): warning C4018: '<' : signed/unsigned mismatch
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\new framework\Debug\learnopenGL.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\new framework\\irrKlang\lib" /LIBPATH:"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\new framework\\glew\lib" /LIBPATH:"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\new framework\\glfw\lib-msvc100" /LIBPATH:"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\new framework\/lua/lib" /LIBPATH:"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\new framework\\freetype\lib" /LIBPATH:"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\new framework\Debug" glew32.lib glfw3.lib opengl32.lib winmm.lib Common.lib debug\lua5.1.lib ws2_32.lib lua5.1.lib irrKlang.lib freetype262d.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\new framework\Debug\learnopenGL.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\new framework\Debug\learnopenGL.lib" /MACHINE:X86 Debug\Camera.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\Debug\learnopenGL.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\\freetype\lib" /LIBPATH:"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\\glew\lib" /LIBPATH:"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\\glfw\lib-msvc100" /LIBPATH:"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\Debug" glew32.lib glfw3.lib opengl32.lib winmm.lib Common.lib ws2_32.lib freetype262d.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\Debug\learnopenGL.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\Debug\learnopenGL.lib" /MACHINE:X86 Debug\AABB.obj
+         Debug\AI_Map.obj
+         Debug\Camera.obj
+         Debug\Component.obj
          Debug\Controller.obj
          Debug\CoreUtilities.obj
+         Debug\Entity.obj
+         Debug\EntityManager.obj
          Debug\FPS_Camera.obj
+         Debug\GridMap.obj
          Debug\Input.obj
+         Debug\Line.obj
          Debug\main.obj
          Debug\Mesh.obj
          Debug\MeshBuilder.obj
+         Debug\Renderer.obj
+         Debug\RendererManager.obj
+         Debug\Renderer_GridMap.obj
+         Debug\Scene.obj
+         Debug\Scene_Boxhead.obj
+         Debug\Scene_Test.obj
          Debug\shader.obj
+         Debug\Shape.obj
+         Debug\SharedResources.obj
+         Debug\SpriteAnimation.obj
+         Debug\SP_Comp.obj
          Debug\Text_Renderer.obj
+         Debug\Transformation.obj
          Debug\View.obj
-     1>LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
-         learnopenGL.vcxproj -> C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\new framework\Debug\learnopenGL.exe
-     1>Done Building Project "C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\new framework\learnopenGL\learnopenGL.vcxproj" (Build target(s)).
+         learnopenGL.vcxproj -> C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\Debug\learnopenGL.exe
+     1>Done Building Project "C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\learnopenGL\learnopenGL.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:11.54
+Time Elapsed 00:00:01.28

@@ -35,6 +35,57 @@
     <ClCompile Include="Source\Scene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Entity.cpp">
+      <Filter>Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Transformation.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SharedResources.cpp">
+      <Filter>Core Utilities\Shared Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\EntityManager.cpp">
+      <Filter>Core Utilities\Entity manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Line.cpp">
+      <Filter>line</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Shape.cpp">
+      <Filter>Component\Shape</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene_Boxhead.cpp">
+      <Filter>Scene\Boxhead</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SpriteAnimation.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\AABB.cpp">
+      <Filter>Component\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GridMap.cpp">
+      <Filter>Gridmap</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\RendererManager.cpp">
+      <Filter>Core Utilities\Component managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SP_Comp.cpp">
+      <Filter>Component\Spartial Partition</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Renderer.cpp">
+      <Filter>Component\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Renderer_GridMap.cpp">
+      <Filter>Component\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\AI_Map.cpp">
+      <Filter>AI Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene_Test.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Controller">
@@ -66,6 +117,48 @@
     </Filter>
     <Filter Include="Scene">
       <UniqueIdentifier>{34476a48-2729-4b7e-8aed-4c51d14cdba0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entity">
+      <UniqueIdentifier>{f44874ae-1746-41f5-8bb5-27a8b7cf54dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component">
+      <UniqueIdentifier>{db1406cd-e591-44d7-84f7-60a8b677ac4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System">
+      <UniqueIdentifier>{29798660-5271-496b-b324-e12d4873aa62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Collision">
+      <UniqueIdentifier>{84638a3a-3078-4044-8224-8620e42d12ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core Utilities\Shared Resources">
+      <UniqueIdentifier>{f6d61eb0-5205-4fc9-8f03-a418498b0554}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core Utilities\Entity manager">
+      <UniqueIdentifier>{59157daa-afed-45ad-9938-f09cd58b220e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Shape">
+      <UniqueIdentifier>{87dff153-107d-423c-8e91-10962c2483ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="line">
+      <UniqueIdentifier>{22c69fdb-dd91-4b03-96ff-4dd3a6fcdc26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\Boxhead">
+      <UniqueIdentifier>{fd840957-9ace-41a6-9e90-baaad438985f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gridmap">
+      <UniqueIdentifier>{67a569d5-c034-4cd9-9352-791b570b6797}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core Utilities\Component managers">
+      <UniqueIdentifier>{a9951826-49db-4b0a-b142-333c8ea1fbab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Spartial Partition">
+      <UniqueIdentifier>{b78b7e4c-603c-483b-ba89-57195bc72a1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Renderer">
+      <UniqueIdentifier>{f3c7ab18-b243-4ce9-be10-ccb4317e7705}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AI Map">
+      <UniqueIdentifier>{2b23547f-5999-4a28-a0b9-0bd006fbee19}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -107,5 +200,69 @@
     <ClInclude Include="Source\Scene.h">
       <Filter>Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Component.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Entity.h">
+      <Filter>Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Transformation.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SharedResources.h">
+      <Filter>Core Utilities\Shared Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\EntityManager.h">
+      <Filter>Core Utilities\Entity manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Line.h">
+      <Filter>line</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Shape.h">
+      <Filter>Component\Shape</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene_Boxhead.h">
+      <Filter>Scene\Boxhead</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SpriteAnimation.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Load_TGA.h">
+      <Filter>Core Utilities\View</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SpriteAnimManager.h">
+      <Filter>Core Utilities\View</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AABB.h">
+      <Filter>Component\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GridMap.h">
+      <Filter>Gridmap</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\RendererManager.h">
+      <Filter>Core Utilities\Component managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SP_Comp.h">
+      <Filter>Component\Spartial Partition</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Renderer.h">
+      <Filter>Component\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Renderer_GridMap.h">
+      <Filter>Component\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AI_Map.h">
+      <Filter>AI Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TileMap.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene_Test.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Source\IMPROVEMENTS.txt" />
+    <Text Include="lessons_learnt.txt" />
   </ItemGroup>
 </Project>

@@ -1,0 +1,161 @@
+﻿Build started 17/7/2016 7:09:09 PM.
+     1>Project "C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\learnopenGL\learnopenGL.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\\freetype" /I"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\\glew\include" /I"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\\glfw\include" /I"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\\Common\Source" /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Source\BoxCollision.cpp Source\Camera.cpp Source\Component.cpp Source\Controller.cpp Source\CoreUtilities.cpp Source\Entity.cpp Source\EntityManager.cpp Source\FPS_Camera.cpp Source\Input.cpp Source\Line.cpp Source\main.cpp Source\Mesh.cpp Source\MeshBuilder.cpp Source\Renderer.cpp Source\Scene.cpp Source\Scene_Collision.cpp Source\Scene_ECS.cpp Source\Scene_SAT_test.cpp Source\Scene_Test.cpp Source\shader.cpp Source\Shape.cpp Source\SharedResources.cpp Source\Text_Renderer.cpp Source\Transformation.cpp Source\View.cpp
+         BoxCollision.cpp
+     1>C:\Program Files (x86)\Windows Kits\8.1\Include\shared\minwindef.h(130): warning C4005: 'APIENTRY' : macro redefinition
+                 C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\glfw\include\GLFW/glfw3.h(92) : see previous definition of 'APIENTRY'
+     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\Entity.h(113): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+         Camera.cpp
+         Component.cpp
+     1>C:\Program Files (x86)\Windows Kits\8.1\Include\shared\minwindef.h(130): warning C4005: 'APIENTRY' : macro redefinition
+                 C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\glfw\include\GLFW/glfw3.h(92) : see previous definition of 'APIENTRY'
+         Controller.cpp
+     1>C:\Program Files (x86)\Windows Kits\8.1\Include\shared\minwindef.h(130): warning C4005: 'APIENTRY' : macro redefinition
+                 C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\glfw\include\GLFW/glfw3.h(92) : see previous definition of 'APIENTRY'
+     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\Entity.h(113): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+     1>Source\Controller.cpp(2): warning C4305: 'initializing' : truncation from 'int' to 'const unsigned char'
+     1>Source\Controller.cpp(2): warning C4309: 'initializing' : truncation of constant value
+         CoreUtilities.cpp
+     1>C:\Program Files (x86)\Windows Kits\8.1\Include\shared\minwindef.h(130): warning C4005: 'APIENTRY' : macro redefinition
+                 C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\glfw\include\GLFW/glfw3.h(92) : see previous definition of 'APIENTRY'
+     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\Entity.h(113): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+         Entity.cpp
+     1>C:\Program Files (x86)\Windows Kits\8.1\Include\shared\minwindef.h(130): warning C4005: 'APIENTRY' : macro redefinition
+                 C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\glfw\include\GLFW/glfw3.h(92) : see previous definition of 'APIENTRY'
+     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\Entity.h(113): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+     1>Source\Entity.cpp(44): warning C4018: '<' : signed/unsigned mismatch
+     1>Source\Entity.cpp(61): warning C4018: '<' : signed/unsigned mismatch
+     1>Source\Entity.cpp(133): warning C4018: '<' : signed/unsigned mismatch
+     1>Source\Entity.cpp(135): warning C4018: '<' : signed/unsigned mismatch
+     1>Source\Entity.cpp(148): warning C4018: '<' : signed/unsigned mismatch
+     1>Source\Entity.cpp(150): warning C4018: '<' : signed/unsigned mismatch
+         EntityManager.cpp
+     1>C:\Program Files (x86)\Windows Kits\8.1\Include\shared\minwindef.h(130): warning C4005: 'APIENTRY' : macro redefinition
+                 C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\glfw\include\GLFW/glfw3.h(92) : see previous definition of 'APIENTRY'
+     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\Entity.h(113): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+         FPS_Camera.cpp
+     1>C:\Program Files (x86)\Windows Kits\8.1\Include\shared\minwindef.h(130): warning C4005: 'APIENTRY' : macro redefinition
+                 C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\glfw\include\GLFW/glfw3.h(92) : see previous definition of 'APIENTRY'
+     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\Entity.h(113): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+     1>Source\FPS_Camera.cpp(92): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>Source\FPS_Camera.cpp(93): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>Source\FPS_Camera.cpp(102): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>Source\FPS_Camera.cpp(103): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>Source\FPS_Camera.cpp(117): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>Source\FPS_Camera.cpp(140): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>Source\FPS_Camera.cpp(149): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+     1>Source\FPS_Camera.cpp(150): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+         Input.cpp
+     1>C:\Program Files (x86)\Windows Kits\8.1\Include\shared\minwindef.h(130): warning C4005: 'APIENTRY' : macro redefinition
+                 C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\glfw\include\GLFW/glfw3.h(92) : see previous definition of 'APIENTRY'
+     1>Source\Input.cpp(13): warning C4018: '<' : signed/unsigned mismatch
+     1>Source\Input.cpp(123): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>Source\Input.cpp(152): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>Source\Input.cpp(153): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+     1>Source\Input.cpp(154): warning C4244: 'initializing' : conversion from 'float' to 'int', possible loss of data
+         Line.cpp
+     1>C:\Program Files (x86)\Windows Kits\8.1\Include\shared\minwindef.h(130): warning C4005: 'APIENTRY' : macro redefinition
+                 C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\glfw\include\GLFW/glfw3.h(92) : see previous definition of 'APIENTRY'
+     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\Entity.h(113): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+         main.cpp
+     1>C:\Program Files (x86)\Windows Kits\8.1\Include\shared\minwindef.h(130): warning C4005: 'APIENTRY' : macro redefinition
+                 C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\glfw\include\GLFW/glfw3.h(92) : see previous definition of 'APIENTRY'
+     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\Entity.h(113): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+         Mesh.cpp
+     1>C:\Program Files (x86)\Windows Kits\8.1\Include\shared\minwindef.h(130): warning C4005: 'APIENTRY' : macro redefinition
+                 C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\glfw\include\GLFW/glfw3.h(92) : see previous definition of 'APIENTRY'
+         MeshBuilder.cpp
+     1>C:\Program Files (x86)\Windows Kits\8.1\Include\shared\minwindef.h(130): warning C4005: 'APIENTRY' : macro redefinition
+                 C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\glfw\include\GLFW/glfw3.h(92) : see previous definition of 'APIENTRY'
+         Renderer.cpp
+     1>C:\Program Files (x86)\Windows Kits\8.1\Include\shared\minwindef.h(130): warning C4005: 'APIENTRY' : macro redefinition
+                 C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\glfw\include\GLFW/glfw3.h(92) : see previous definition of 'APIENTRY'
+     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\Entity.h(113): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+         Scene.cpp
+     1>C:\Program Files (x86)\Windows Kits\8.1\Include\shared\minwindef.h(130): warning C4005: 'APIENTRY' : macro redefinition
+                 C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\glfw\include\GLFW/glfw3.h(92) : see previous definition of 'APIENTRY'
+     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\Entity.h(113): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+         Scene_Collision.cpp
+     1>C:\Program Files (x86)\Windows Kits\8.1\Include\shared\minwindef.h(130): warning C4005: 'APIENTRY' : macro redefinition
+                 C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\glfw\include\GLFW/glfw3.h(92) : see previous definition of 'APIENTRY'
+     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\Entity.h(113): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+         Scene_ECS.cpp
+     1>C:\Program Files (x86)\Windows Kits\8.1\Include\shared\minwindef.h(130): warning C4005: 'APIENTRY' : macro redefinition
+                 C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\glfw\include\GLFW/glfw3.h(92) : see previous definition of 'APIENTRY'
+     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\Entity.h(113): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+         Scene_SAT_test.cpp
+     1>C:\Program Files (x86)\Windows Kits\8.1\Include\shared\minwindef.h(130): warning C4005: 'APIENTRY' : macro redefinition
+                 C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\glfw\include\GLFW/glfw3.h(92) : see previous definition of 'APIENTRY'
+     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\Entity.h(113): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+     1>Source\Scene_SAT_test.cpp(193): warning C4018: '<' : signed/unsigned mismatch
+     1>Source\Scene_SAT_test.cpp(235): warning C4018: '<' : signed/unsigned mismatch
+     1>Source\Scene_SAT_test.cpp(247): warning C4018: '<' : signed/unsigned mismatch
+         Scene_Test.cpp
+     1>C:\Program Files (x86)\Windows Kits\8.1\Include\shared\minwindef.h(130): warning C4005: 'APIENTRY' : macro redefinition
+                 C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\glfw\include\GLFW/glfw3.h(92) : see previous definition of 'APIENTRY'
+     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\Entity.h(113): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+         shader.cpp
+         Compiling...
+         Shape.cpp
+     1>C:\Program Files (x86)\Windows Kits\8.1\Include\shared\minwindef.h(130): warning C4005: 'APIENTRY' : macro redefinition
+                 C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\glfw\include\GLFW/glfw3.h(92) : see previous definition of 'APIENTRY'
+     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\Entity.h(113): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+     1>Source\Shape.cpp(132): warning C4018: '<' : signed/unsigned mismatch
+     1>Source\Shape.cpp(134): warning C4018: '<' : signed/unsigned mismatch
+     1>Source\Shape.cpp(148): warning C4018: '<' : signed/unsigned mismatch
+     1>Source\Shape.cpp(159): warning C4018: '<' : signed/unsigned mismatch
+     1>Source\Shape.cpp(181): warning C4018: '<' : signed/unsigned mismatch
+     1>Source\Shape.cpp(193): warning C4018: '<' : signed/unsigned mismatch
+     1>Source\Shape.cpp(210): warning C4018: '<' : signed/unsigned mismatch
+         SharedResources.cpp
+     1>C:\Program Files (x86)\Windows Kits\8.1\Include\shared\minwindef.h(130): warning C4005: 'APIENTRY' : macro redefinition
+                 C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\glfw\include\GLFW/glfw3.h(92) : see previous definition of 'APIENTRY'
+     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\Entity.h(113): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+         Text_Renderer.cpp
+     1>C:\Program Files (x86)\Windows Kits\8.1\Include\shared\minwindef.h(130): warning C4005: 'APIENTRY' : macro redefinition
+                 C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\glfw\include\GLFW/glfw3.h(92) : see previous definition of 'APIENTRY'
+     1>Source\Text_Renderer.cpp(66): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>Source\Text_Renderer.cpp(67): warning C4244: 'argument' : conversion from 'FT_Int' to 'float', possible loss of data
+         Transformation.cpp
+         View.cpp
+     1>C:\Program Files (x86)\Windows Kits\8.1\Include\shared\minwindef.h(130): warning C4005: 'APIENTRY' : macro redefinition
+                 C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\glfw\include\GLFW/glfw3.h(92) : see previous definition of 'APIENTRY'
+     1>Source\View.cpp(11): warning C4244: 'initializing' : conversion from 'float' to 'unsigned short', possible loss of data
+     1>Source\View.cpp(12): warning C4244: 'initializing' : conversion from 'float' to 'unsigned short', possible loss of data
+     1>Source\View.cpp(103): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\Release\learnopenGL.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\\freetype\lib" /LIBPATH:"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\\glew\lib" /LIBPATH:"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\/lua/lib" /LIBPATH:"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\\glfw\lib-msvc100" /LIBPATH:"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\Release" glew32.lib glfw3.lib opengl32.lib winmm.lib Common.lib lua5.1.lib freetype262d.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\Release\learnopenGL.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\Release\learnopenGL.lib" /MACHINE:X86 /SAFESEH Release\BoxCollision.obj
+         Release\Camera.obj
+         Release\Component.obj
+         Release\Controller.obj
+         Release\CoreUtilities.obj
+         Release\Entity.obj
+         Release\EntityManager.obj
+         Release\FPS_Camera.obj
+         Release\Input.obj
+         Release\Line.obj
+         Release\main.obj
+         Release\Mesh.obj
+         Release\MeshBuilder.obj
+         Release\Renderer.obj
+         Release\Scene.obj
+         Release\Scene_Collision.obj
+         Release\Scene_ECS.obj
+         Release\Scene_SAT_test.obj
+         Release\Scene_Test.obj
+         Release\shader.obj
+         Release\Shape.obj
+         Release\SharedResources.obj
+         Release\Text_Renderer.obj
+         Release\Transformation.obj
+         Release\View.obj
+     1>LINK : warning LNK4098: defaultlib 'MSVCRTD' conflicts with use of other libs; use /NODEFAULTLIB:library
+         Generating code
+         Finished generating code
+         learnopenGL.vcxproj -> C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\Release\learnopenGL.exe
+     1>Done Building Project "C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\learnopenGL\learnopenGL.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:20.72

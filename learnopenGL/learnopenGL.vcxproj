@@ -11,48 +11,74 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\AABB.cpp" />
+    <ClCompile Include="Source\AI_Map.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\Component.cpp" />
     <ClCompile Include="Source\Controller.cpp" />
     <ClCompile Include="Source\CoreUtilities.cpp" />
     <ClCompile Include="Source\Entity.cpp" />
+    <ClCompile Include="Source\EntityManager.cpp" />
     <ClCompile Include="Source\FPS_Camera.cpp" />
+    <ClCompile Include="Source\GridMap.cpp" />
     <ClCompile Include="Source\Input.cpp" />
+    <ClCompile Include="Source\Line.cpp" />
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\Mesh.cpp" />
     <ClCompile Include="Source\MeshBuilder.cpp" />
     <ClCompile Include="Source\Renderer.cpp" />
+    <ClCompile Include="Source\RendererManager.cpp" />
+    <ClCompile Include="Source\Renderer_GridMap.cpp" />
     <ClCompile Include="Source\Scene.cpp" />
-    <ClCompile Include="Source\Scene_ECS.cpp" />
+    <ClCompile Include="Source\Scene_Boxhead.cpp" />
     <ClCompile Include="Source\Scene_Test.cpp" />
     <ClCompile Include="Source\shader.cpp" />
+    <ClCompile Include="Source\Shape.cpp" />
+    <ClCompile Include="Source\SharedResources.cpp" />
+    <ClCompile Include="Source\SpriteAnimation.cpp" />
+    <ClCompile Include="Source\SP_Comp.cpp" />
     <ClCompile Include="Source\Text_Renderer.cpp" />
     <ClCompile Include="Source\Transformation.cpp" />
     <ClCompile Include="Source\View.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\AABB.h" />
+    <ClInclude Include="Source\AI_Map.h" />
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\Component.h" />
     <ClInclude Include="Source\Controller.h" />
     <ClInclude Include="Source\CoreUtilities.h" />
     <ClInclude Include="Source\Entity.h" />
+    <ClInclude Include="Source\EntityManager.h" />
     <ClInclude Include="Source\FPS_Camera.h" />
+    <ClInclude Include="Source\GridMap.h" />
     <ClInclude Include="Source\Header.h" />
     <ClInclude Include="Source\Input.h" />
     <ClInclude Include="Source\Light.h" />
+    <ClInclude Include="Source\Load_TGA.h" />
     <ClInclude Include="Source\Mesh.h" />
     <ClInclude Include="Source\MeshBuilder.h" />
     <ClInclude Include="Source\Renderer.h" />
+    <ClInclude Include="Source\RendererManager.h" />
+    <ClInclude Include="Source\Renderer_GridMap.h" />
     <ClInclude Include="Source\Scene.h" />
-    <ClInclude Include="Source\Scene_ECS.h" />
+    <ClInclude Include="Source\Scene_Boxhead.h" />
     <ClInclude Include="Source\Scene_Test.h" />
     <ClInclude Include="Source\shader.hpp" />
+    <ClInclude Include="Source\Shape.h" />
+    <ClInclude Include="Source\SharedResources.h" />
+    <ClInclude Include="Source\SpriteAnimation.h" />
+    <ClInclude Include="Source\SpriteAnimManager.h" />
+    <ClInclude Include="Source\SP_Comp.h" />
     <ClInclude Include="Source\Text_Renderer.h" />
+    <ClInclude Include="Source\TileMap.h" />
     <ClInclude Include="Source\Transformation.h" />
+    <ClInclude Include="Source\Line.h" />
     <ClInclude Include="Source\Vertex.h" />
     <ClInclude Include="Source\View.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="lessons_learnt.txt" />
     <Text Include="Source\IMPROVEMENTS.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -97,13 +123,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)\glew\include;$(SolutionDir)\glfw\include;$(SolutionDir)\Common\Source;$(SolutionDir)\freetype;$(SolutionDir)/lua/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\freetype;$(SolutionDir)\glew\include;$(SolutionDir)\glfw\include;$(SolutionDir)\Common\Source;$(SolutionDir)\freetype;$(SolutionDir)/lua/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)\glew\lib;$(SolutionDir)\glfw\lib-msvc100;$(SolutionDir)/lua/lib;$(SolutionDir)\freetype\lib;$(SolutionDir)$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32.lib;glfw3.lib;opengl32.lib;winmm.lib;Common.lib;debug\lua5.1.lib;ws2_32.lib;lua5.1.lib;freetype262d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\freetype\lib;$(SolutionDir)\glew\lib;$(SolutionDir)\glfw\lib-msvc100;$(SolutionDir)$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32.lib;glfw3.lib;opengl32.lib;winmm.lib;Common.lib;ws2_32.lib;freetype262d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -115,15 +141,15 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)\glew\include;$(SolutionDir)\glfw\include;$(SolutionDir)\Common\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\freetype;$(SolutionDir)\glew\include;$(SolutionDir)\glfw\include;$(SolutionDir)\Common\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(SolutionDir)\glew\lib;$(SolutionDir)\glfw\lib-msvc100;$(SolutionDir)$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32.lib;glfw3.lib;opengl32.lib;winmm.lib;Common.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\freetype\lib;$(SolutionDir)\glew\lib;$(SolutionDir)/lua/lib;$(SolutionDir)\glfw\lib-msvc100;$(SolutionDir)$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32.lib;glfw3.lib;opengl32.lib;winmm.lib;Common.lib;lua5.1.lib;freetype262d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -1,3 +1,7 @@
 -create new ostringstream everytime needed, no need to change internal state, which takes more resources to clear
 
 -Create constructor/destructor and copy constructor if class object is to be used with vectors: memonry leak issue
+
+-Github: SSH blocked on port 22 (public wifi?)
+
+-Default parameters will not be updated unless you rebuild solution
