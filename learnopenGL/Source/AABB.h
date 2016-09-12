@@ -13,8 +13,9 @@ Date: 22/8/2016
 /*************************************************************/
 class AABB : public Renderer
 {
-	Vector3 vel;	//offset vel
 	bool collided;
+	Vector3 vel;
+	bool affects_parent;	//does collision affects parent entity?
 
 public:
 
@@ -27,7 +28,7 @@ public:
 
 
 	/******************** Init functions **********************/
-	void Init(const char* name, Mesh* debugMesh, Vector3 pos, Vector3 scale);
+	void Init(const char* name, Mesh* debugMesh, Vector3 pos, Vector3 scale, bool affects_parent);
 
 	/******************** collision functions **********************/
 	bool CollisionCheck(AABB& checkMe);

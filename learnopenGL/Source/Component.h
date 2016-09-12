@@ -24,8 +24,8 @@ class Component
 {
 protected:
 
-	bool transformByGrandParent;	//is it transforming by the grand-parent? Since component's parent is entity
-	int parentHandle;
+	int transformBy_Ancestor_ID;	//is it transforming by ancestor?(parent is it's entity) If so, what's the ID of ELDEST transforming ancestor
+	int entityHandle;
 	const char* name;
 	bool active;	//only updates when active
 
@@ -69,12 +69,12 @@ public:
 	virtual void ByParent_Rotate(float angle, Vector3 axis);
 
 	/******************** Entity Transformation function: CALLED BY ENTITY ONLY **********************/
-	virtual void CalculateTRS_WithParent(const Mtx44& parentRotMat, bool GrandParentTransform);
+	virtual void CalculateTRS_WithParent(const Mtx44& parentRotMat, int transformBy_Ancestor_ID);
 
 	/******************** Get functions **********************/
 	const char* GetName();
 	bool isActive();
-	bool GetTransByGrandParent();
+	int GetTransByGrandParent();
 	int GetParentHandle();
 
 	/******************** State functions **********************/

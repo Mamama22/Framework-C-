@@ -18,6 +18,7 @@ public:
 
 /*************************************************************
 Entity, work in progress
+transforming
 
 Contains components as well as children (entities)
 
@@ -43,6 +44,7 @@ class Entity
 	/******************** List **********************/
 	vector<Component*> componentList;
 	vector<Entity*> children;
+	int transformBy_Ancestor_ID;	//is it transforming by ancestor? If so, what's the ID of ELDEST transforming ancestor
 	
 protected:
 
@@ -58,7 +60,7 @@ protected:
 public:
 	
 	/**************************************** public var ******************************************/
-	bool transforming;
+	bool transforming;	//is it transforming by itself?
 	Transformation transform;
 
 	/**************************************** Constructor/destructor ******************************************/
@@ -91,7 +93,7 @@ public:
 
 	/**************************************** CALLED BY PARENT ONLY ******************************************/
 	//TRS---------------------------------------------//
-	virtual void CalculateTRS_WithParent(const Mtx44& parentRotMat, bool parentTransforming);
+	virtual void CalculateTRS_WithParent(const Mtx44& parentRotMat, int transformBy_Ancestor_ID);
 
 	//transformation---------------------------------------------//
 	virtual void ByParent_Translate(Vector3 vel);

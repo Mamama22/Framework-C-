@@ -27,6 +27,9 @@ void Entity::AddComponent(Component* comp)
 {
 	componentList.push_back(comp);
 	comp->Added(transform, handle);
+
+	if (active)
+		comp->SetActive(true);
 }
 
 /********************************************************************************
@@ -200,37 +203,56 @@ void Entity::ByParent_Translate(Vector3 vel)
 }
 
 /********************************************************************************
-Calculate overall TRS as well as for children, 
+Calculate overall TRS as well as for children
+Called by ELDEST ancestor
 ********************************************************************************/
 void Entity::CalculateTRS()
 {
 	if (parent)	//if have parent, TRS calculated before
 		return;
 
+	//get the ID of transforming ancestor(THIS)-------------------------------//
+	int transforming_ancestor = handle;
+	if (!transforming)	//if this entity is not transforming, Transforming Ancestor = -1
+		transforming_ancestor = -1;
+
 	transform.Calculate_TRS();
 
 	for (int i = 0; i < children.size(); ++i)
-		children[i]->CalculateTRS_WithParent(transform.TRS, transforming);	//if parent(THIS) transform
+		children[i]->CalculateTRS_WithParent(transform.TRS, transforming_ancestor);	//transformBy_Ancestor_ID is handle of ELDEST(this)
 	for (int i = 0; i < componentList.size(); ++i)	
-		componentList[i]->CalculateTRS_WithParent(transform.TRS, false);	//no grandparent
+		componentList[i]->CalculateTRS_WithParent(transform.TRS, -1);	//no ancestor, this is the ELDEST
 }
 
 
 /********************************************************************************
-Rotate with entity (parent): when entity rotates, pos of this component
-changes along the axis entity rotates
+This can only be called if parent IS TRANSFORMING, so transformBy_Parent_ID wil never be -1
 ********************************************************************************/
-void Entity::CalculateTRS_WithParent(const Mtx44& parentRotMat, bool parentTransforming)
+void Entity::CalculateTRS_WithParent(const Mtx44& parentRotMat, int transformBy_Ancestor_ID)
 {
+	//get the ID of transforming ancestor-------------------------------//
+	int transforming_ancestor = transformBy_Ancestor_ID;
+
+	//check if there's a transforming ancestor-------------------------//
+	if (transforming_ancestor != -1)
+		this->transformBy_Ancestor_ID = transforming_ancestor;
+	else if (transforming)
+		transforming_ancestor = handle;	//THIS will become new the transforming ancestor
+
+	//Make sure comp. will get Grandparent and above transforming handle-------------------------------------//
+	int transforming_ancestor_not_parent = transforming_ancestor;
+	if (transforming_ancestor_not_parent == handle)
+		transforming_ancestor_not_parent = -1;
+
 	Mtx44 tmp = transform.Calculate_TRS_withParent(parentRotMat);
 
 	for (int i = 0; i < children.size(); ++i)
-		children[i]->CalculateTRS_WithParent(tmp, transforming);	//if parent(THIS) transform
+		children[i]->CalculateTRS_WithParent(tmp, transforming_ancestor);	//if parent(THIS) transform
 
 	//Assumes grandparent is transforming, since child entity collision always affect grandparent, or else it shouldn't be
 	//a child of grandparent's shape
 	for (int i = 0; i < componentList.size(); ++i)
-		componentList[i]->CalculateTRS_WithParent(tmp, true);
+		componentList[i]->CalculateTRS_WithParent(tmp, transforming_ancestor_not_parent);
 }
 
 /********************************************************************************
@@ -240,6 +262,7 @@ void Entity::PreUpdate()
 {
 	transform.PreUpdate();
 	transforming = false;
+	transformBy_Ancestor_ID = -1;
 }
 
 /********************************************************************************

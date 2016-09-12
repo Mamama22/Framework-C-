@@ -21,8 +21,8 @@ void Controller::Init()
 
 	//Init scene-----------------------------------//
 	//scene_boxhead
-	//scene_ECS_2
-	current_scene = &scene_boxhead;
+	//scene_test
+	current_scene = &scene_test;
 	current_scene->Init();
 
 	CU::Post_Init();

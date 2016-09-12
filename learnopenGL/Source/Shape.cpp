@@ -349,7 +349,7 @@ Vector3 normal1, normal2;
 float bounce1 = 0.f, bounce2 = 0.f;
 void Shape::CollisionCheck_2(Shape& obstacle)
 {
-	if (parent_shape && transformByGrandParent)
+	if (parent_shape)
 	{
 		//	collide_withParent = !parent_shape->collided;	//cal. collision with Parent if Parent is not collided
 	}
@@ -388,7 +388,7 @@ void Shape::CollisionCheck_2(Shape& obstacle)
 	//float transformAngle = transform.angle;	//use local angle
 
 	//if transformed by grandparent, use grandparent's angle, if not dir will be wrong------//
-	float transformAngle = CU::entityMan.GetTopParent_Entity(parentHandle)->transform.angle;
+	float transformAngle = CU::entityMan.GetTopParent_Entity(entityHandle)->transform.angle;
 
 
 	//Collide offset--------------------------------------------------------------------------------------------//
@@ -405,7 +405,7 @@ void Shape::CollisionCheck_2(Shape& obstacle)
 	//Set collision offset vel-------------------------------------------------------------------------------------//
 	vel = offsetAway * 1.05f;
 
-	CU::entityMan.GetTopParent_Entity(parentHandle)->Translate(vel);
+	CU::entityMan.GetTopParent_Entity(entityHandle)->Translate(vel);
 }
 
 void Shape::TranslatePosWithAngle(Vector3& pos, Vector3 dir, float speed)
@@ -586,8 +586,7 @@ void Shape::PreUpdate()
 
 void Shape::Update()
 {
-	//reset flags--------------------------------------------------------//
-	transformByGrandParent = false;
+
 }
 
 /********************************************************************************

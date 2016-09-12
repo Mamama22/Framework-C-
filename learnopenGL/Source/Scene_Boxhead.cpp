@@ -51,7 +51,7 @@ AABB* Scene_Boxhead::InitCharacter(Entity** pointer, Vector3 pos, Vector3 box_sc
 
 	//Add AABB----------------------------------------------------//
 	AABB* boxy = new AABB;
-	boxy->Init("fuck u", boxMesh, pos, box_scale);
+	boxy->Init("fuck u", boxMesh, pos, box_scale, false);
 	(*pointer)->AddComponent(boxy);
 
 	//Add SP comp---------------------------------------------------//
@@ -237,7 +237,7 @@ void Scene_Boxhead::DrawOnScreen()
 	//Axes----------------------------------------------------//
 	CU::view.SetIdentity();
 	CU::view.Scale(2000.f, 2000.f, 2000.f);
-	CU::view.RenderMesh(*CU::shared.axes, 1.f);
+	CU::shared.axes->Render();
 }
 
 /********************************************************************************

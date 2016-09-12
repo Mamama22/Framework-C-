@@ -3,6 +3,7 @@
 
 //Scenes-------------------------//
 #include "Scene_Boxhead.h"
+#include "Scene_Test.h"
 
 /*************************************************************
 New and improved controller
@@ -15,6 +16,7 @@ class Controller
 	//Scenes--------------------------------//
 	Scene* current_scene;
 	Scene_Boxhead scene_boxhead;
+	Scene_Test scene_test;
 
 	/********************** FPS **********************/
 	const static unsigned char Controller::FPS; // FPS of this game (ONLY RELEASE MODE CAN RUN SMOOTHLY AT 170FPS MAX)

@@ -4,7 +4,7 @@
 Component::Component()
 {
 	active = false;
-	parentHandle = -1;
+	entityHandle = -1;
 }
 
 Component::Component(const Component& copyMe)
@@ -27,7 +27,7 @@ void Component::Init(const char* name)
 void Component::PreUpdate()
 {
 	transform.PreUpdate();
-	transformByGrandParent = false;
+	transformBy_Ancestor_ID = -1;
 }
 
 /********************************************************************************
@@ -82,7 +82,7 @@ Added
 void Component::Added(Transformation& parentTrans, int parentHandle)
 {
 	transform.AddedToParent(parentTrans);
-	this->parentHandle = parentHandle;
+	this->entityHandle = parentHandle;
 }
 
 /********************************************************************************
@@ -115,13 +115,12 @@ changes along the axis entity rotates
 parentRotMat: parent's TRS
 GrandParentTransform: transformed by parent, (Component's grandparent/ancestor)
 ********************************************************************************/
-void Component::CalculateTRS_WithParent(const Mtx44& parentRotMat, bool GrandParentTransform)
+void Component::CalculateTRS_WithParent(const Mtx44& parentRotMat, int transformBy_Ancestor_ID)
 {
 	transform.Calculate_TRS_withParent(parentRotMat);
 
 	//if entity's parent has transformation this frame------------------------//
-	if (GrandParentTransform)
-		transformByGrandParent = true;
+	this->transformBy_Ancestor_ID = transformBy_Ancestor_ID;
 }
 
 /********************************************************************************
@@ -129,8 +128,8 @@ Getter/setter
 ********************************************************************************/
 const char* Component::GetName(){ return name; }
 bool Component::isActive(){ return active; }
-bool Component::GetTransByGrandParent(){ return transformByGrandParent; }
-int Component::GetParentHandle(){ return parentHandle; }
+int Component::GetTransByGrandParent(){ return transformBy_Ancestor_ID; }
+int Component::GetParentHandle(){ return entityHandle; }
 
 /********************************************************************************
 State

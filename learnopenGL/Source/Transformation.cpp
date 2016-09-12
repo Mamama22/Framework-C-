@@ -10,7 +10,6 @@ TransformNode Transformation::customTrans[20];
 int Transformation::totalTrans = 0;
 int Transformation::TRS_count = 0;
 int Transformation::TRS_cal_count = 0;
-int Transformation::TRS_cal_stage = 0;
 
 /********************************************************************************
 Set transformation
