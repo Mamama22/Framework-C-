@@ -12,6 +12,7 @@ Entity::Entity()
 	CU::entityMan.RegisterEntity(this);	//MUST REGISTER
 	transforming = false;
 	active = false;
+	sticky = true;
 }
 
 Entity::~Entity()
@@ -234,7 +235,7 @@ void Entity::CalculateTRS_WithParent(const Mtx44& parentRotMat, int transformBy_
 	int transforming_ancestor = transformBy_Ancestor_ID;
 
 	//check if there's a transforming ancestor-------------------------//
-	if (transforming_ancestor != -1)
+	if (transforming_ancestor != -1  && sticky)
 		this->transformBy_Ancestor_ID = transforming_ancestor;
 	else if (transforming)
 		transforming_ancestor = handle;	//THIS will become new the transforming ancestor

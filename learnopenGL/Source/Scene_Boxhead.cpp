@@ -51,7 +51,7 @@ AABB* Scene_Boxhead::InitCharacter(Entity** pointer, Vector3 pos, Vector3 box_sc
 
 	//Add AABB----------------------------------------------------//
 	AABB* boxy = new AABB;
-	boxy->Init("fuck u", boxMesh, pos, box_scale, false);
+	boxy->Init("fuck u", boxMesh, pos, box_scale);
 	(*pointer)->AddComponent(boxy);
 
 	//Add SP comp---------------------------------------------------//

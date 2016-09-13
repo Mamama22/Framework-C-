@@ -44,7 +44,7 @@ class Entity
 	/******************** List **********************/
 	vector<Component*> componentList;
 	vector<Entity*> children;
-	int transformBy_Ancestor_ID;	//is it transforming by ancestor? If so, what's the ID of ELDEST transforming ancestor
+	int transformBy_Ancestor_ID;	//is it transforming by ancestor? If so, what's the ID of ELDEST transforming ancestor (Use to modify ancestor)
 	
 protected:
 
@@ -62,6 +62,7 @@ public:
 	/**************************************** public var ******************************************/
 	bool transforming;	//is it transforming by itself?
 	Transformation transform;
+	bool sticky;	//transform affects parent
 
 	/**************************************** Constructor/destructor ******************************************/
 	Entity();

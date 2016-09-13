@@ -22,10 +22,9 @@ AABB::~AABB()
 /********************************************************************************
 Add point
 ********************************************************************************/
-void AABB::Init(const char* name, Mesh* debugMesh, Vector3 pos, Vector3 scale, bool affects_parent)
+void AABB::Init(const char* name, Mesh* debugMesh, Vector3 pos, Vector3 scale)
 {
 	active = true;
-	this->affects_parent = affects_parent;
 	Renderer::Init(name, debugMesh, pos, scale);
 }
 
@@ -141,7 +140,7 @@ bool AABB::CollisionCheck(AABB& checkMe)
 	vel = AABB_dir * theOffset;
 
 	//offset entity----------------------------------------------------//
-	//cout << "TA id: " << transformBy_Ancestor_ID << endl;
+	cout << "TA id: " << transformBy_Ancestor_ID << endl;
 	if (transformBy_Ancestor_ID == -1)
 		CU::entityMan.GetEntity(entityHandle)->Translate(vel * 1.01f);
 	else

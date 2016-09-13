@@ -24,12 +24,15 @@ void Scene_Test::Init()
 	InitCharacter(&player, Vector3(0, 0, 0), Vector3(100, 100, 1));
 	player_AABB.push_back( AddAABB(player, Vector3(-75, 0, 0), Vector3(50, 50, 1), CU::shared.quad_1) );
 	player_AABB.push_back( AddAABB(player, Vector3(75, 0, 0), Vector3(50, 50, 1), CU::shared.quad_1) );
+	player->sticky = false;
 
 	InitCharacter(&pickup_1, Vector3(-100, 0, 0), Vector3(25, 25, 1));
 	player_AABB.push_back(AddAABB(pickup_1, Vector3(-100, 0, 0), Vector3(25, 25, 1), CU::shared.quad_1));
+	pickup_1->sticky = true;
 
 	InitCharacter(&pickup_2, Vector3(-200, -100, 0), Vector3(25, 25, 1));
 	player_AABB.push_back(AddAABB(pickup_2, Vector3(-200, -100, 0), Vector3(25, 25, 1), CU::shared.quad_1));
+	pickup_2->sticky = true;
 
 	//Init obstacles------------------------------------------//
 	obstacle_AABB.push_back(AddAABB(base, Vector3(-175, -200, 0), Vector3(50, 50, 1), CU::shared.quad_1));
@@ -62,7 +65,7 @@ AABB* Scene_Test::AddAABB(Entity* player, Vector3 pos, Vector3 scale, Mesh* boxM
 {
 	//Add AABB----------------------------------------------------//
 	AABB* boxy = new AABB;
-	boxy->Init("fuck u", boxMesh, pos, scale, false);
+	boxy->Init("fuck u", boxMesh, pos, scale);
 	player->AddComponent(boxy);
 
 	return boxy;
@@ -95,20 +98,20 @@ void Scene_Test::UpdatePlayerInput()
 	if (CU::input.IsKeyPressed(Input::D))
 		player->Translate(Vector3(2.f, 0, 0));
 
-	/*if (CU::input.IsKeyPressed(Input::ARROW_UP))
-		pickup->Translate(Vector3(0, 2.f, 0));
+	if (CU::input.IsKeyPressed(Input::ARROW_UP))
+		pickup_1->Translate(Vector3(0, 2.f, 0));
 	if (CU::input.IsKeyPressed(Input::ARROW_DOWN))
-		pickup->Translate(Vector3(0, -2.f, 0));
+		pickup_1->Translate(Vector3(0, -2.f, 0));
 	if (CU::input.IsKeyPressed(Input::ARROW_LEFT))
-		pickup->Translate(Vector3(-2.f, 0, 0));
+		pickup_1->Translate(Vector3(-2.f, 0, 0));
 	if (CU::input.IsKeyPressed(Input::ARROW_RIGHT))
-		pickup->Translate(Vector3(2.f, 0, 0));*/
+		pickup_1->Translate(Vector3(2.f, 0, 0));
 
 	//player's rotation--------------------------------------//
-	if (CU::input.IsKeyPressed(Input::ARROW_LEFT))
+	/*if (CU::input.IsKeyPressed(Input::ARROW_LEFT))
 	player->Rotate(2.f, Vector3(0, 0, 1));
 	if (CU::input.IsKeyPressed(Input::ARROW_RIGHT))
-	player->Rotate(-2.f, Vector3(0, 0, 1));
+	player->Rotate(-2.f, Vector3(0, 0, 1));*/
 
 	////pick up's rotation--------------------------------------//
 	//if (CU::input.IsKeyPressed(Input::V))
@@ -148,6 +151,7 @@ void Scene_Test::Run_Stage1()
 	//Call parent--------------------------------------//
 	Scene::Run_Stage1();
 
+	base->Translate(Vector3(0.1f, 0, 0));
 	UpdatePlayerInput();
 }
 

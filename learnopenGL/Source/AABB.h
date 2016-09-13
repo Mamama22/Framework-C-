@@ -15,9 +15,9 @@ class AABB : public Renderer
 {
 	bool collided;
 	Vector3 vel;
-	bool affects_parent;	//does collision affects parent entity?
-
+	
 public:
+
 
 	/******************** constructor/destructor **********************/
 	AABB();
@@ -28,7 +28,7 @@ public:
 
 
 	/******************** Init functions **********************/
-	void Init(const char* name, Mesh* debugMesh, Vector3 pos, Vector3 scale, bool affects_parent);
+	void Init(const char* name, Mesh* debugMesh, Vector3 pos, Vector3 scale);
 
 	/******************** collision functions **********************/
 	bool CollisionCheck(AABB& checkMe);
