@@ -15,6 +15,8 @@ class Scene_Test : public Scene
 {
 	Entity* base;
 	Entity* player;
+	Entity* pickup_1;
+	Entity* pickup_2;
 
 	vector<AABB*> player_AABB;
 	vector<AABB*> obstacle_AABB;

@@ -25,6 +25,12 @@ void Scene_Test::Init()
 	player_AABB.push_back( AddAABB(player, Vector3(-75, 0, 0), Vector3(50, 50, 1), CU::shared.quad_1) );
 	player_AABB.push_back( AddAABB(player, Vector3(75, 0, 0), Vector3(50, 50, 1), CU::shared.quad_1) );
 
+	InitCharacter(&pickup_1, Vector3(-100, 0, 0), Vector3(25, 25, 1));
+	player_AABB.push_back(AddAABB(pickup_1, Vector3(-100, 0, 0), Vector3(25, 25, 1), CU::shared.quad_1));
+
+	InitCharacter(&pickup_2, Vector3(-200, -100, 0), Vector3(25, 25, 1));
+	player_AABB.push_back(AddAABB(pickup_2, Vector3(-200, -100, 0), Vector3(25, 25, 1), CU::shared.quad_1));
+
 	//Init obstacles------------------------------------------//
 	obstacle_AABB.push_back(AddAABB(base, Vector3(-175, -200, 0), Vector3(50, 50, 1), CU::shared.quad_1));
 	obstacle_AABB.push_back(AddAABB(base, Vector3(175, 200, 0), Vector3(50, 50, 1), CU::shared.quad_1));
@@ -110,28 +116,28 @@ void Scene_Test::UpdatePlayerInput()
 	//if (CU::input.IsKeyPressed(Input::B))
 	//	pickup->Rotate(-2.f, Vector3(0, 0, 1));
 
-	////Add entities to main test entity-------------------------------//
-	//if (CU::input.IsKeyReleased(Input::N))
-	//{
-	//	RemoveChild(*gridmap, *pickup);
-	//	AddAsChild(*player, *pickup);
-	//}
-	//if (CU::input.IsKeyReleased(Input::M))
-	//{
-	//	RemoveChild(*gridmap, *pickup_1);
-	//	AddAsChild(*pickup, *pickup_1);
-	//}
+	//Add entities to main test entity-------------------------------//
+	if (CU::input.IsKeyReleased(Input::N))	//pickup 1 add to player
+	{
+		RemoveChild(*base, *pickup_1);
+		AddAsChild(*player, *pickup_1);
+	}
+	if (CU::input.IsKeyReleased(Input::M))	//pickup 2 add to pickup_1
+	{
+		RemoveChild(*base, *pickup_2);
+		AddAsChild(*pickup_1, *pickup_2);
+	}
 
-	//if (CU::input.IsKeyReleased(Input::O))
-	//{
-	//	RemoveChild(*player, *pickup);
-	//	AddAsChild(*gridmap, *pickup);
-	//}
-	//if (CU::input.IsKeyReleased(Input::P))
-	//{
-	//	RemoveChild(*pickup, *pickup_1);
-	//	AddAsChild(*gridmap, *pickup_1);
-	//}
+	if (CU::input.IsKeyReleased(Input::O))	//remove pickup 1
+	{
+		RemoveChild(*player, *pickup_1);
+		AddAsChild(*base, *pickup_1);
+	}
+	if (CU::input.IsKeyReleased(Input::P))	//remove pickup 2
+	{
+		RemoveChild(*pickup_1, *pickup_2);
+		AddAsChild(*base, *pickup_2);
+	}
 }
 
 /********************************************************************************
