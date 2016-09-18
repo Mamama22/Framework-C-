@@ -37,12 +37,13 @@ void SharedResources::Init()
 	textureList[TEX_MUSIC] = LoadTGA("Image//CatPurple.tga");
 	textureList[TEX_SPRITE_EXPLOSION] = LoadTGA("Image//explosion_hd.tga");
 	//textureList[TEX_MC_TILEMAP] = LoadTGA("Image//minecraft_tilemap.tga");
-	textureList[TEX_PERRY] = LoadTGA("Image//perry_da_platypus.tga");
+	//textureList[TEX_PERRY] = LoadTGA("Image//perry_da_platypus.tga");
 	//textureList[TEX_AI_TILEMAP] = LoadTGA("Image//AI_tilemap.tga");
 
 	//tilemap---------------------------------------------------------------//
 	tilemapList[TILEMAP_MC].Init(2, 2, LoadTGA("Image//minecraft_tilemap.tga"));
 	tilemapList[TILEMAP_AI].Init(2, 2, LoadTGA("Image//AI_tilemap.tga"));
+	tilemapList[TILEMAP_PERRY].Init(1, 1, LoadTGA("Image//perry_da_platypus.tga"));
 
 	//preload some textures into meshes---------------------------------//
 	playerQuad->SetTexture(TEX_MUSIC);

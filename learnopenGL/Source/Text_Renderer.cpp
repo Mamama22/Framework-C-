@@ -61,14 +61,14 @@ void FreeType_Text::Init()
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 		// Now store character for later use-----------------------------------------------//
-		Character character;
+		TextCharacter character;
 
 		character.init(texture, Vector2(minecraft->glyph->bitmap.width, minecraft->glyph->bitmap.rows),
 			Vector2(minecraft->glyph->bitmap_left, minecraft->glyph->bitmap_top),
 			minecraft->glyph->advance.x);
 
 		//Add new data-------------------------------------------------------------//
-		characters.insert(std::pair<GLchar, Character>(c, character));
+		characters.insert(std::pair<GLchar, TextCharacter>(c, character));
 	}
 
 	glBindTexture(GL_TEXTURE_2D, 0);

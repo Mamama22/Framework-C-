@@ -6,7 +6,7 @@
 /******************************************************************************
 Store info for charcter glyph
 ******************************************************************************/
-struct Character
+struct TextCharacter
 {
 	GLuint textureID;
 	Vector2 size;
@@ -41,7 +41,7 @@ class FreeType_Text
 	FT_Face minecraft;
 
 public:
-	map<GLchar, Character> characters;
+	map<GLchar, TextCharacter> characters;
 
 	/********************** constructor/destructor *****************************/
 	FreeType_Text();

@@ -20,9 +20,9 @@ void Scene_Boxhead::Init()
 
 	//character----------------------------------------------//
 	player_AABB.resize(3);
-	player_AABB[0] = InitCharacter(&player, Vector3(-100, -100, 0), Vector3(20, 20, 1), CU::shared.quad_2);
-	player_AABB[1] = InitCharacter(&pickup, Vector3(120, -100, 0), Vector3(20, 20, 1), CU::shared.quad_2);
-	player_AABB[2] = InitCharacter(&pickup_1, Vector3(120, 100, 0), Vector3(20, 20, 1), CU::shared.quad_2);
+	player_AABB[0] = InitCharacter(&player, Vector3(-100, -100, 0), Vector3(20, 20, 1), CU::shared.quad_2, AImap->GetHandle(), false);
+	player_AABB[1] = InitCharacter(&pickup, Vector3(120, -100, 0), Vector3(20, 20, 1), CU::shared.quad_2, AImap->GetHandle(), true);
+	player_AABB[2] = InitCharacter(&pickup_1, Vector3(120, 100, 0), Vector3(20, 20, 1), CU::shared.quad_2, AImap->GetHandle(), false);
 
 	//Add player and entity to gridmap--------------------------------------//
 	gridmap->AddChildren(player);
@@ -39,10 +39,10 @@ void Scene_Boxhead::Init()
 /********************************************************************************
 Character
 ********************************************************************************/
-AABB* Scene_Boxhead::InitCharacter(Entity** pointer, Vector3 pos, Vector3 box_scale, Mesh* boxMesh)
+AABB* Scene_Boxhead::InitCharacter(Character** pointer, Vector3 pos, Vector3 box_scale, Mesh* boxMesh, int AI_map_ID, bool displayPath)
 {
-	*pointer = new Entity;
-	(*pointer)->Init(pos, Vector3(1.f, 1.f, 1.f));
+	*pointer = new Character;
+	(*pointer)->Init(pos, Vector3(1.f, 1.f, 1.f), AI_map_ID, displayPath);
 
 	//Add renderer------------------------------------------------//
 	Render_InWorld* mama = new Render_InWorld;
@@ -91,6 +91,7 @@ void Scene_Boxhead::InitGridmap()
 	vector< vector<int> > pathMap;
 	pathMap.resize(25);
 
+	//the inital map-----------------------------------------//
 	for (int x = 0; x < 25; ++x)
 	{
 		pathMap[x].resize(25);
@@ -100,7 +101,7 @@ void Scene_Boxhead::InitGridmap()
 			for (int y = 0; y < 25; ++y)
 			{
 				if (y >= 4 && y <= 20)
-					pathMap[x][y] = -1;
+					pathMap[x][y] = 0;
 				else
 					pathMap[x][y] = 1;
 			}
@@ -119,6 +120,14 @@ void Scene_Boxhead::InitGridmap()
 	AImap->Init(gridmap->transform.pos, pathMap, gridmap->Get_TileScale(), gridmap->Get_TotalTilesX(), gridmap->Get_TotalTilesY());
 	AImap->SetActive(true);
 	gridmap->AddChildren(AImap);
+
+	////test AI_Comp-----------------------------------------------------------------//
+	//test_AI = new AI_Comp;
+	//test_AI->Init("ASD", AImap->GetHandle(), true);
+	//AImap->AddComponent(test_AI);
+
+	////test find path-----------------//
+	//test_AI->findPath(2, 2, 24, 22);
 }
 
 /********************************************************************************
@@ -149,13 +158,17 @@ void Scene_Boxhead::UpdatePlayerInput()
 		gridmap->Translate(Vector3(2.f, 0, 0));
 
 	if (CU::input.IsKeyPressed(Input::ARROW_UP))
-		pickup->Translate(Vector3(0, 2.f, 0));
+		player->Translate(Vector3(0, 2.f, 0));
 	if (CU::input.IsKeyPressed(Input::ARROW_DOWN))
-		pickup->Translate(Vector3(0, -2.f, 0));
+		player->Translate(Vector3(0, -2.f, 0));
 	if (CU::input.IsKeyPressed(Input::ARROW_LEFT))
-		pickup->Translate(Vector3(-2.f, 0, 0));
+		player->Translate(Vector3(-2.f, 0, 0));
 	if (CU::input.IsKeyPressed(Input::ARROW_RIGHT))
-		pickup->Translate(Vector3(2.f, 0, 0));
+		player->Translate(Vector3(2.f, 0, 0));
+
+	//AI path finding---------------------------------------//
+	if (CU::input.IsKeyReleased(Input::K))
+		pickup->Test_FindPath();
 
 	//player's rotation--------------------------------------//
 	/*if (CU::input.IsKeyPressed(Input::ARROW_LEFT))
@@ -237,7 +250,7 @@ void Scene_Boxhead::DrawOnScreen()
 	//Axes----------------------------------------------------//
 	CU::view.SetIdentity();
 	CU::view.Scale(2000.f, 2000.f, 2000.f);
-	CU::shared.axes->Render();
+	//CU::shared.axes->Render();
 }
 
 /********************************************************************************

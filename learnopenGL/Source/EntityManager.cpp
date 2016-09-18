@@ -12,7 +12,7 @@ Register entity. Entity added to list and handle given.
 int EntityManager::RegisterEntity(Entity* regMe)
 {
 	int handle = entityList.size();
-	regMe->Sethandle(handle);
+	regMe->SetHandle(handle);
 	entityList.push_back(regMe);
 	return handle;
 }

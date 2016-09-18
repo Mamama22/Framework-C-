@@ -1,14 +1,5 @@
 #include "Controller.h"
 
-
-void PrintArray(int gg[])
-{
-	for (int i = 0; i < 4; ++i)
-	{
-		cout << gg[i] << endl;
-	}
-}
-
 int main(void)
 {
 	/* Memory leak checker */
@@ -19,10 +10,17 @@ int main(void)
 	controller.Run();
 	controller.Exit();
 
-	/*int gg[4];
-	gg[0] = 1;
-	gg[1] = 2;
-	gg[2] = 3;
-	gg[3] = 4;
-	PrintArray(gg);*/
+	/*int** asdsd;
+	asdsd = new int*[20];
+
+	for (int i = 0; i < 20; ++i)
+	{
+		asdsd[i] = new int[20];
+
+		for (int y = 0; y < 20; ++y)
+		{
+			asdsd[i][y] = 22;
+		}
+	}
+	cout << "ASDAS: " << asdsd[12][13] << endl;*/
 }

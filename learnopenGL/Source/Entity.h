@@ -5,6 +5,7 @@
 //component types-----------------------------//
 #include "Renderer_GridMap.h"
 #include "SP_Comp.h"
+#include "AI_Comp.h"
 
 /********************************************************************************
 error
@@ -88,8 +89,8 @@ public:
 	virtual void CalculateTRS();
 
 	/**************************************** Transformation function ******************************************/
-	void Translate(Vector3 vel);
-	void Rotate(float angle, Vector3 axis);
+	virtual void Translate(Vector3 vel);
+	virtual void Rotate(float angle, Vector3 axis);
 
 
 	/**************************************** CALLED BY PARENT ONLY ******************************************/
@@ -105,8 +106,8 @@ public:
 	Entity* GetTopParent();	//get the very top parent
 	void GetChildrenList(vector<Entity*>& list);
 	void GetCompList(vector<Component*>& list);
-	int Gethandle();
-	void Sethandle(int handle);
+	int GetHandle();
+	void SetHandle(int handle);
 	bool getActive();
 	void SetActive(bool b);
 

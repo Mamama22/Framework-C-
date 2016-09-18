@@ -22,7 +22,7 @@ void Controller::Init()
 	//Init scene-----------------------------------//
 	//scene_boxhead
 	//scene_test
-	current_scene = &scene_test;
+	current_scene = &scene_boxhead;
 	current_scene->Init();
 
 	CU::Post_Init();

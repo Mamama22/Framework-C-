@@ -94,6 +94,5 @@ void CU::Exit()
 {
 	view.Exit();
 	shared.Exit();
-	rendererMan.Exit();
 	entityMan.Exit();
 }

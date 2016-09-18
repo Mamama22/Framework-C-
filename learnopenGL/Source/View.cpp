@@ -247,7 +247,7 @@ void View::RenderText(string text, Vector2 pos, float yScale, Color color)
 	std::string::const_iterator c;
 	for (c = text.begin(); c != text.end(); c++)
 	{
-		Character ch = textMan.characters[*c];
+		TextCharacter ch = textMan.characters[*c];
 
 		GLfloat xpos = pos.x + ch.bearing.x * yScale;
 		GLfloat ypos = pos.y - (ch.size.y - ch.bearing.y) * yScale;

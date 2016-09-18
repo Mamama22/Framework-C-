@@ -84,6 +84,7 @@ Tilemap Texture enum
 enum TILEMAP_ENUM
 {
 	TILEMAP_MC,
+	TILEMAP_PERRY,
 	TILEMAP_AI,
 
 	TOTAL_TILEMAP,

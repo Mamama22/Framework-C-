@@ -43,15 +43,3 @@ void RendererManager::DrawRenderer()
 			renderList[i]->Draw();
 	}
 }
-
-/********************************************************************************
-delete renderers
-********************************************************************************/
-void RendererManager::Exit()
-{
-	for (int i = 0; i < renderList.size(); ++i)
-	{
-		if (renderList[i])
-			delete renderList[i];
-	}
-}

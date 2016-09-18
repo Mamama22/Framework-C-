@@ -127,7 +127,7 @@ void GridMap::Init(Vector3 pos, TILEMAP_ENUM tilemesh, float tileScale, int tota
 	//highlight intersected-----------------------------------------------//
 	intersectedGrid = new Render_GridMap;
 	//intersectedGrid->Init("Asd", CU::shared.quad_start0, Vector3(0, 0, 0), Vector3(mapScaleX / (float)total_SP_X, mapScaleY / (float)total_SP_Y, 1));
-	intersectedGrid->Init("d", TILEMAP_AI, pos, gridScaleX, total_SP_X, total_SP_Y);
+	intersectedGrid->Init("d", TILEMAP_PERRY, pos, gridScaleX, total_SP_X, total_SP_Y);
 	intersectedGrid->SetAlpha(0.5f);
 	intersectedGrid->SetAllTilesEmpty();
 	intersectedGrid->RecalculateMesh();
@@ -183,7 +183,7 @@ void GridMap::Update_Stage2()
 			if (SP_Grids[(x * total_SP_Y) + y].Get_entityCount() == 0)
 				intersectedGrid->SetTileEmpty(x, y);
 			else
-				intersectedGrid->SetTile(x, y, 3);
+				intersectedGrid->SetTile(x, y, 1);
 		}
 		intersectedGrid->RecalculateMesh();
 	}
@@ -235,7 +235,7 @@ Added entity as children
 void GridMap::AddChildren(Entity* child)
 {
 	//Get their shape collider
-	CU::entityMan.GetEntityComp(child->Gethandle());
+	CU::entityMan.GetEntityComp(child->GetHandle());
 
 	//look through for children's SP comp------------------------------//
 	for (int i = 0; i < CU::entityMan.compList.size(); ++i)

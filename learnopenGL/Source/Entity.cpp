@@ -12,13 +12,18 @@ Entity::Entity()
 	CU::entityMan.RegisterEntity(this);	//MUST REGISTER
 	transforming = false;
 	active = false;
-	sticky = true;
+	sticky = false;
 }
 
 Entity::~Entity()
 {
+	for (int i = 0; i < componentList.size(); ++i)
+	{
+		delete componentList[i];
+	}
+
 	componentList.clear(); 
-	children.clear(); 
+	children.clear();
 }
 
 /********************************************************************************
@@ -46,6 +51,8 @@ void Entity::AddChildren(Entity* child)
 
 	children.push_back(child);
 	child->Added(this);
+
+	child->SetActive(active);
 }
 
 /********************************************************************************
@@ -150,6 +157,9 @@ No need to roate children by parent, their pos will be derived from TRS
 ********************************************************************************/
 void Entity::Translate(Vector3 vel)
 {
+	if (sticky)
+		return;
+
 	transform.Translate(vel);
 	transforming = true;
 
@@ -165,6 +175,9 @@ Rotates entity
 ********************************************************************************/
 void Entity::Rotate(float angle, Vector3 axis)
 {
+	if (sticky)
+		return;
+
 	transform.Rotate(angle, axis);
 	transforming = true;
 
@@ -321,8 +334,8 @@ void Entity::GetCompList(vector<Component*>& list)
 		list[i] = componentList[i];
 }
 
-int Entity::Gethandle(){ return handle; }
-void Entity::Sethandle(int handle){ this->handle = handle; }
+int Entity::GetHandle(){ return handle; }
+void Entity::SetHandle(int handle){ this->handle = handle; }
 
 bool Entity::getActive(){ return active; }
 void Entity::SetActive(bool b)

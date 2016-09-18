@@ -42,7 +42,7 @@ public:
 	virtual ~Component();
 
 	/******************** comp functions **********************/
-	void Init(const char* name);
+	void Init(const char* name, Vector3 pos, Vector3 scale);
 	virtual void PreUpdate();
 	void Update();
 

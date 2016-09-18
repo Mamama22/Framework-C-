@@ -3,7 +3,7 @@
 #include "Renderer.h"
 
 /*==========================================================================================================================
-Render grid map
+Render grid map, starts from bottom left corner
 
 How to use:
 1) Call init and pass in relevant info, make sure mesh is a tilemap

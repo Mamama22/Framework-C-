@@ -48,6 +48,18 @@ public:
 	void Exit();
 
 	/********************************************************************************
+	Check if given entity is of this class type
+	********************************************************************************/
+	template<class T>
+	bool CheckEntityType(int handle)
+	{
+		if (dynamic_cast<T*>(entityList[handle]))
+			return true;
+
+		return false;
+	}
+
+	/********************************************************************************
 	Check if given component is of this class type
 	********************************************************************************/
 	template<class T>

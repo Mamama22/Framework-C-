@@ -172,8 +172,7 @@ Add point
 void Shape::Init(const char* name, Vector3 pos)
 {
 	active = true;
-	Component::Init(name);
-	transform.Set(pos, Vector3(1, 1, 1));
+	Component::Init(name, pos, Vector3(1, 1, 1));
 	prevPos.SetZero();
 }
 

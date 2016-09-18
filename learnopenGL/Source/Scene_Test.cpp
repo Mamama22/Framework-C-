@@ -98,20 +98,20 @@ void Scene_Test::UpdatePlayerInput()
 	if (CU::input.IsKeyPressed(Input::D))
 		player->Translate(Vector3(2.f, 0, 0));
 
-	if (CU::input.IsKeyPressed(Input::ARROW_UP))
+	/*if (CU::input.IsKeyPressed(Input::ARROW_UP))
 		pickup_1->Translate(Vector3(0, 2.f, 0));
 	if (CU::input.IsKeyPressed(Input::ARROW_DOWN))
 		pickup_1->Translate(Vector3(0, -2.f, 0));
 	if (CU::input.IsKeyPressed(Input::ARROW_LEFT))
 		pickup_1->Translate(Vector3(-2.f, 0, 0));
 	if (CU::input.IsKeyPressed(Input::ARROW_RIGHT))
-		pickup_1->Translate(Vector3(2.f, 0, 0));
+		pickup_1->Translate(Vector3(2.f, 0, 0));*/
 
 	//player's rotation--------------------------------------//
-	/*if (CU::input.IsKeyPressed(Input::ARROW_LEFT))
+	if (CU::input.IsKeyPressed(Input::ARROW_LEFT))
 	player->Rotate(2.f, Vector3(0, 0, 1));
 	if (CU::input.IsKeyPressed(Input::ARROW_RIGHT))
-	player->Rotate(-2.f, Vector3(0, 0, 1));*/
+	player->Rotate(-2.f, Vector3(0, 0, 1));
 
 	////pick up's rotation--------------------------------------//
 	//if (CU::input.IsKeyPressed(Input::V))
@@ -151,7 +151,6 @@ void Scene_Test::Run_Stage1()
 	//Call parent--------------------------------------//
 	Scene::Run_Stage1();
 
-	base->Translate(Vector3(0.1f, 0, 0));
 	UpdatePlayerInput();
 }
 

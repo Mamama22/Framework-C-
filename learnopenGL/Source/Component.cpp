@@ -19,9 +19,10 @@ Component::~Component()
 /********************************************************************************
 Init:
 ********************************************************************************/
-void Component::Init(const char* name)
+void Component::Init(const char* name, Vector3 pos, Vector3 scale)
 {
 	this->name = name;
+	transform.Set(pos, scale);
 }
 
 void Component::PreUpdate()

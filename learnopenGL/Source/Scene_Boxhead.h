@@ -13,17 +13,20 @@ Date: 18/8/2016
 /*************************************************************/
 class Scene_Boxhead : public Scene
 {
-	Entity* player;
-	Entity* pickup;
-	Entity* pickup_1;
+	Character* player;
+	Character* pickup;
+	Character* pickup_1;
 	AI_Map* AImap;
 
 	GridMap* gridmap;
+	
+
+	//test comps-----------------------------//
 	vector<AABB*> player_AABB;
 	vector<AABB*> obstacle_AABB;
 
 	/******************** Utilities **********************/
-	static AABB* InitCharacter(Entity** pointer, Vector3 pos, Vector3 box_scale, Mesh* boxMesh);
+	static AABB* InitCharacter(Character** pointer, Vector3 pos, Vector3 box_scale, Mesh* boxMesh, int AI_map_ID, bool displayPath);
 	static void AddAsChild(Entity& parent, Entity& child);
 	static void RemoveChild(Entity& parent, Entity& child);
 

@@ -29,9 +29,8 @@ Init
 ********************************************************************************/
 void Renderer::Init(const char* name, Mesh* mesh, Vector3 pos, Vector3 scale)
 {
-	Component::Init(name);
+	Component::Init(name, pos, scale);
 	this->mesh = mesh;
-	transform.Set(pos, scale);
 }
 
 /********************************************************************************
