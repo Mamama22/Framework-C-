@@ -56,6 +56,8 @@ Find a path at the AI_Map
 AI_Map* gg;
 bool AI_Comp::findPath(int startPt_X, int startPt_Y, int endPt_X, int endPt_Y)
 {
+	if (!active)return false;
+
 	if (AI_Map_id == -1)
 		return false;
 	

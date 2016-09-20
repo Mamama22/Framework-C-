@@ -90,6 +90,7 @@ public:
 
 	/**************************************** Transformation function ******************************************/
 	virtual void Translate(Vector3 vel);
+	virtual void Relocate(Vector3 pos);
 	virtual void Rotate(float angle, Vector3 axis);
 
 

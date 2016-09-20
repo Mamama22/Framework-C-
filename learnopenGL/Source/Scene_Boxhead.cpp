@@ -34,6 +34,9 @@ void Scene_Boxhead::Init()
 	obstacle_AABB.resize(2);
 	obstacle_AABB[0] = InitCharacter(&ob, Vector3(-100, 60, 0), Vector3(30, 150, 1), CU::shared.quad_1);
 	obstacle_AABB[1] = InitCharacter(&ob, Vector3(220, -50, 0), Vector3(170, 70, 1), CU::shared.quad_1);*/
+
+	//AI test--------------------------------------------------------------------//
+	AI_step_timer = AI_STEP_TIME;
 }
 
 /********************************************************************************
@@ -59,7 +62,7 @@ AABB* Scene_Boxhead::InitCharacter(Character** pointer, Vector3 pos, Vector3 box
 	spcomp->Init("asdasd", pos, box_scale);
 	(*pointer)->AddComponent(spcomp);
 
-	(*pointer)->SetActive(true);
+	(*pointer)->SetActive(false);
 
 	return boxy;
 }
@@ -72,8 +75,7 @@ void Scene_Boxhead::InitGridmap()
 	//gridmap---------------------------------------------------------//
 	gridmap = new GridMap;
 	//pos, mesh, tilescale, total tiles X, total tiles Y, total X grids, total Y grids, tilemap size X, tilemap size Y, total SP X, total SP Y
-	gridmap->Init(Vector3(-400, -300, 0), TILEMAP_MC, 20.f, 25, 25, 1, 1, 2, 2, 2, 2);
-	gridmap->SetActive(true);
+	gridmap->Init(Vector3(-400, -300, 0), TILEMAP_MC, 23.f, 25, 25, 1, 1, 2, 2, 2, 2);
 
 	//modify times----------------------------//
 	for (int x = 0; x < gridmap->Get_TotalTilesX(); ++x)
@@ -100,8 +102,8 @@ void Scene_Boxhead::InitGridmap()
 		{
 			for (int y = 0; y < 25; ++y)
 			{
-				if (y >= 4 && y <= 20)
-					pathMap[x][y] = 0;
+				if (y >= 7 && y <= 15)	//set as obstacle
+					pathMap[x][y] = -1;
 				else
 					pathMap[x][y] = 1;
 			}
@@ -118,16 +120,7 @@ void Scene_Boxhead::InitGridmap()
 	AImap = new AI_Map;
 
 	AImap->Init(gridmap->transform.pos, pathMap, gridmap->Get_TileScale(), gridmap->Get_TotalTilesX(), gridmap->Get_TotalTilesY());
-	AImap->SetActive(true);
 	gridmap->AddChildren(AImap);
-
-	////test AI_Comp-----------------------------------------------------------------//
-	//test_AI = new AI_Comp;
-	//test_AI->Init("ASD", AImap->GetHandle(), true);
-	//AImap->AddComponent(test_AI);
-
-	////test find path-----------------//
-	//test_AI->findPath(2, 2, 24, 22);
 }
 
 /********************************************************************************
@@ -168,7 +161,11 @@ void Scene_Boxhead::UpdatePlayerInput()
 
 	//AI path finding---------------------------------------//
 	if (CU::input.IsKeyReleased(Input::K))
-		pickup->Test_FindPath();
+		AImap->Update_Steps();
+
+	//A-Star-----------------------------------------------//
+	if (CU::input.IsKeyReleased(Input::L))
+		AImap->Start_BFS(0, 0, 5, 5);
 
 	//player's rotation--------------------------------------//
 	/*if (CU::input.IsKeyPressed(Input::ARROW_LEFT))
@@ -213,6 +210,14 @@ void Scene_Boxhead::Run_Stage1()
 {
 	//Call parent--------------------------------------//
 	Scene::Run_Stage1();
+
+	AI_step_timer -= CU::dt;
+
+	if (AI_step_timer <= 0.0)
+	{
+		AI_step_timer = AI_STEP_TIME;
+		//AImap->Update_Steps();
+	}
 
 	UpdatePlayerInput();
 }

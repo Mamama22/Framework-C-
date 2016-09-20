@@ -57,6 +57,15 @@ void Component::Translate(Vector3 vel)	//overload if applicable
 }
 
 /********************************************************************************
+Relocate
+********************************************************************************/
+void Component::Relocate(Vector3 pos)
+{
+	Vector3 vel = pos - transform.pos;
+	Translate(vel);
+}
+
+/********************************************************************************
 Rotate
 ********************************************************************************/
 void Component::Rotate(float angle, Vector3 axis)

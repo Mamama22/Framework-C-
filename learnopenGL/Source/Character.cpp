@@ -23,7 +23,7 @@ Update chracter movement and flags: stage 1
 ********************************************************************************/
 void Character::Update_Stage1()
 {
-	float speed = 100.f;
+	float speed = 250.f;
 
 	switch (state)
 	{
@@ -46,7 +46,7 @@ void Character::Update_Stage1()
 			vel = targetPos - transform.pos;
 		}
 		
-		Translate(dir * speed * CU::dt);
+		Translate(vel);
 
 		break;
 	}

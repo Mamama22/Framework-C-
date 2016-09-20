@@ -10,6 +10,7 @@ void SharedResources::Init()
 {
 	quad = MeshBuilder::GenerateQuad(Color(0, 255, 0), 1.f, 1.f, false);
 	quad_start0 = MeshBuilder::GenerateQuad(Color(52, 247, 111), 1.f, 1.f, true);
+	quad_start0_1 = MeshBuilder::GenerateQuad(Color(152, 247, 111), 1.f, 1.f, true);
 	quad_1 = MeshBuilder::GenerateQuad(Color(255, 255, 0), 1.f, 1.f, false);
 	quad_2 = MeshBuilder::GenerateQuad(Color(0, 255, 255), 1.f, 1.f, false);
 	boundingBox_Mesh = MeshBuilder::GenerateDebugQuad(Color(42, 212, 175));
@@ -72,6 +73,7 @@ void SharedResources::Exit()
 	delete explosion;
 	delete debug_quad;
 	delete quad_start0;
+	delete quad_start0_1;
 }
 
 /********************************************************************************

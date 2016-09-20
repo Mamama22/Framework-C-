@@ -102,7 +102,7 @@ public:
 	void PreUpdate();
 
 	/******************** Transformation **********************/
-	void Translate(Vector3 vel);	//MAKE SURE childrens also called
+	void Translate(Vector3 vel);	//MAKE SURE childrens also called for entity
 	void Scale(Vector3 scale);
 	void Rotate(float angle, Vector3 axis);
 

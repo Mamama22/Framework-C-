@@ -19,6 +19,7 @@ public:
 	Mesh* quad_1;
 	Mesh* quad_2;
 	Mesh* quad_start0;
+	Mesh* quad_start0_1;
 	Mesh* debug_quad;
 	Mesh* sphere;
 	Mesh* sphere_1;

@@ -2,6 +2,7 @@
 #define SCENE_BOXHEAD_H
 
 #include "Scene.h"
+#define AI_STEP_TIME 0.0001
 
 /*************************************************************
 Author: Tan Yie Cher
@@ -20,6 +21,8 @@ class Scene_Boxhead : public Scene
 
 	GridMap* gridmap;
 	
+	//AI test--------------------------------//
+	double AI_step_timer;
 
 	//test comps-----------------------------//
 	vector<AABB*> player_AABB;

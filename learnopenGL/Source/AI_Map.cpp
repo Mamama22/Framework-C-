@@ -3,6 +3,9 @@
 
 AI_Map::AI_Map()
 {
+	AS_start = AS_end = NULL;
+	pathFind_step = -1;
+	state = IDLE;
 }
 
 AI_Map::~AI_Map()
@@ -10,6 +13,10 @@ AI_Map::~AI_Map()
 	for (int i = 0; i < total_tiles_X; ++i)
 		delete[] pathMap[i];
 	delete[] pathMap;
+
+	for (int i = 0; i < total_tiles_X; ++i)
+		delete[] nodeList[i];
+	delete[] nodeList;
 }
 
 /********************************************************************************
@@ -20,6 +27,7 @@ void AI_Map::Init(Vector3 pos, vector< vector<int> >& pathMap_passIn, float tile
 	Entity::Init(pos, Vector3(1, 1, 1));
 
 	this->tileScale = tileScale;
+	total_passable_tiles = 0;
 
 	//scene map----------------------------------------------------------------------------------------//
 	pathMap = new int*[total_tiles_X];	//wtf, pathMap_template cannot directly new bool*[]
@@ -41,7 +49,10 @@ void AI_Map::Init(Vector3 pos, vector< vector<int> >& pathMap_passIn, float tile
 		for (int y = 0; y < total_tiles_Y; ++y)
 		{
 			if (pathMap[x][y] >= 0)	//valid tile
+			{
+				total_passable_tiles++;
 				pathMap_renderer->SetTile(x, y, 1);
+			}
 			else	//wall
 			{
 				pathMap_renderer->SetTileEmpty(x, y);
@@ -55,6 +66,28 @@ void AI_Map::Init(Vector3 pos, vector< vector<int> >& pathMap_passIn, float tile
 
 	this->total_tiles_X = total_tiles_X;
 	this->total_tiles_Y = total_tiles_Y;
+
+	//a star-------------------------------------------------------------------------------------//
+	Init_AStar();
+	Init_BFS();
+}
+
+void AI_Map::Update_Stage1()
+{
+}
+
+void AI_Map::Update_Steps()
+{
+	switch (state)
+	{
+	case IDLE:
+		break;
+	case SHOW_BFS:
+		onClick_BFS();
+		break;
+	case SHOW_A_STAR:
+		break;
+	}
 }
 
 /********************************************************************************
@@ -152,6 +185,24 @@ Get point pos (transform.pos is at bottom left corner)
 Vector3 AI_Map::Get_PointPos(int x, int y)
 {
 	return Vector3(transform.pos.x + (tileScale * x), transform.pos.y + (tileScale * y), 0);
+}
+
+/********************************************************************************
+Setup for path-find
+********************************************************************************/
+void AI_Map::StartPathFind(int startX, int startY, int endX, int endY)
+{
+	pathFind_step = 0;
+	this->pathFind_startX = startX;
+	this->pathFind_startY = startY;
+	this->pathFind_endX = endX;
+	this->pathFind_endY = endY;
+
+	//renderers for start end pos-----------------------------------------------//
+	AS_start->Relocate(Get_PointPos(startX, startY));
+	AS_end->Relocate(Get_PointPos(endX, endY));
+	AS_start->SetActive(true);
+	AS_end->SetActive(true);
 }
 
 /********************************************************************************

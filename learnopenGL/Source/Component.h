@@ -51,6 +51,7 @@ public:
 
 	/******************** Transformation function **********************/
 	virtual void Translate(Vector3 vel);	//overload if applicable
+	virtual void Relocate(Vector3 pos);	
 	virtual void Rotate(float angle, Vector3 axis);
 
 	/******************** CALLED BY PARENT ONLY **********************/

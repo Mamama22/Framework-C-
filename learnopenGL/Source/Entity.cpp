@@ -11,7 +11,7 @@ Entity::Entity()
 	parent = NULL; 
 	CU::entityMan.RegisterEntity(this);	//MUST REGISTER
 	transforming = false;
-	active = false;
+	active = true;
 	sticky = false;
 }
 
@@ -51,8 +51,6 @@ void Entity::AddChildren(Entity* child)
 
 	children.push_back(child);
 	child->Added(this);
-
-	child->SetActive(active);
 }
 
 /********************************************************************************
@@ -168,6 +166,19 @@ void Entity::Translate(Vector3 vel)
 		children[i]->ByParent_Translate(vel);
 	for (int i = 0; i < componentList.size(); ++i)
 		componentList[i]->ByParent_Translate(vel);
+}
+
+/********************************************************************************
+Relocate entity and children + components
+No need to roate children by parent, their pos will be derived from TRS
+********************************************************************************/
+void Entity::Relocate(Vector3 pos)
+{
+	if (sticky)
+		return;
+
+	Vector3 vel = pos - transform.pos;
+	Translate(vel);
 }
 
 /********************************************************************************
