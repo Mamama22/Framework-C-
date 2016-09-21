@@ -37,6 +37,8 @@ void Scene_Boxhead::Init()
 
 	//AI test--------------------------------------------------------------------//
 	AI_step_timer = AI_STEP_TIME;
+
+	stop_auto_anim = false;
 }
 
 /********************************************************************************
@@ -93,12 +95,15 @@ void Scene_Boxhead::InitGridmap()
 	vector< vector<int> > pathMap;
 	pathMap.resize(25);
 
+	int count = 5;
+
 	//the inital map-----------------------------------------//
 	for (int x = 0; x < 25; ++x)
 	{
 		pathMap[x].resize(25);
 
-		if (x >= 4 && x <= 20)
+		//load the tiles--------------------------------------------//
+		if (x >= count && x <= count + 2)
 		{
 			for (int y = 0; y < 25; ++y)
 			{
@@ -115,7 +120,16 @@ void Scene_Boxhead::InitGridmap()
 				pathMap[x][y] = 1;
 			}
 		}
+
+		//increase count-------------------------------------------//
+		if (x == count + 2)
+		{
+			count += 4;
+		}
 	}
+
+	for (int y = 0; y < 24; ++y)
+		pathMap[16][y] = -1;
 
 	AImap = new AI_Map;
 
@@ -165,7 +179,7 @@ void Scene_Boxhead::UpdatePlayerInput()
 
 	//A-Star-----------------------------------------------//
 	if (CU::input.IsKeyReleased(Input::L))
-		AImap->Start_BFS(0, 0, 5, 5);
+		AImap->Start_BFS(1, 3, 17, 5);
 
 	//player's rotation--------------------------------------//
 	/*if (CU::input.IsKeyPressed(Input::ARROW_LEFT))
@@ -211,12 +225,16 @@ void Scene_Boxhead::Run_Stage1()
 	//Call parent--------------------------------------//
 	Scene::Run_Stage1();
 
-	AI_step_timer -= CU::dt;
-
-	if (AI_step_timer <= 0.0)
+	if (!stop_auto_anim)
 	{
-		AI_step_timer = AI_STEP_TIME;
-		//AImap->Update_Steps();
+
+		AI_step_timer -= CU::dt;
+
+		if (AI_step_timer <= 0.0)
+		{
+			AI_step_timer = AI_STEP_TIME;
+			AImap->Update_Steps();
+		}
 	}
 
 	UpdatePlayerInput();

@@ -1,6 +1,8 @@
 #ifndef AI_MAP_H
 #define AI_MAP_H
 #include "Entity.h"
+#include <queue>
+using std::queue;
 
 struct XY_grid
 {
@@ -20,6 +22,8 @@ struct XY_grid
 
 /*************************************************************
 BFS grid
+
+BFS algorithm: no need 8 ajacent nodes, we can simply go diagonal by cutting thru zig-zag tiles
 
 Author: Tan Yie Cher
 Date: 19/9/2016
@@ -124,6 +128,8 @@ private:
 	/************************************* BFS ***************************************/
 	BFS_Grid** bfs_GridList;
 	vector<BFS_Grid*> frontier;
+	queue<BFS_Grid*> frontier2;
+
 	int frontier_lastIndex;	//keeps track of last grid of frontier
 
 	/************************************* A* Path-Finding ***************************************/

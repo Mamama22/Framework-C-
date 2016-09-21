@@ -23,6 +23,7 @@ class Scene_Boxhead : public Scene
 	
 	//AI test--------------------------------//
 	double AI_step_timer;
+	bool stop_auto_anim;
 
 	//test comps-----------------------------//
 	vector<AABB*> player_AABB;
