@@ -7,8 +7,7 @@ AI_Comp::AI_Comp()
 	AI_Map_id = -1; 
 
 	//assumes max path is 200 tiles----------------------//
-	xPoints.resize(200);
-	yPoints.resize(200);
+	points.resize(200);
 	pathSize = 0;
 	target_index = -1;
 	state = IDLE;
@@ -63,12 +62,17 @@ bool AI_Comp::findPath(int startPt_X, int startPt_Y, int endPt_X, int endPt_Y)
 	
 	gg = static_cast<AI_Map*>(CU::entityMan.GetEntity(AI_Map_id));
 
-	if (gg->findPath(this, startPt_X, startPt_Y, endPt_X, endPt_Y))
+	int size = gg->findPath(this, startPt_X, startPt_Y, endPt_X, endPt_Y);
+
+	if (size != -1)
 	{
 		state = PATH_FOLLOWING;
 
-		//Set start point as target----------------------------------//
-		target_index = 0;
+		//get pathsize----------------------------------------------//
+		pathSize = size;
+
+		//Set END point as target----------------------------------//
+		target_index = pathSize - 1;
 
 		if (display_path)
 			gg->AddPath_ToDisplay(this);
@@ -85,7 +89,7 @@ Get target point pos, if reached, AI Comp will automatically assign a new one
 Vector3 AI_Comp::GetTargetPointPos()
 {
 	gg = static_cast<AI_Map*>(CU::entityMan.GetEntity(AI_Map_id));
-	return gg->Get_PointPos(xPoints[target_index], yPoints[target_index]);
+	return gg->Get_PointPos(points[target_index].x, points[target_index].y);
 }
 
 /********************************************************************************
@@ -94,8 +98,10 @@ Get next points pos (Assume entity reached target point)
 void AI_Comp::GetNextPoint()
 {
 	//go next index--------------------------------//
-	if (target_index < pathSize - 1)	//target_index == pathSize - 1: reached dest. point
-		target_index++;
+	if (target_index > 0)	//target_index == pathSize - 1: reached dest. point
+		target_index--;
+	else
+		target_index = -1;	//set to -1 to signal reached
 
 	if (display_path)
 	{
@@ -111,7 +117,7 @@ can be called by AI_Map too
 void AI_Comp::RemovePath()
 {
 	target_index = -1;
-	pathSize = 0;
+	pathSize = -1;
 }
 
 /********************************************************************************
@@ -119,8 +125,8 @@ For AI_Map, set points
 ********************************************************************************/
 void AI_Comp::AddPoint(int x, int y, int index)
 {
-	xPoints[index] = x;
-	yPoints[index] = y;
+	points[index].x = x;
+	points[index].y = y;
 	pathSize++;
 }
 
@@ -129,14 +135,17 @@ Reached end point
 ********************************************************************************/
 bool AI_Comp::Reached_Dest()
 {
-	return target_index == pathSize - 1;
+	return target_index == -1;
 }
 
 int AI_Comp::Get_currentPathSize(){ return pathSize; }
 int AI_Comp::Get_target_index(){ return target_index; }
-int AI_Comp::Get_xPoint(int index){ return xPoints[index]; }
-int AI_Comp::Get_yPoint(int index){ return yPoints[index]; }
+int AI_Comp::Get_xPoint(int index){ return points[index].x; }
+int AI_Comp::Get_yPoint(int index){ return points[index].y; }
 float AI_Comp::Get_tileScale(){ return tileScale; }
+vector<XY_grid>& AI_Comp::Get_XY_Grids(){ return points; }
+
+void AI_Comp::Set_PathSize(int s){ pathSize = 0; }
 
 void AI_Comp::Exit()
 {

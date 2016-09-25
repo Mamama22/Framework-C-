@@ -76,11 +76,10 @@ void AI_Map::Init_BFS()
 }
 
 /*******************************************************************************
-Start BFS
+Setup BFS pathfinding
 ********************************************************************************/
 void AI_Map::Start_BFS(int startX, int startY, int endX, int endY)
 {
-	state = SHOW_BFS;
 	StartPathFind(startX, startY, endX, endY);
 
 	//reset grids-----------------------------------------------------//
@@ -93,14 +92,105 @@ void AI_Map::Start_BFS(int startX, int startY, int endX, int endY)
 	frontier[pathFind_step] = &bfs_GridList[startX][startY];
 	frontier[pathFind_step]->SetAs_Visited();	///mark as visited
 	frontier_lastIndex = 0;	//last index is 0
+}
 
-	frontier2.push(&bfs_GridList[startX][startY]);
+/*******************************************************************************
+Start BFS for display
+********************************************************************************/
+void AI_Map::Start_BFS_display(int startX, int startY, int endX, int endY)
+{
+	state = SHOW_BFS;
+	Start_BFS(startX, startY, endX, endY);
+}
+
+
+/*******************************************************************************
+Update BFS loop
+********************************************************************************/
+XY_grid thePos;
+bool AI_Map::Update_BFS()
+{
+	//if not out of loop-------------------------------------------------------------------------//
+	if (pathFind_step >= frontier_lastIndex + 1)
+	{	
+		return true;
+	}
+
+	//Get pos------------------------------------------------------------------------------------//
+	thePos = frontier[pathFind_step]->pos;
+	pathMap_renderer->SetTile(thePos.x, thePos.y, 2);	//mark as visited
+
+	//Get ajacent grids--------------------------------------------------------------------------//
+	if ((thePos.x + thePos.y) % 2 != 0)	//follo redblobgames tut, if % 2 == 0, reverse
+	{
+
+		if (thePos.x < total_tiles_X - 1)	//grid  2, 3
+			Add_AjacentTo_Frontier(&bfs_GridList[thePos.x + 1][thePos.y]);
+
+		if (thePos.y > 0)	//grid 4, 5
+			Add_AjacentTo_Frontier(&bfs_GridList[thePos.x][thePos.y - 1]);
+
+		if (thePos.x > 0)	//grid 6, 7
+			Add_AjacentTo_Frontier(&bfs_GridList[thePos.x - 1][thePos.y]);
+
+		if (thePos.y < total_tiles_Y - 1)	//grid 0, 1
+			Add_AjacentTo_Frontier(&bfs_GridList[thePos.x][thePos.y + 1]);
+	}
+
+	//Reverse ORDER------------------------------------------------------------------------------//
+	else
+	{
+		if (thePos.y < total_tiles_Y - 1)	//grid 0, 1
+			Add_AjacentTo_Frontier(&bfs_GridList[thePos.x][thePos.y + 1]);
+
+		if (thePos.x > 0)	//grid 6, 7
+			Add_AjacentTo_Frontier(&bfs_GridList[thePos.x - 1][thePos.y]);
+
+		if (thePos.y > 0)	//grid 4, 5
+			Add_AjacentTo_Frontier(&bfs_GridList[thePos.x][thePos.y - 1]);
+
+		if (thePos.x < total_tiles_X - 1)	//grid  2, 3
+			Add_AjacentTo_Frontier(&bfs_GridList[thePos.x + 1][thePos.y]);
+	}
+
+	//update data------------------------------------------------------------------------------//
+	pathFind_step++;
+	return false;
+}
+
+/*******************************************************************************
+Get optimal path
+********************************************************************************/
+int AI_Map::GetOptimal_path_BFS(vector<XY_grid>& pathList)
+{
+	int size = 0;
+
+	XY_grid currentIndex;
+	currentIndex.x = pathFind_endX;
+	currentIndex.y = pathFind_endY;
+
+	bool breakOut = false;
+	do
+	{
+		pathList[size].x = currentIndex.x;
+		pathList[size].y = currentIndex.y;
+
+		//check if reached starting grid----------------------------------------------//
+		if (currentIndex.x == pathFind_startX && currentIndex.y == pathFind_startY)
+			breakOut = true;
+
+		//get came from---------------------------------------------------------------//
+		currentIndex = bfs_GridList[currentIndex.x][currentIndex.y].came_from;
+		size++;
+
+	} while (!breakOut);
+
+	return size;
 }
 
 /*******************************************************************************
 Display optimal path on mesh
 ********************************************************************************/
-XY_grid thePos;
 void AI_Map::Display_OptimalPath_BFS()
 {
 	XY_grid currentIndex;
@@ -131,57 +221,12 @@ if start grid is in a wall, pathFind_step >= frontier's size in next iteration a
 ********************************************************************************/
 void AI_Map::onClick_BFS()
 {
-	//if not out of loop-------------------------------------------------------------------------//
-	//if (pathFind_step >= frontier_lastIndex + 1)
-	if (frontier2.size() == 0)
+	if (Update_BFS())
 	{
 		//if reached end, show the optimal path-------------------------------//
 		Display_OptimalPath_BFS();
 		state = IDLE;
-		return;
 	}
-
-	//Get pos------------------------------------------------------------------------------------//
-	//thePos = frontier[pathFind_step]->pos;
-	thePos = frontier2.front()->pos;
-	frontier2.pop();
-	pathMap_renderer->SetTile(thePos.x, thePos.y, 2);	//mark as visited
-
-	//Get ajacent grids--------------------------------------------------------------------------//
-	if ((thePos.x + thePos.y) % 2 != 0)	//follo redblobgames tut, if % 2 == 0, reverse
-	{
-
-		if (thePos.x < total_tiles_X - 1)	//grid  2, 3
-			Add_AjacentTo_Frontier(&bfs_GridList[thePos.x + 1][thePos.y]);
-
-		if (thePos.y > 0)	//grid 4, 5
-			Add_AjacentTo_Frontier(&bfs_GridList[thePos.x][thePos.y - 1]);
-		
-		if (thePos.x > 0)	//grid 6, 7
-			Add_AjacentTo_Frontier(&bfs_GridList[thePos.x - 1][thePos.y]);
-
-		if (thePos.y < total_tiles_Y - 1)	//grid 0, 1
-			Add_AjacentTo_Frontier(&bfs_GridList[thePos.x][thePos.y + 1]);
-	}
-
-	//Reverse ORDER------------------------------------------------------------------------------//
-	else
-	{
-		if (thePos.y < total_tiles_Y - 1)	//grid 0, 1
-			Add_AjacentTo_Frontier(&bfs_GridList[thePos.x][thePos.y + 1]);
-		
-		if (thePos.x > 0)	//grid 6, 7
-			Add_AjacentTo_Frontier(&bfs_GridList[thePos.x - 1][thePos.y]);
-		
-		if (thePos.y > 0)	//grid 4, 5
-			Add_AjacentTo_Frontier(&bfs_GridList[thePos.x][thePos.y - 1]);
-		
-		if (thePos.x < total_tiles_X - 1)	//grid  2, 3
-			Add_AjacentTo_Frontier(&bfs_GridList[thePos.x + 1][thePos.y]);
-	}
-	
-	//update data------------------------------------------------------------------------------//
-	pathFind_step++;
 
 	pathMap_renderer->RecalculateMesh();	//update mesh
 }
@@ -202,17 +247,8 @@ bool AI_Map::Add_AjacentTo_Frontier(BFS_Grid* addMe)
 	frontier[frontier_lastIndex] = addMe;
 	frontier[frontier_lastIndex]->SetAs_Visited();	//set as visited
 	frontier[frontier_lastIndex]->Set_CameFrom(thePos);	//set came from
-	frontier2.push(addMe);
 
 	pathMap_renderer->SetTile(addMe->pos.x, addMe->pos.y, 0);	//mark as waiting
 	
 	return true;
-}
-
-/********************************************************************************
-clear BFS
-********************************************************************************/
-void AI_Map::Clear_BFS()
-{
-
 }

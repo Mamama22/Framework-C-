@@ -35,6 +35,10 @@ void Character::Update_Stage1()
 		//get latest update target pos (in case moved)----------------------------------------//
 		targetPos = AI_comp->GetTargetPointPos();
 
+		//check if same pos, go next point---------------------------------------------//
+		if (targetPos.Same(transform.pos))
+			break;
+
 		//translate to target, if reach, get new target----------------------//
 		Vector3 dir = (targetPos - transform.pos).Normalized();
 
@@ -69,7 +73,7 @@ void Character::Update_Stage3()
 		//check if in bounds of tile----------------------------------------//
 		if ((targetPos - transform.pos).LengthSquared() < dist * dist)
 		{
-			AI_comp->GetNextPoint();
+			AI_comp->GetNextPoint();	//if yes, go next point
 	
 			if (AI_comp->Reached_Dest())
 				state = IDLE;
@@ -82,9 +86,9 @@ void Character::Update_Stage3()
 /********************************************************************************
 Test find a path and follow it
 ********************************************************************************/
-void Character::Test_FindPath()
+void Character::FindPath(int startX, int startY, int endX, int endY)
 {
-	if (AI_comp->findPath(2, 2, 24, 22))
+	if (AI_comp->findPath(startX, startY, endX, endY))
 	{
 		state = MOVE;
 	}

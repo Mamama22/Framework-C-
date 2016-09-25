@@ -64,7 +64,8 @@ AABB* Scene_Boxhead::InitCharacter(Character** pointer, Vector3 pos, Vector3 box
 	spcomp->Init("asdasd", pos, box_scale);
 	(*pointer)->AddComponent(spcomp);
 
-	(*pointer)->SetActive(false);
+
+	//(*pointer)->SetActive(false);
 
 	return boxy;
 }
@@ -177,9 +178,16 @@ void Scene_Boxhead::UpdatePlayerInput()
 	if (CU::input.IsKeyReleased(Input::K))
 		AImap->Update_Steps();
 
+	//clear paths display from map---------------------------------------//
+	/*if (CU::input.IsKeyReleased(Input::C))
+		AImap->Clear_Display();*/
+
 	//A-Star-----------------------------------------------//
 	if (CU::input.IsKeyReleased(Input::L))
-		AImap->Start_BFS(1, 3, 17, 5);
+	{
+		//AImap->Start_BFS(17, 2, 15, 6);
+		pickup->FindPath(17, 2, 15, 6);
+	}
 
 	//player's rotation--------------------------------------//
 	/*if (CU::input.IsKeyPressed(Input::ARROW_LEFT))

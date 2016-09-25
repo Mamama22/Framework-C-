@@ -41,7 +41,7 @@ public:
 	void Update_Stage3();
 
 	/******************** Testing functions **********************/
-	void Test_FindPath();
+	void FindPath(int startX, int startY, int endX, int endY);
 };
 
 #endif

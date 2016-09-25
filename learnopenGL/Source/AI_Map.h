@@ -4,22 +4,6 @@
 #include <queue>
 using std::queue;
 
-struct XY_grid
-{
-	int x;
-	int y;
-
-	XY_grid(){ x = y = -1; }
-	~XY_grid(){}
-
-	XY_grid& operator=(XY_grid& copyMe)
-	{
-		x = copyMe.x;
-		y = copyMe.y;
-		return *this;
-	}
-};
-
 /*************************************************************
 BFS grid
 
@@ -48,40 +32,6 @@ struct BFS_Grid
 };
 
 /*************************************************************
-A* node
-
-Author: Tan Yie Cher
-Date: 18/9/2016
-/*************************************************************/
-struct AS_Node
-{
-	int x, y;
-	unsigned G, H, F;
-	int dirX, dirY;
-
-	AS_Node();
-	~AS_Node();
-
-	//init------------------------------------------------//
-	void Init(int x, int y, bool is_wall);
-
-	//Start path-finding----------------------------------------------//
-	void Set_asStart(AS_Node& endNode);
-
-	//Runtime----------------------------------------------//
-	void Set_AsCentral(int endX, int endY);	//set as central point
-	void Reset();
-
-	void Set_G(unsigned cost);
-	void Set_H(unsigned cost);
-	void SetGH(unsigned G, unsigned H);
-	void CalculateSurroundings(AS_Node nodeList[]);
-
-	//flags-------------------------------------------------//
-	bool isWall();
-};
-
-/*************************************************************
 AI Map
 
 How to use:
@@ -92,6 +42,10 @@ How to use:
 NOTE:
 Init pathfind start/end renderers in A* Init() for now
 BFS: change vector<BFS_Grid*> tp BFS_Grid array for better performance
+
+OBSERVATIONS (25/9/16):
+BFS sarch with 25x25 map drop fps to 55, 100000 zombies using it drops fps to 11
+Conclusion: BFS ftw
 
 Author: Tan Yie Cher
 Date: 10/9/2016
@@ -128,20 +82,18 @@ private:
 	/************************************* BFS ***************************************/
 	BFS_Grid** bfs_GridList;
 	vector<BFS_Grid*> frontier;
-	queue<BFS_Grid*> frontier2;
 
 	int frontier_lastIndex;	//keeps track of last grid of frontier
 
-	/************************************* A* Path-Finding ***************************************/
-	AS_Node** nodeList;	//2D array of nodes
-
 	/************************************* internal functions ***************************************/
-	void Init_AStar();
 	void Init_BFS();
 
+	void Start_BFS(int startX, int startY, int endX, int endY);
 	void onClick_BFS();
+	bool Update_BFS();
 	bool Add_AjacentTo_Frontier(BFS_Grid* addMe);
 	void Display_OptimalPath_BFS();
+	int GetOptimal_path_BFS(vector<XY_grid>& pathList);
 
 	//utilities--------------------------------//
 	void StartPathFind(int startX, int startY, int endX, int endY);	//a path-finding is initiated
@@ -157,16 +109,12 @@ public:
 	void Update_Steps();	//update pathfind
 
 	/************************************* Pathfinding functions ***************************************/
-	bool findPath(AI_Comp* AI_comp, const int startPt_X, const int startPt_Y, const int endPt_X, const int endPt_Y);
+	int findPath(AI_Comp* AI_comp, const int startPt_X, const int startPt_Y, const int endPt_X, const int endPt_Y);
 	void AddPath_ToDisplay(AI_Comp* AI_comp);	
-
-	//A-Star-----------------------------------------------------//
-	void Start_AStar(int startX, int startY, int endX, int endY);
-	void Clear_AStar();
+	void Clear_Display();
 
 	//BFS--------------------------------------------------------//
-	void Start_BFS(int startX, int startY, int endX, int endY);
-	void Clear_BFS();
+	void Start_BFS_display(int startX, int startY, int endX, int endY);
 
 	/************************************* Get functions ***************************************/
 	Vector3 Get_PointPos(int x, int y);

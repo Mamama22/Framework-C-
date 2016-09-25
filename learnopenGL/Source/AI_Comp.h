@@ -2,6 +2,21 @@
 #define AI_COMP_H
 #include "Component.h"
 
+struct XY_grid
+{
+	int x;
+	int y;
+
+	XY_grid(){ x = y = -1; }
+	~XY_grid(){}
+
+	XY_grid& operator=(XY_grid& copyMe)
+	{
+		x = copyMe.x;
+		y = copyMe.y;
+		return *this;
+	}
+};
 
 /*************************************************************
 Author: Tan Yie Cher
@@ -17,6 +32,7 @@ How to use:
 
 !!!!!!!!!!!!!!!!!!!!!!!!!
 Can only be used in: Stage 3
+points is used last to first (size - 1 --> 0) due to BFS usage
 
 Date: 17/9/2016
 /*************************************************************/
@@ -42,8 +58,7 @@ private:
 	float tileScale;
 
 	/**************** Path-finding var *******************/
-	vector<int> xPoints;
-	vector<int> yPoints;
+	vector<XY_grid> points;
 	int pathSize;	//how many points path currently have
 	int target_index;	//the index of current target point
 	
@@ -81,6 +96,9 @@ public:
 	int Get_xPoint(int index);
 	int Get_yPoint(int index);
 	float Get_tileScale();
+	vector<XY_grid>& Get_XY_Grids();
+
+	void Set_PathSize(int s);
 };
 
 #endif
