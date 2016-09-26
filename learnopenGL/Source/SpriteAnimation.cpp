@@ -6,6 +6,18 @@
 #include "CoreUtilities.h"
 using namespace std;
 
+/********************************************************************************
+Sprite anim type
+********************************************************************************/
+void SpriteAnim_Type::Init(TEXTURE_ENUM texture_id, int total_row, int total_col)
+{
+	this->texture_id = texture_id;
+	this->total_row = total_row;
+	this->total_col = total_col;
+	mesh = MeshBuilder::GenerateQuad_split("", total_row, total_col);
+	mesh->SetTexture(texture_id);
+}
+
 SpriteAnimation::SpriteAnimation(int row, int col)
  : total_row(row)
  , total_col(col)
@@ -19,8 +31,12 @@ SpriteAnimation::SpriteAnimation(int row, int col)
 	CU::spriteMan.AddActiveSprite(this);
 }
 
-void SpriteAnimation::init(float frameTime, int startCol, int startRow, int endCol, int endRow)
+void SpriteAnimation::Init(const char* name, Vector3 pos, Vector3 scale, float frameTime, int startCol, 
+	int startRow, int endCol, int endRow, SpriteAnim_Type& sprite_type)
 {
+	/* parent */
+	Renderer::Init(name, NULL, pos, scale);
+
 	finishedFrame = false;
 	/* set total frame and frame time */
 
@@ -40,6 +56,9 @@ void SpriteAnimation::init(float frameTime, int startCol, int startRow, int endC
 	/* set current row and column */
 	currentRow = startRow;
 	currentCol = startCol;
+
+	/* sprite type */
+	this->sprite_type = &sprite_type;
 }
 
 void SpriteAnimation::ReStart()
@@ -86,9 +105,11 @@ void SpriteAnimation::Update()
 	}
 }
 
-void SpriteAnimation::Render()
+void SpriteAnimation::Draw()
 {
-	Mesh::Render(GetOffset() * 6, 6);
+	CU::view.SetIdentity();
+	CU::view.LoadMatrix(transform.finalTRS);
+	sprite_type->mesh->Render(GetOffset() * 6, 6, alpha);
 	rendered_prev = true;
 }
 

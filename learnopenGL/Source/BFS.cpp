@@ -9,7 +9,9 @@ BFS_Grid::BFS_Grid()
 	visited = false;
 }
 
-BFS_Grid::~BFS_Grid(){}
+BFS_Grid::~BFS_Grid()
+{
+}
 
 /********************************************************************************
 Set the fixed X, Y pos

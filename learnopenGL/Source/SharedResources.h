@@ -2,6 +2,7 @@
 #define SHARED_RESOURCES_H
 
 #include "TileMap.h"
+#include "SpriteAnimation.h"
 
 /*************************************************************
 Some commonly used resoures, like certain meshes.
@@ -34,13 +35,15 @@ public:
 	Mesh* playerQuad;
 	Mesh* turretQuad;
 
-	Mesh* explosion;
-
 	Mtx44 mtx[10];
 
 	/******************** texture list **********************/
 	GLuint textureList[TOTAL_TEXTURES];
 	TileMap tilemapList[TOTAL_TILEMAP];
+
+	/******************** sprite list **********************/
+	SpriteAnim_Type explosion_sprite_type;
+	SpriteAnim_Type zombie_sprite_type;
 
 	/******************** core **********************/
 	void Init();

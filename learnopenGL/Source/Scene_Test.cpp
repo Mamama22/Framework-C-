@@ -50,7 +50,7 @@ void Scene_Test::InitCharacter(Entity** pointer, Vector3 pos, Vector3 scale)
 
 	//Add renderer------------------------------------------------//
 	Render_InWorld* mama = new Render_InWorld;
-	mama->Init("fuck u", CU::shared.quad_2, pos, scale);	//assign available renderer
+	mama->Init("fuck u", CU::shared.quad, pos, scale);	//assign available renderer
 	(*pointer)->AddComponent(mama);
 
 	(*pointer)->SetActive(true);

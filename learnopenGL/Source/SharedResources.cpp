@@ -29,22 +29,23 @@ void SharedResources::Init()
 	turretQuad = MeshBuilder::GenerateQuad(Color(28, 128, 65), 1.f, 1.f, false);
 	debug_quad = MeshBuilder::GenerateDebugQuad(Color(219, 135, 39));
 
-	//sprites: Col, Row
-	explosion = MeshBuilder::GenerateSpriteAnimation("FU?", 6, 8);
-	explosion->SetTexture(TEX_SPRITE_EXPLOSION);
-	static_cast<SpriteAnimation*>(explosion)->init(0.02, 0, 0, 7, 5);
+
+	//sprites types------------------------------------------------------------//
+	explosion_sprite_type.Init(TEX_SPRITE_EXPLOSION, 6, 8);
+	zombie_sprite_type.Init(TEX_SPRITE_ZOMBIE, 8, 8);
 
 	//testures------------------------------------------------------------------//
-	textureList[TEX_MUSIC] = LoadTGA("Image//CatPurple.tga");
-	textureList[TEX_SPRITE_EXPLOSION] = LoadTGA("Image//explosion_hd.tga");
-	//textureList[TEX_MC_TILEMAP] = LoadTGA("Image//minecraft_tilemap.tga");
-	//textureList[TEX_PERRY] = LoadTGA("Image//perry_da_platypus.tga");
-	//textureList[TEX_AI_TILEMAP] = LoadTGA("Image//AI_tilemap.tga");
+	textureList[TEX_MUSIC] = LoadTGA("Image//game/CatPurple.tga");
+	textureList[TEX_SPRITE_EXPLOSION] = LoadTGA("Image//game/explosion_hd.tga");
+	textureList[TEX_SPRITE_ZOMBIE] = LoadTGA("Image//game/zombie_sprite_sheet.tga");
+	textureList[TEX_PERRY] = LoadTGA("Image//game/perry_da_platypus.tga");
+	textureList[TEX_MC_TILEMAP] = LoadTGA("Image//game/minecraft_tilemap.tga");
+	textureList[TEX_AI_TILEMAP] = LoadTGA("Image//game/AI_tilemap.tga");
 
 	//tilemap---------------------------------------------------------------//
-	tilemapList[TILEMAP_MC].Init(2, 2, LoadTGA("Image//minecraft_tilemap.tga"));
-	tilemapList[TILEMAP_AI].Init(2, 2, LoadTGA("Image//AI_tilemap.tga"));
-	tilemapList[TILEMAP_PERRY].Init(1, 1, LoadTGA("Image//perry_da_platypus.tga"));
+	tilemapList[TILEMAP_MC].Init(2, 2, textureList[TEX_MC_TILEMAP]);
+	tilemapList[TILEMAP_AI].Init(2, 2, textureList[TEX_AI_TILEMAP]);
+	tilemapList[TILEMAP_PERRY].Init(1, 1, textureList[TEX_PERRY]);
 
 	//preload some textures into meshes---------------------------------//
 	playerQuad->SetTexture(TEX_MUSIC);
@@ -70,7 +71,6 @@ void SharedResources::Exit()
 	delete floorQuad;
 	delete playerQuad;
 	delete turretQuad;
-	delete explosion;
 	delete debug_quad;
 	delete quad_start0;
 	delete quad_start0_1;
@@ -92,7 +92,7 @@ void SharedResources::CalculateOffset(Vector3& offset, Vector3& dir, float dist)
 
 /********************************************************************************
 project vector onto axis of dir
-********************************************************************************/
+***********************************************************************qwqw*********/
 Vector3 SharedResources::vectorProjection(Vector3& projected, Vector3& dir)
 {
 	Vector3 part1;

@@ -67,16 +67,34 @@ Texture enum
 /*************************************************************/
 enum TEXTURE_ENUM
 {
+	/* normal textures */
 	TEX_MUSIC,
-	TEX_SPRITE_EXPLOSION,
-	TEX_MC_TILEMAP,
 	TEX_PERRY,
+
+	/* sprite */
+	TEX_SPRITE_EXPLOSION,
+	TEX_SPRITE_ZOMBIE,
+
+	/* Tilemaps */
+	TEX_MC_TILEMAP,
 	TEX_AI_TILEMAP,
 
 	TOTAL_TEXTURES,
 
 	TEX_NONE = -1,
 };
+
+
+///*************************************************************
+//sprite texture enum
+///*************************************************************/
+//enum SPRITE_TEXTURE_ENUM
+//{
+//	TEX_SPRITE_EXPLOSION,
+//	TEX_SPRITE_ZOMBIE,
+//
+//	TOTAL_SPRITE_TEXTURES,
+//};
 
 /*************************************************************
 Tilemap Texture enum

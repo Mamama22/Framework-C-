@@ -1,23 +1,51 @@
 #ifndef SPRITEANIMATION_H
 #define SPRITEANIMATION_H
-#include "TileMap.h"
+#include "Renderer.h"
 #include "Vector2.h"
+/*************************************************************
+Sprite animation type. Contains all the basic info of a sprite type
 
+Author: Tan Yie Cher
+Date: 26/9/16
+/*************************************************************/
+class SpriteAnim_Type
+{
+public:
+
+	TEXTURE_ENUM texture_id;
+	int total_row;
+	int total_col;
+	Mesh* mesh;	//shared mesh
+
+	void Init(TEXTURE_ENUM texture_id, int total_row, int total_col);
+};
+
+/*************************************************************
+Sprite animation
+modifed to not be mesh.
+Has 2 managers.
+
+Author: Tan Yie Cher
+Date: early 2015
+/*************************************************************/
 /*** mesh class for animation ***/
-class SpriteAnimation : public Mesh
+class SpriteAnimation : public Renderer
 {
 
 public:
 
 	/* constructor/destructor */
-	 SpriteAnimation(int row, int col);
-	 ~SpriteAnimation();
+	SpriteAnimation(int row, int col);
+	~SpriteAnimation();
 
 	/* init/update/render */
-	 //oppDir: if true, going from bottom to top and right to left
-	void init(float frameTime, int startCol, int startRow, int endCol, int endRow);
+	//oppDir: if true, going from bottom to top and right to left
+	void Init(const char* name, Vector3 pos, Vector3 scale, float frameTime, int startCol, int startRow, int endCol, int endRow, SpriteAnim_Type& sprite_type);
 	void Update();
-	void Render();
+
+	//Virtual-------------------------------------------------------------------//
+	void Draw();
+
 	int GetOffset();	//for rendering
 
 	void ReStart();
@@ -30,6 +58,7 @@ public:
 	int endRow;
 	int startCol;
 	int endCol;
+	SpriteAnim_Type* sprite_type;
 
 	double frameTime;		//time per frame
 	double timer;

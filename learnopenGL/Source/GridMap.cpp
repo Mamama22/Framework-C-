@@ -132,6 +132,7 @@ void GridMap::Init(Vector3 pos, TILEMAP_ENUM tilemesh, float tileScale, int tota
 	intersectedGrid->SetAllTilesEmpty();
 	intersectedGrid->RecalculateMesh();
 	AddComponent(intersectedGrid);
+	intersectedGrid->SetActive(false);
 
 	sp_GridScale.Set(gridScaleX, gridScaleY, 1.f);
 

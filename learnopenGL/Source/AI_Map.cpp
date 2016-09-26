@@ -13,6 +13,10 @@ AI_Map::~AI_Map()
 	for (int i = 0; i < total_tiles_X; ++i)
 		delete[] pathMap[i];
 	delete[] pathMap;
+
+	for (int x = 0; x < total_tiles_X; ++x)
+		delete[] bfs_GridList[x];
+	delete[] bfs_GridList;
 }
 
 /********************************************************************************

@@ -49,14 +49,9 @@ AABB* Scene_Boxhead::InitCharacter(Character** pointer, Vector3 pos, Vector3 box
 	*pointer = new Character;
 	(*pointer)->Init(pos, Vector3(1.f, 1.f, 1.f), AI_map_ID, displayPath);
 
-	//Add renderer------------------------------------------------//
-	Render_InWorld* mama = new Render_InWorld;
-	mama->Init("fuck u", CU::shared.playerQuad, pos, Vector3(10.f, 10.f, 1.f));	//assign available renderer
-	(*pointer)->AddComponent(mama);
-
 	//Add AABB----------------------------------------------------//
 	AABB* boxy = new AABB;
-	boxy->Init("fuck u", boxMesh, pos, box_scale);
+	boxy->Init("fuck u", CU::shared.quad, pos, box_scale);
 	(*pointer)->AddComponent(boxy);
 
 	//Add SP comp---------------------------------------------------//
@@ -64,6 +59,10 @@ AABB* Scene_Boxhead::InitCharacter(Character** pointer, Vector3 pos, Vector3 box
 	spcomp->Init("asdasd", pos, box_scale);
 	(*pointer)->AddComponent(spcomp);
 
+	//Add renderer (Sprite Animation)------------------------------------------------//
+	SpriteAnimation* mama = new SpriteAnimation(8, 8);
+	mama->Init("fuck u", pos, Vector3(10.f, 10.f, 1.f), 0.02, 0, 0, 7, 7, CU::shared.zombie_sprite_type);
+	(*pointer)->AddComponent(mama);
 
 	//(*pointer)->SetActive(false);
 

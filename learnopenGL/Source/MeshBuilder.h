@@ -1,7 +1,7 @@
 #ifndef MESH_BUILDER_H
 #define MESH_BUILDER_H
 
-#include "SpriteAnimation.h"
+#include "Mesh.h"
 
 /*************************************************************
 Mesh builder class
@@ -21,7 +21,7 @@ public:
 	static Mesh* GenerateDebugQuad(Color color);
 	static Mesh* GenerateRTriangle(Color color);
 	static Mesh* GenerateSphere(Color color, unsigned numStack, unsigned numSlice, float radius = 1.f);
-	static Mesh* GenerateSpriteAnimation(const std::string& meshName, unsigned numRow, unsigned numCol);
+	static Mesh* GenerateQuad_split(const std::string& meshName, unsigned numRow, unsigned numCol);
 
 	//custom quad---------------------------------------------------------------------//
 	static Mesh_Tilemap* GenerateTilemapQuad(std::vector<Vertex>& vertex_buffer_data, std::vector<GLuint>& index_buffer_data, int totalX, int totalY, bool start0 = false);

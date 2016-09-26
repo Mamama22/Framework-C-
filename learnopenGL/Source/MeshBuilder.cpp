@@ -348,11 +348,12 @@ Mesh_Tilemap* MeshBuilder::GenerateTilemapQuad(std::vector<Vertex>& vertex_buffe
 }
 
 /******************************************************************************
-Generate a sprite animation
+Generate a quad split up in grids
+Ideal for text, sprites
 ******************************************************************************/
-Mesh* MeshBuilder::GenerateSpriteAnimation(const std::string&, unsigned numRow, unsigned numCol)
+Mesh* MeshBuilder::GenerateQuad_split(const std::string&, unsigned numRow, unsigned numCol)
 {
-	SpriteAnimation *mesh = new SpriteAnimation(numRow, numCol);
+	Mesh *mesh = new Mesh();
 	std::vector<Vertex> vertex_buffer_data;
 	std::vector<GLuint> index_buffer_data;
 
