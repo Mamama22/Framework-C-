@@ -86,6 +86,15 @@
     <ClCompile Include="Source\Scene_Test.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Character.cpp">
+      <Filter>Entity\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\AI_Comp.cpp">
+      <Filter>Component\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\BFS.cpp">
+      <Filter>AI Map</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Controller">
@@ -159,6 +168,12 @@
     </Filter>
     <Filter Include="AI Map">
       <UniqueIdentifier>{2b23547f-5999-4a28-a0b9-0bd006fbee19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\AI">
+      <UniqueIdentifier>{e0f68f98-8f37-45b3-8738-f3e23ea8b4bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entity\Character">
+      <UniqueIdentifier>{72fa460f-eae7-464e-87a0-9362d8b01710}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -259,6 +274,12 @@
     </ClInclude>
     <ClInclude Include="Source\Scene_Test.h">
       <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Character.h">
+      <Filter>Entity\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AI_Comp.h">
+      <Filter>Component\AI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
