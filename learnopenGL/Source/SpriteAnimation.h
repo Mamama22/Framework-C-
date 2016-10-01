@@ -17,7 +17,11 @@ public:
 	int total_col;
 	Mesh* mesh;	//shared mesh
 
+	SpriteAnim_Type();
+	~SpriteAnim_Type();
+
 	void Init(TEXTURE_ENUM texture_id, int total_row, int total_col);
+	void Exit();
 };
 
 /*************************************************************
@@ -35,7 +39,7 @@ class SpriteAnimation : public Renderer
 public:
 
 	/* constructor/destructor */
-	SpriteAnimation(int row, int col);
+	SpriteAnimation();
 	~SpriteAnimation();
 
 	/* init/update/render */

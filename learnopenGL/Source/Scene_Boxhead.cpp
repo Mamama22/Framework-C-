@@ -60,7 +60,7 @@ AABB* Scene_Boxhead::InitCharacter(Character** pointer, Vector3 pos, Vector3 box
 	(*pointer)->AddComponent(spcomp);
 
 	//Add renderer (Sprite Animation)------------------------------------------------//
-	SpriteAnimation* mama = new SpriteAnimation(8, 8);
+	SpriteAnimation* mama = new SpriteAnimation;
 	mama->Init("fuck u", pos, Vector3(10.f, 10.f, 1.f), 0.02, 0, 0, 7, 7, CU::shared.zombie_sprite_type);
 	(*pointer)->AddComponent(mama);
 

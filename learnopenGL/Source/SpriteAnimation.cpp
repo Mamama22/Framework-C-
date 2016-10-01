@@ -6,6 +6,9 @@
 #include "CoreUtilities.h"
 using namespace std;
 
+SpriteAnim_Type::SpriteAnim_Type(){}
+SpriteAnim_Type::~SpriteAnim_Type(){}
+
 /********************************************************************************
 Sprite anim type
 ********************************************************************************/
@@ -18,10 +21,13 @@ void SpriteAnim_Type::Init(TEXTURE_ENUM texture_id, int total_row, int total_col
 	mesh->SetTexture(texture_id);
 }
 
-SpriteAnimation::SpriteAnimation(int row, int col)
- : total_row(row)
- , total_col(col)
- , currentRow(0)	
+void SpriteAnim_Type::Exit()
+{
+	delete mesh;
+}
+
+SpriteAnimation::SpriteAnimation() :
+  currentRow(0)	
  , currentCol(0)
  ,frameTime(0)
  , timer(0)
