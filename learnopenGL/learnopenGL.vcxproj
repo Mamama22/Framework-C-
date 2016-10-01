@@ -12,8 +12,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\AABB.cpp" />
+    <ClCompile Include="Source\AI_Comp.cpp" />
     <ClCompile Include="Source\AI_Map.cpp" />
+    <ClCompile Include="Source\BFS.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
+    <ClCompile Include="Source\Character.cpp" />
     <ClCompile Include="Source\Component.cpp" />
     <ClCompile Include="Source\Controller.cpp" />
     <ClCompile Include="Source\CoreUtilities.cpp" />
@@ -43,8 +46,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\AABB.h" />
+    <ClInclude Include="Source\AI_Comp.h" />
     <ClInclude Include="Source\AI_Map.h" />
     <ClInclude Include="Source\Camera.h" />
+    <ClInclude Include="Source\Character.h" />
     <ClInclude Include="Source\Component.h" />
     <ClInclude Include="Source\Controller.h" />
     <ClInclude Include="Source\CoreUtilities.h" />

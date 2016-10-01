@@ -66,7 +66,7 @@
       <Filter>Component\Collision</Filter>
     </ClCompile>
     <ClCompile Include="Source\GridMap.cpp">
-      <Filter>Gridmap</Filter>
+      <Filter>Entity\Gridmap</Filter>
     </ClCompile>
     <ClCompile Include="Source\RendererManager.cpp">
       <Filter>Core Utilities\Component managers</Filter>
@@ -81,19 +81,19 @@
       <Filter>Component\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="Source\AI_Map.cpp">
-      <Filter>AI Map</Filter>
+      <Filter>Entity\AI Map</Filter>
     </ClCompile>
     <ClCompile Include="Source\Scene_Test.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Character.cpp">
-      <Filter>Entity\Character</Filter>
-    </ClCompile>
     <ClCompile Include="Source\AI_Comp.cpp">
       <Filter>Component\AI</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Character.cpp">
+      <Filter>Entity\Character</Filter>
+    </ClCompile>
     <ClCompile Include="Source\BFS.cpp">
-      <Filter>AI Map</Filter>
+      <Filter>Entity\AI Map</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -154,9 +154,6 @@
     <Filter Include="Scene\Boxhead">
       <UniqueIdentifier>{fd840957-9ace-41a6-9e90-baaad438985f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Gridmap">
-      <UniqueIdentifier>{67a569d5-c034-4cd9-9352-791b570b6797}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Core Utilities\Component managers">
       <UniqueIdentifier>{a9951826-49db-4b0a-b142-333c8ea1fbab}</UniqueIdentifier>
     </Filter>
@@ -166,14 +163,17 @@
     <Filter Include="Component\Renderer">
       <UniqueIdentifier>{f3c7ab18-b243-4ce9-be10-ccb4317e7705}</UniqueIdentifier>
     </Filter>
-    <Filter Include="AI Map">
+    <Filter Include="Component\AI">
+      <UniqueIdentifier>{e9da7d51-3be9-4bed-8655-f4a85610fac6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entity\AI Map">
       <UniqueIdentifier>{2b23547f-5999-4a28-a0b9-0bd006fbee19}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Component\AI">
-      <UniqueIdentifier>{e0f68f98-8f37-45b3-8738-f3e23ea8b4bc}</UniqueIdentifier>
+    <Filter Include="Entity\Gridmap">
+      <UniqueIdentifier>{67a569d5-c034-4cd9-9352-791b570b6797}</UniqueIdentifier>
     </Filter>
     <Filter Include="Entity\Character">
-      <UniqueIdentifier>{72fa460f-eae7-464e-87a0-9362d8b01710}</UniqueIdentifier>
+      <UniqueIdentifier>{04c0bc63-86ff-466f-9580-4d8e666268e1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -252,7 +252,7 @@
       <Filter>Component\Collision</Filter>
     </ClInclude>
     <ClInclude Include="Source\GridMap.h">
-      <Filter>Gridmap</Filter>
+      <Filter>Entity\Gridmap</Filter>
     </ClInclude>
     <ClInclude Include="Source\RendererManager.h">
       <Filter>Core Utilities\Component managers</Filter>
@@ -267,7 +267,7 @@
       <Filter>Component\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="Source\AI_Map.h">
-      <Filter>AI Map</Filter>
+      <Filter>Entity\AI Map</Filter>
     </ClInclude>
     <ClInclude Include="Source\TileMap.h">
       <Filter>Mesh</Filter>
@@ -275,11 +275,11 @@
     <ClInclude Include="Source\Scene_Test.h">
       <Filter>Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Character.h">
-      <Filter>Entity\Character</Filter>
-    </ClInclude>
     <ClInclude Include="Source\AI_Comp.h">
       <Filter>Component\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Character.h">
+      <Filter>Entity\Character</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

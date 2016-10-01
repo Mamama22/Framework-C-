@@ -1,38 +1,19 @@
-﻿Build started 13/9/2016 1:59:13 AM.
+﻿Build started 27/9/2016 7:54:28 PM.
      1>Project "C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\learnopenGL\learnopenGL.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\\freetype" /I"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\\glew\include" /I"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\\glfw\include" /I"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\\Common\Source" /I"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\\freetype" /I"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\/lua/include" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Source\Entity.cpp
-         Entity.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\\freetype" /I"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\\glew\include" /I"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\\glfw\include" /I"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\\Common\Source" /I"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\\freetype" /I"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\/lua/include" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Source\SpriteAnimation.cpp
+         SpriteAnimation.cpp
      1>c:\program files (x86)\windows kits\8.1\include\shared\minwindef.h(130): warning C4005: 'APIENTRY' : macro redefinition
                  c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\glfw\include\glfw\glfw3.h(92) : see previous definition of 'APIENTRY'
-     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\entity.h(129): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\entity.h(132): warning C4067: unexpected tokens following preprocessor directive - expected a newline
      1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\spriteanimmanager.h(25): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\entity.cpp(40): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\entity.cpp(55): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\entity.cpp(72): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\entity.cpp(109): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\entity.cpp(127): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\entity.cpp(131): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\entity.cpp(156): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\entity.cpp(158): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\entity.cpp(171): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\entity.cpp(173): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\entity.cpp(185): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\entity.cpp(187): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\entity.cpp(199): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\entity.cpp(201): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\entity.cpp(221): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\entity.cpp(223): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\entity.cpp(249): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\entity.cpp(254): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\entity.cpp(313): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\entity.cpp(319): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\entity.cpp(332): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\tanyiecher\desktop\semester 5\practice\ma framework 2016\learnopengl\source\entity.cpp(334): warning C4018: '<' : signed/unsigned mismatch
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\Debug\learnopenGL.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\\freetype\lib" /LIBPATH:"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\\glew\lib" /LIBPATH:"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\\glfw\lib-msvc100" /LIBPATH:"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\Debug" glew32.lib glfw3.lib opengl32.lib winmm.lib Common.lib ws2_32.lib freetype262d.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\Debug\learnopenGL.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\tanyiecher\Desktop\SEMESTER 5\PRACTICE\Ma Framework 2016\Debug\learnopenGL.lib" /MACHINE:X86 Debug\AABB.obj
+         Debug\AI_Comp.obj
          Debug\AI_Map.obj
+         Debug\BFS.obj
          Debug\Camera.obj
+         Debug\Character.obj
          Debug\Component.obj
          Debug\Controller.obj
          Debug\CoreUtilities.obj
@@ -64,4 +45,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.28
+Time Elapsed 00:00:01.37

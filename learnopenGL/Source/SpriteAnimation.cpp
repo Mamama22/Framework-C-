@@ -52,8 +52,8 @@ void SpriteAnimation::Init(const char* name, Vector3 pos, Vector3 scale, float f
 	this->startCol = startCol;
 	this->endCol = endCol;
 
-	int totalRow = (endRow - startRow) + 1;
-	int totalCol = (endCol - startCol) + 1;
+	total_row = (endRow - startRow) + 1;
+	total_col = (endCol - startCol) + 1;
 
 	//totalTime / total frame
 	//frameTime = (double)(totalTime / (float)(totalRow + totalCol));
