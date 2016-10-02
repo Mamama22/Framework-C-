@@ -73,6 +73,9 @@ void Character::Update_Stage3()
 		//check if in bounds of tile----------------------------------------//
 		if ((targetPos - transform.pos).LengthSquared() < dist * dist)
 		{
+			//relocate to targetPos for better accuracy
+			Relocate(targetPos);
+
 			AI_comp->GetNextPoint();	//if yes, go next point
 	
 			if (AI_comp->Reached_Dest())

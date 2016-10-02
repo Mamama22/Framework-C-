@@ -1,7 +1,7 @@
 #ifndef GRIDMAP_H
 #define GRIDMAP_H
 
-#include "Entity.h"
+#include "Layer.h"
 #define MAX_ENTITY_PER_GRID 50
 
 class SP_Grid
@@ -53,22 +53,9 @@ protected:
 
 	//tiles of all the grid-----------------//
 	float tileScale;
-
-	/******************** Render **********************/
-	//grids-----------------------------//
-	int totalX_grids;
-	int totalY_grids;
-
-	int totalX_Tiles_perGrid;
-	int totalY_Tiles_perGrid;
-
-	TILEMAP_ENUM tilemap_enum;
 	
-	vector<Render_GridMap*> render_gridMap;
+	/******************** Path **********************/
 	vector< vector<int> > pathMap;
-
-	//modifying tools--------------------------//
-	vector<Render_GridMap*> meshModified;
 
 	/******************** Spartial partition **********************/
 	int total_SP_X;
@@ -97,8 +84,7 @@ public:
 	~GridMap();
 
 	/******************** Core functions **********************/
-	void Init(Vector3 pos, TILEMAP_ENUM tilemesh, float tileScale, int totalX_tiles, int totalY_tiles, 
-		int totalX_grids, int totalY_grids, int tileMap_sizeX, int tileMap_sizeY, int total_SP_X, int total_SP_Y);
+	void Init(Vector3 pos, TILEMAP_ENUM tilemesh, float tileScale, int totalX_tiles, int totalY_tiles, int total_SP_X, int total_SP_Y);
 
 	//Will be called everytime BEFORE comp updates-------------------//
 	void PreUpdate();
@@ -108,20 +94,14 @@ public:
 	void AddChildren(Entity* child);
 
 	/******************** Modify tiles **********************/
-	void ModifyTile(int tileType, int x, int y);
-	void RecalculateMesh();	//call after modifying tiles
+	
 
 	/******************** Spartial Partition **********************/
 	void Update_SP(Entity* updateMe);
 
 	/******************** Getter **********************/
-	int Get_TotalGridsX();
-	int Get_TotalGridsY();
-	int Get_TilesPerGridX();
-	int Get_TilesPerGridY();
 	int Get_TotalTilesX();
 	int Get_TotalTilesY();
-	TILEMAP_ENUM Get_TilemapEnum();
 	float Get_TileScale();
 };
 

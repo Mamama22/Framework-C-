@@ -36,6 +36,7 @@ void SharedResources::Init()
 
 	//testures------------------------------------------------------------------//
 	textureList[TEX_MUSIC] = LoadTGA("Image//game/CatPurple.tga");
+	textureList[TEX_CURSOR] = LoadTGA("Image//game/middle_finger.tga");
 	textureList[TEX_SPRITE_EXPLOSION] = LoadTGA("Image//game/explosion_hd.tga");
 	textureList[TEX_SPRITE_ZOMBIE] = LoadTGA("Image//game/zombie_sprite_sheet.tga");
 	textureList[TEX_PERRY] = LoadTGA("Image//game/perry_da_platypus.tga");

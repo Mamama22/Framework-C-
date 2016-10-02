@@ -20,7 +20,7 @@ void Scene_Boxhead::Init()
 
 	//character----------------------------------------------//
 	player_AABB.resize(3);
-	player_AABB[0] = InitCharacter(&player, Vector3(-100, -100, 0), Vector3(20, 20, 1), CU::shared.quad_2, AImap->GetHandle(), false);
+	player_AABB[0] = InitCharacter(&player, Vector3(0, 0, 0), Vector3(20, 20, 1), CU::shared.quad_2, AImap->GetHandle(), false);
 	player_AABB[1] = InitCharacter(&pickup, Vector3(120, -100, 0), Vector3(20, 20, 1), CU::shared.quad_2, AImap->GetHandle(), true);
 	player_AABB[2] = InitCharacter(&pickup_1, Vector3(120, 100, 0), Vector3(20, 20, 1), CU::shared.quad_2, AImap->GetHandle(), false);
 
@@ -49,10 +49,10 @@ AABB* Scene_Boxhead::InitCharacter(Character** pointer, Vector3 pos, Vector3 box
 	*pointer = new Character;
 	(*pointer)->Init(pos, Vector3(1.f, 1.f, 1.f), AI_map_ID, displayPath);
 
-	//Add AABB----------------------------------------------------//
-	AABB* boxy = new AABB;
-	boxy->Init("fuck u", CU::shared.quad, pos, box_scale);
-	(*pointer)->AddComponent(boxy);
+	////Add AABB----------------------------------------------------//
+	//AABB* boxy = new AABB;
+	//boxy->Init("fuck u", CU::shared.quad, pos, box_scale);
+	//(*pointer)->AddComponent(boxy);
 
 	//Add SP comp---------------------------------------------------//
 	SP_Comp* spcomp = new SP_Comp;
@@ -61,12 +61,12 @@ AABB* Scene_Boxhead::InitCharacter(Character** pointer, Vector3 pos, Vector3 box
 
 	//Add renderer (Sprite Animation)------------------------------------------------//
 	SpriteAnimation* mama = new SpriteAnimation;
-	mama->Init("fuck u", pos, Vector3(10.f, 10.f, 1.f), 0.02, 0, 0, 7, 7, CU::shared.zombie_sprite_type);
+	mama->Init("fuck u", pos, box_scale, 0.02, 0, 0, 7, 7, CU::shared.zombie_sprite_type);
 	(*pointer)->AddComponent(mama);
 
 	//(*pointer)->SetActive(false);
 
-	return boxy;
+	return NULL;
 }
 
 /********************************************************************************
@@ -77,18 +77,24 @@ void Scene_Boxhead::InitGridmap()
 	//gridmap---------------------------------------------------------//
 	gridmap = new GridMap;
 	//pos, mesh, tilescale, total tiles X, total tiles Y, total X grids, total Y grids, tilemap size X, tilemap size Y, total SP X, total SP Y
-	gridmap->Init(Vector3(-400, -300, 0), TILEMAP_MC, 23.f, 25, 25, 1, 1, 2, 2, 2, 2);
+	gridmap->Init(Vector3(-400, -300, 0), TILEMAP_MC, 23.f, 25, 25, 2, 2);
 
-	//modify times----------------------------//
-	for (int x = 0; x < gridmap->Get_TotalTilesX(); ++x)
-	{
-		for (int y = 0; y < gridmap->Get_TotalTilesY(); ++y)
-		{
-			int tileType = rand() % CU::shared.tilemapList[gridmap->Get_TilemapEnum()].total_tiles();	//tilemap size is 4
-			gridmap->ModifyTile(tileType, x, y);
-		}
-	}
-	gridmap->RecalculateMesh();
+	//add a layer---------------------------------------------------//
+	GridLayer* gridlayer = new GridLayer;
+	gridlayer->Init("d", TILEMAP_MC, Vector3(-400, -300, 0));
+
+	//modify tiles of layer------------------------------------------------//
+	//for (int x = 0; x < gridlayer->Get_TotalTilesX(); ++x)
+	//{
+	//	for (int y = 0; y < gridmap->Get_TotalTilesY(); ++y)
+	//	{
+	//		int tileType = rand() % CU::shared.tilemapList[gridlayer->Get_TilemapEnum()].total_tiles();	//tilemap size is 4
+	//		gridlayer->ModifyTile(tileType, x, y);
+	//	}
+	//}
+	gridlayer->RecalculateMesh();
+
+	gridmap->AddChildren(gridlayer);
 
 
 	//ai map---------------------------------------------------//
@@ -280,7 +286,7 @@ void Scene_Boxhead::DrawOnScreen()
 	//Axes----------------------------------------------------//
 	CU::view.SetIdentity();
 	CU::view.Scale(2000.f, 2000.f, 2000.f);
-	//CU::shared.axes->Render();
+	CU::shared.axes->Render();
 }
 
 /********************************************************************************

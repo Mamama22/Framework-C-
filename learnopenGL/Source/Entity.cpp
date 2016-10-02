@@ -359,3 +359,6 @@ void Entity::SetActive(bool b)
 	for (int i = 0; i < componentList.size(); ++i)
 		componentList[i]->SetActive(b);
 }
+
+int Entity::Get_TotalChildren(){ return children.size(); }
+int Entity::Get_TotalComp(){ return componentList.size(); }

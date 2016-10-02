@@ -54,8 +54,8 @@ protected:
 	int handle;
 	
 	/******************** Added/removed **********************/
-	void Added(Entity* parent);	//if this entity added, do something
-	void Removed();	//if this entity removed, do something
+	virtual void Added(Entity* parent);	//if this entity added, do something
+	virtual void Removed();	//if this entity removed, do something
 
 
 public:
@@ -111,6 +111,8 @@ public:
 	void SetHandle(int handle);
 	bool getActive();
 	void SetActive(bool b);
+	int Get_TotalChildren();
+	int Get_TotalComp();
 
 	/**************************************** abstract functions ******************************************/
 	virtual void Exit(){}

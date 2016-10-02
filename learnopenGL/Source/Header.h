@@ -70,6 +70,7 @@ enum TEXTURE_ENUM
 	/* normal textures */
 	TEX_MUSIC,
 	TEX_PERRY,
+	TEX_CURSOR,
 
 	/* sprite */
 	TEX_SPRITE_EXPLOSION,
@@ -83,18 +84,6 @@ enum TEXTURE_ENUM
 
 	TEX_NONE = -1,
 };
-
-
-///*************************************************************
-//sprite texture enum
-///*************************************************************/
-//enum SPRITE_TEXTURE_ENUM
-//{
-//	TEX_SPRITE_EXPLOSION,
-//	TEX_SPRITE_ZOMBIE,
-//
-//	TOTAL_SPRITE_TEXTURES,
-//};
 
 /*************************************************************
 Tilemap Texture enum

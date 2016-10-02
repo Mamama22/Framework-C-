@@ -86,10 +86,14 @@ bool AI_Comp::findPath(int startPt_X, int startPt_Y, int endPt_X, int endPt_Y)
 /********************************************************************************
 Get target point pos, if reached, AI Comp will automatically assign a new one
 ********************************************************************************/
+Vector3 adsadsae;
 Vector3 AI_Comp::GetTargetPointPos()
 {
 	gg = static_cast<AI_Map*>(CU::entityMan.GetEntity(AI_Map_id));
-	return gg->Get_PointPos(points[target_index].x, points[target_index].y);
+	adsadsae = gg->Get_PointPos(points[target_index].x, points[target_index].y);
+	adsadsae.x += tileScale * 0.5f;	//remember to add half-scale
+	adsadsae.y += tileScale * 0.5f;
+	return adsadsae;
 }
 
 /********************************************************************************

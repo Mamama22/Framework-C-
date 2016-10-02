@@ -1,6 +1,6 @@
 #ifndef INPUT_H
 #define INPUT_H
-#include "Header.h"
+#include "Renderer.h"
 
 struct TypeChar
 {

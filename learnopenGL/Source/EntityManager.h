@@ -59,6 +59,15 @@ public:
 		return false;
 	}
 
+	template<class T>
+	static bool CheckEntityType(Entity* checkMe)
+	{
+		if (dynamic_cast<T*>(checkMe))
+			return true;
+
+		return false;
+	}
+
 	/********************************************************************************
 	Check if given component is of this class type
 	********************************************************************************/
