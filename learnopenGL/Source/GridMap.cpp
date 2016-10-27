@@ -70,7 +70,7 @@ void GridMap::Init(Vector3 pos, TILEMAP_ENUM tilemesh, float tileScale, int tota
 {
 	float mapScaleX = tileScale * totalX_tiles;
 	float mapScaleY = tileScale * totalY_tiles;
-	Entity::Init(pos, Vector3(mapScaleX, mapScaleY, 1.f));
+	Entity::Init(pos, Vector3(1.f, 1.f, 1.f));
 
 	//total tiles combined for entire map---------------------------------//
 	this->totalX_tiles = totalX_tiles;
@@ -81,23 +81,33 @@ void GridMap::Init(Vector3 pos, TILEMAP_ENUM tilemesh, float tileScale, int tota
 	//Spartial partition-------------------------------------------//
 	this->total_SP_X = total_SP_X;
 	this->total_SP_Y = total_SP_Y;
+	added_debug_SP = false;	//added last
+}
+
+/********************************************************************************
+Add debug grids to renderer
+********************************************************************************/
+void GridMap::Add_DebugSP_renderers()
+{
+	float mapScaleX = tileScale * totalX_tiles;
+	float mapScaleY = tileScale * totalY_tiles;
 	float gridScaleX = mapScaleX / (float)total_SP_X;
 	float gridScaleY = mapScaleY / (float)total_SP_Y;
 
 	//X sp lines-------------------------------------------------------------//
 	Render_Repetitive* render_line = new Render_Repetitive();
-	render_line->Init("SD", CU::shared.quad_start0, pos, Vector3(mapScaleX, 2, 1), Vector3(0, mapScaleY / (float)total_SP_Y, 0), total_SP_X + 1);
+	render_line->Init("SD", CU::shared.quad_start0, transform.GetPos(), Vector3(mapScaleX, 2, 1), Vector3(0, mapScaleY / (float)total_SP_Y, 0), total_SP_X + 1);
 	AddComponent(render_line);
 
 	//Y sp lines-------------------------------------------------------------//
 	render_line = new Render_Repetitive();
-	render_line->Init("SD", CU::shared.quad_start0, pos, Vector3(2, mapScaleY, 1), Vector3(mapScaleX / (float)total_SP_X, 0, 0), total_SP_Y + 1);
+	render_line->Init("SD", CU::shared.quad_start0, transform.GetPos(), Vector3(2, mapScaleY, 1), Vector3(mapScaleX / (float)total_SP_X, 0, 0), total_SP_Y + 1);
 	AddComponent(render_line);
 
 	//highlight intersected-----------------------------------------------//
 	intersectedGrid = new Render_GridMap;
 	//intersectedGrid->Init("Asd", CU::shared.quad_start0, Vector3(0, 0, 0), Vector3(mapScaleX / (float)total_SP_X, mapScaleY / (float)total_SP_Y, 1));
-	intersectedGrid->Init("d", TILEMAP_PERRY, pos, gridScaleX, total_SP_X, total_SP_Y);
+	intersectedGrid->Init("d", TILEMAP_PERRY, transform.GetPos(), gridScaleX, total_SP_X, total_SP_Y);
 	intersectedGrid->SetAlpha(0.5f);
 	intersectedGrid->SetAllTilesEmpty();
 	intersectedGrid->RecalculateMesh();
@@ -112,6 +122,13 @@ void GridMap::Init(Vector3 pos, TILEMAP_ENUM tilemesh, float tileScale, int tota
 
 void GridMap::PreUpdate()
 {
+	//make sure debug SP added last (renders on top)
+	if (!added_debug_SP)
+	{
+		added_debug_SP = true;
+		Add_DebugSP_renderers();
+	}
+	
 	for (int i = 0; i < SP_Grids.size(); ++i)
 		SP_Grids[i].ClearAll();
 }
@@ -208,7 +225,7 @@ void GridMap::AddChildren(Entity* child)
 	}
 	else
 	{
-		//Get their shape collider
+		//Get their list of components
 		CU::entityMan.GetEntityComp(child->GetHandle());
 
 		//look through for children's SP comp------------------------------//

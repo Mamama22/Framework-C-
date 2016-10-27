@@ -14,6 +14,12 @@ Date: 1/10/2016
 class Scene_MapEditor : public Scene
 {
 	GridMap* gridmap;
+	GridLayer* gridLayer;
+
+	//editor
+	int x_inter, y_inter;	//x/y intersect for tiles
+	Vector3 inter_tilePos;
+	float inter_tileScale;
 
 	/******************** Init **********************/
 	void InitGridmap();

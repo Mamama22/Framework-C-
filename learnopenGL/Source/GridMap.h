@@ -37,6 +37,7 @@ REMOVED: Children will only be added if it has a SP comp
 
 NOTE:
 -Make sure no spartial partition bound for your entity is larger than a SP grid
+-Improve render order (SP)
 
 Author: Tan Yie Cher
 Date: 24/8/2016
@@ -53,6 +54,7 @@ protected:
 
 	//tiles of all the grid-----------------//
 	float tileScale;
+
 	
 	/******************** Path **********************/
 	vector< vector<int> > pathMap;
@@ -73,9 +75,12 @@ protected:
 
 	vector<SP_Grid> SP_Grids;	//list of SP grids
 
+	bool added_debug_SP;	//have we added debug SP renderers?
+
 	//utilities
 	void RemoveSP_FromAllGrids(SP_Comp* removeMe, IntersectedPoints prev_storePoints[]);
 	void AddSP_ToGrids(SP_Comp* addMe, IntersectedPoints  current_storePoints[]);
+	void Add_DebugSP_renderers();
 
 public:
 

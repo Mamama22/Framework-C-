@@ -18,7 +18,7 @@ public:
 	static Mesh* GenerateLine(Color color, bool start0 = false);
 	static Mesh* GenerateAxes(float lengthX = 1.f, float lengthY = 1.f, float lengthZ = 1.f);
 	static Mesh* GenerateQuad(Color color, float length = 1.f, float texCoord = 1.f, bool start0 = false);
-	static Mesh* GenerateDebugQuad(Color color);
+	static Mesh* GenerateDebugQuad(Color color, bool start0 = false);
 	static Mesh* GenerateRTriangle(Color color);
 	static Mesh* GenerateSphere(Color color, unsigned numStack, unsigned numSlice, float radius = 1.f);
 	static Mesh* GenerateQuad_split(const std::string& meshName, unsigned numRow, unsigned numCol);

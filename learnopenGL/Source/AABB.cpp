@@ -140,7 +140,6 @@ bool AABB::CollisionCheck(AABB& checkMe)
 	vel = AABB_dir * theOffset;
 
 	//offset entity----------------------------------------------------//
-	cout << "TA id: " << transformBy_Ancestor_ID << endl;
 	if (transformBy_Ancestor_ID == -1)
 		CU::entityMan.GetEntity(entityHandle)->Translate(vel * 1.01f);
 	else

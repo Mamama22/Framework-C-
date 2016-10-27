@@ -98,6 +98,9 @@ public:
 	void RenderTilemap(Mesh& renderMe, float alpha);
 	void RenderText(string text, Vector2 pos, float yScale, Color color);
 
+	/********************** Helpful utilities *****************************/
+	void Draw_HollowQuad(Vector3& bottomPos, float scale);
+
 	/********************** Getter/setter *****************************/
 	static GLFWwindow* getWindow();
 

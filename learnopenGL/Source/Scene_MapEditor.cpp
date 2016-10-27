@@ -17,6 +17,10 @@ void Scene_MapEditor::Init()
 
 	//gridmap--------------------------------------------------------//
 	InitGridmap();
+
+	//tiles---------------------------------------------//
+	x_inter = y_inter = -1;
+	inter_tileScale = 0.0f;
 }
 
 /********************************************************************************
@@ -29,22 +33,42 @@ void Scene_MapEditor::InitGridmap()
 	//pos, mesh, tilescale, total tiles X, total tiles Y, total X grids, total Y grids, tilemap size X, tilemap size Y, total SP X, total SP Y
 	gridmap->Init(Vector3(-400, -300, 0), TILEMAP_MC, 23.f, 25, 25, 2, 2);
 
+	////add a layer---------------------------------------------------//
+	//gridlayer = new GridLayer;
+	//gridlayer->Init("d", TILEMAP_MC, Vector3(-400, -300, 0));
+	//gridmap->AddChildren(gridlayer);
+
+	////modify tiles of layer------------------------------------------------//
+	//for (int x = 0; x < gridlayer->Get_TotalTilesX(); ++x)
+	//{
+	//	for (int y = 0; y < gridmap->Get_TotalTilesY(); ++y)
+	//	{
+	//		int tileType = 0;	//tilemap size is 4
+	//		gridlayer->ModifyTile(tileType, x, y);
+	//	}
+	//}
+	//gridlayer->RecalculateMesh();
 
 	//add a layer---------------------------------------------------//
-	GridLayer* gridlayer = new GridLayer;
-	gridlayer->Init("d", TILEMAP_MC, Vector3(-400, -300, 0));
-	gridmap->AddChildren(gridlayer);
+	gridLayer = new GridLayer;
+	gridLayer->Init("d", TILEMAP_MC, Vector3(-400, -300, 0));
+	gridmap->AddChildren(gridLayer);
 
 	//modify tiles of layer------------------------------------------------//
-	for (int x = 0; x < gridlayer->Get_TotalTilesX(); ++x)
+	for (int x = 0; x < gridLayer->Get_TotalTilesX(); ++x)
 	{
 		for (int y = 0; y < gridmap->Get_TotalTilesY(); ++y)
 		{
-			int tileType = rand() % CU::shared.tilemapList[gridlayer->Get_TilemapEnum()].total_tiles();	//tilemap size is 4
-			gridlayer->ModifyTile(tileType, x, y);
+			int tileType = rand() % CU::shared.tilemapList[gridLayer->Get_TilemapEnum()].total_tiles();	//tilemap size is 4
+			gridLayer->ModifyTile(tileType, x, y);
 		}
 	}
-	gridlayer->RecalculateMesh();
+
+	//set middle row empty
+	for (int x = 0; x < gridLayer->Get_TotalTilesX(); ++x)
+		gridLayer->SetTileEmpty(x, 10);
+
+	gridLayer->RecalculateMesh();
 }
 
 /********************************************************************************
@@ -79,6 +103,10 @@ Run
 void Scene_MapEditor::Run_Stage3()
 {
 	Scene::Run_Stage3();
+
+	//check cursor intersected active layer-----------------------------//
+	gridLayer->GetIntersected_Tile(CU::input.GetCursorPos_World2D(), x_inter, y_inter, inter_tilePos);
+	inter_tileScale = gridLayer->Get_TileScale();
 }
 
 /********************************************************************************
@@ -108,6 +136,12 @@ void Scene_MapEditor::DrawOnScreen()
 	//CU::view.Scale(45.f, 45.f, 1.f);
 	//CU::shared.quad->SetTexture(TEX_CURSOR);
 	//CU::shared.quad->Render();
+
+	//highlighted tile----------------------------------------//
+	if (x_inter != -1)
+	{
+		CU::view.Draw_HollowQuad(inter_tilePos, inter_tileScale);
+	}
 }
 
 /********************************************************************************

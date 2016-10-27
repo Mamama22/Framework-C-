@@ -24,7 +24,7 @@ void Scene_Test::Init()
 	InitCharacter(&player, Vector3(0, 0, 0), Vector3(100, 100, 1));
 	player_AABB.push_back( AddAABB(player, Vector3(-75, 0, 0), Vector3(50, 50, 1), CU::shared.quad_1) );
 	player_AABB.push_back( AddAABB(player, Vector3(75, 0, 0), Vector3(50, 50, 1), CU::shared.quad_1) );
-	player->sticky = false;
+	player->sticky = false;	//does it 'stick' to parent?
 
 	InitCharacter(&pickup_1, Vector3(-100, 0, 0), Vector3(25, 25, 1));
 	player_AABB.push_back(AddAABB(pickup_1, Vector3(-100, 0, 0), Vector3(25, 25, 1), CU::shared.quad_1));

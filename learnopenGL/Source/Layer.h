@@ -27,6 +27,8 @@ class GridLayer : public Entity
 	int totalX_Tiles_perGrid;
 	int totalY_Tiles_perGrid;
 	float tileScale;
+	float mapScaleX;
+	float mapScaleY;
 	TILEMAP_ENUM tilemap_enum;
 
 	vector<Render_GridMap*> render_gridMap;	//contain all the grid renderer
@@ -57,6 +59,9 @@ public:
 	/******************** Added/removed **********************/
 	void Added_toGridMap(float tileScale, int totalX_tiles, int totalY_tiles);	//if this entity added, do something
 
+	/******************** Stage 3 functions **********************/
+	void GetIntersected_Tile(Vector3 cursorPos, int& x, int& y, Vector3& tilePos);	//get intersected tile from cusor pos
+	
 	/******************** Getter **********************/
 	int Get_TotalGridsX();
 	int Get_TotalGridsY();

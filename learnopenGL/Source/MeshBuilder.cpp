@@ -81,7 +81,7 @@ Mesh* MeshBuilder::GenerateLine(Color color, bool start0)
 /******************************************************************************
 Generate a debug quad
 ******************************************************************************/
-Mesh* MeshBuilder::GenerateDebugQuad(Color color)
+Mesh* MeshBuilder::GenerateDebugQuad(Color color, bool start0)
 {
 	Mesh *mesh = new Mesh();
 	Vertex v;
@@ -89,18 +89,37 @@ Mesh* MeshBuilder::GenerateDebugQuad(Color color)
 	std::vector<Vertex> vertex_buffer_data;
 	std::vector<GLuint> index_buffer_data;
 
-	v.pos.Set(-0.5f, -0.5f, 0.f);//0
-	v.color = color;
-	vertex_buffer_data.push_back(v);
-	v.pos.Set(0.5f, -0.5f, 0.f);	//1
-	v.color = color;
-	vertex_buffer_data.push_back(v);
-	v.pos.Set(0.5f, 0.5f, 0.f);	//2
-	v.color = color;
-	vertex_buffer_data.push_back(v);
-	v.pos.Set(-0.5f, 0.5f, 0.f);//3
-	v.color = color;
-	vertex_buffer_data.push_back(v);
+	if (!start0)
+	{
+		v.pos.Set(-0.5f, -0.5f, 0.f);//0
+		v.color = color;
+		vertex_buffer_data.push_back(v);
+		v.pos.Set(0.5f, -0.5f, 0.f);	//1
+		v.color = color;
+		vertex_buffer_data.push_back(v);
+		v.pos.Set(0.5f, 0.5f, 0.f);	//2
+		v.color = color;
+		vertex_buffer_data.push_back(v);
+		v.pos.Set(-0.5f, 0.5f, 0.f);//3
+		v.color = color;
+		vertex_buffer_data.push_back(v);
+	}
+	else
+	{
+		v.pos.Set(0.f, 0.f, 0.f);//0
+		v.color = color;
+		vertex_buffer_data.push_back(v);
+		v.pos.Set(1.0f, 0.f, 0.f);	//1
+		v.color = color;
+		vertex_buffer_data.push_back(v);
+		v.pos.Set(1.0f, 1.f, 0.f);	//2
+		v.color = color;
+		vertex_buffer_data.push_back(v);
+		v.pos.Set(0.f, 1.f, 0.f);//3
+		v.color = color;
+		vertex_buffer_data.push_back(v);
+	}
+	
 
 	index_buffer_data.push_back(0);
 	index_buffer_data.push_back(1);

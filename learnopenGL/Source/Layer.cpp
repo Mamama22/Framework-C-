@@ -44,8 +44,8 @@ void GridLayer::Added_toGridMap(float tileScale, int totalX_tiles, int totalY_ti
 	this->totalX_tiles = totalX_tiles;
 	this->totalY_tiles = totalY_tiles;
 
-	float mapScaleX = tileScale * totalX_tiles;
-	float mapScaleY = tileScale * totalY_tiles;
+	mapScaleX = tileScale * totalX_tiles;
+	mapScaleY = tileScale * totalY_tiles;
 
 	//total grids for entire map---------------------------------------//
 	this->totalX_grids = 1;
@@ -77,6 +77,26 @@ void GridLayer::Added_toGridMap(float tileScale, int totalX_tiles, int totalY_ti
 		//reset--------------------------------------//
 		startPos.y = transform.pos.y;
 		startPos.x += totalX_Tiles_perGrid * tileScale;
+	}
+}
+
+/********************************************************************************
+Get the renderer based on the coords provided
+Will add to modified list automatically
+********************************************************************************/
+void GridLayer::GetIntersected_Tile(Vector3 cursorPos, int& x, int& y, Vector3& tilePos)
+{
+	if (!(cursorPos.x >= transform.pos.x && cursorPos.x < transform.pos.x + mapScaleX) ||
+		!(cursorPos.y >= transform.pos.y || cursorPos.y < transform.pos.y + mapScaleY))
+		x = y = -1;
+	else
+	{
+		cursorPos -= transform.pos;
+		x = (int)(cursorPos.x / tileScale);
+		y = (int)(cursorPos.y / tileScale);
+		tilePos = transform.pos;
+		tilePos.x += tileScale * x;
+		tilePos.y += tileScale * y;
 	}
 }
 

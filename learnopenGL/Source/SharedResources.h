@@ -22,6 +22,7 @@ public:
 	Mesh* quad_start0;
 	Mesh* quad_start0_1;
 	Mesh* debug_quad;
+	Mesh* debug_quad_start0;
 	Mesh* sphere;
 	Mesh* sphere_1;
 	Mesh* line_1;

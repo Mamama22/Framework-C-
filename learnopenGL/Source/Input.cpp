@@ -221,3 +221,10 @@ bool Input::IsKeyReleased(CONTROLS key){ return KeyReleased[key]; }
 float Input::getYaw(){ return yaw; }
 float Input::getPitch(){ return pitch; }
 Vector3 Input::GetCursorPos(){ return cursorPos; }
+Vector3 Input::GetCursorPos_World2D()
+{
+	Vector3 returnVal = cursorPos;
+	returnVal.x -= Screen::CAMERA_WIDTH * 0.5f;
+	returnVal.y -= Screen::CAMERA_HEIGHT * 0.5f;
+	return returnVal;
+}

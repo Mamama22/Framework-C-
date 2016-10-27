@@ -26,7 +26,7 @@ Init core utilities after scene's init
 void CU::Post_Init()
 {
 	//set TRS for all----------------------------//
-	entityMan.UpdateStage2();
+	entityMan.Update_AllTRS();
 }
 
 /********************************************************************************

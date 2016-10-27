@@ -2,6 +2,7 @@
 #include "CoreUtilities.h"
 Component* Entity::p;
 vector<Component*>::iterator Entity::it;
+vector<Entity*>::iterator Entity::entity_it;
 
 /********************************************************************************
 Constructor/destructor
@@ -362,3 +363,28 @@ void Entity::SetActive(bool b)
 
 int Entity::Get_TotalChildren(){ return children.size(); }
 int Entity::Get_TotalComp(){ return componentList.size(); }
+
+bool Entity::Check_ifChildrenAdded(Entity* checkMe)
+{
+	for (int i = 0; i < children.size(); ++i)
+	{
+		if (checkMe == children[i])
+			return true;
+	}
+	return false;
+}
+
+void Entity::Add_Children(Entity* addMe, bool back)
+{
+	if (Check_ifChildrenAdded(addMe))
+		return;
+
+	if (back)	//back
+		children.push_back(addMe);
+	else //front
+	{
+		entity_it = children.begin();
+		children.insert(entity_it, addMe);
+	}
+	addMe->Added(this);
+}

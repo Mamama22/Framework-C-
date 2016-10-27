@@ -36,6 +36,7 @@ Date: 2/7/2016
 class Entity
 {
 	static vector<Component*>::iterator it;
+	static vector<Entity*>::iterator entity_it;
 	static Component* p;
 
 	/******************** Var **********************/
@@ -53,6 +54,10 @@ protected:
 	Entity* parent;
 	int handle;
 	
+	/******************** Internal utilities **********************/
+	bool Check_ifChildrenAdded(Entity* checkMe);
+	void Add_Children(Entity* addMe, bool back);	//true: back, false: front
+
 	/******************** Added/removed **********************/
 	virtual void Added(Entity* parent);	//if this entity added, do something
 	virtual void Removed();	//if this entity removed, do something

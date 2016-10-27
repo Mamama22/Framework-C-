@@ -28,7 +28,7 @@ void SharedResources::Init()
 	playerQuad = MeshBuilder::GenerateQuad(Color(157, 212, 76), 1.f, 1.f, false);
 	turretQuad = MeshBuilder::GenerateQuad(Color(28, 128, 65), 1.f, 1.f, false);
 	debug_quad = MeshBuilder::GenerateDebugQuad(Color(219, 135, 39));
-
+	debug_quad_start0 = MeshBuilder::GenerateDebugQuad(Color(219, 135, 39), true);
 
 	//sprites types------------------------------------------------------------//
 	explosion_sprite_type.Init(TEX_SPRITE_EXPLOSION, 6, 8);
@@ -67,12 +67,13 @@ void SharedResources::Exit()
 	delete quad;
 	delete quad_1;
 	delete quad_2;
+	delete debug_quad;
+	delete debug_quad_start0;
 	delete line_start0;
 	delete line_start0_1;
 	delete floorQuad;
 	delete playerQuad;
 	delete turretQuad;
-	delete debug_quad;
 	delete quad_start0;
 	delete quad_start0_1;
 }

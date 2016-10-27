@@ -127,6 +127,7 @@ public:
 	float getYaw();
 	float getPitch();
 	Vector3 GetCursorPos();
+	Vector3 GetCursorPos_World2D();
 };
 
 

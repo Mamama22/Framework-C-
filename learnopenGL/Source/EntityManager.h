@@ -43,6 +43,8 @@ public:
 	void UpdateStage2();
 	void UpdateStage3();
 	void UpdateStage4();
+	
+	void Update_AllTRS();
 
 	/******************** Exit functions **********************/
 	void Exit();

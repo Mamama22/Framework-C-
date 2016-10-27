@@ -526,6 +526,17 @@ void View::RenderTilemap(Mesh& renderMe, float alpha)
 }
 
 /********************************************************************************
+Draw a hollow cube
+********************************************************************************/
+void View::Draw_HollowQuad(Vector3& bottomPos, float scale)
+{
+	CU::view.SetIdentity();
+	CU::view.Translate(bottomPos.x, bottomPos.y, 0.f);
+	CU::view.Scale(scale, scale, 1.f);
+	CU::shared.debug_quad_start0->Render();
+}
+
+/********************************************************************************
 Reset
 ********************************************************************************/
 void View::Reset()
